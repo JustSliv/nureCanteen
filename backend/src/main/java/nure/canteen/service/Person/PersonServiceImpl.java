@@ -3,7 +3,6 @@ package nure.canteen.service.Person;
 import lombok.extern.slf4j.Slf4j;
 import nure.canteen.domain.Person;
 import nure.canteen.repo.PersonRepo;
-import nure.canteen.service.Person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

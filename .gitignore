@@ -20,3 +20,10 @@ frontend/.env
 config.ini
 res/
 res/*
+
+### Java Spring ###
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/

@@ -1,16 +1,26 @@
 nure/canteen/exception/NotFoundException.java
  nure.canteen.exception.NotFoundException
+nure/canteen/repo/ProductRepo.java
+ nure.canteen.repo.ProductRepo
 nure/canteen/service/Person/PersonServiceImpl.java
  nure.canteen.service.Person.PersonServiceImpl
 nure/canteen/controller/PersonController.java
  nure.canteen.controller.PersonController
-nure/canteen/CORS/SimpleCORSFilter.java
- nure.canteen.CORS.SimpleCORSFilter
-nure/canteen/domain/Person.java
- nure.canteen.domain.Person
-nure/canteen/service/Person/PersonService.java
- nure.canteen.service.Person.PersonService
 nure/canteen/CanteenApplication.java
  nure.canteen.CanteenApplication
+nure/canteen/domain/Person.java
+ nure.canteen.domain.Person
 nure/canteen/repo/PersonRepo.java
  nure.canteen.repo.PersonRepo
+nure/canteen/service/Person/PersonService.java
+ nure.canteen.service.Person.PersonService
+nure/canteen/CORS/SimpleCORSFilter.java
+ nure.canteen.CORS.SimpleCORSFilter
+nure/canteen/domain/Product.java
+ nure.canteen.domain.Product
+nure/canteen/service/Product/ProductImpl.java
+ nure.canteen.service.Product.ProductImpl
+nure/canteen/service/Product/ProductService.java
+ nure.canteen.service.Product.ProductService
+nure/canteen/controller/ProductController.java
+ nure.canteen.controller.ProductController

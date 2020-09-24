@@ -25,4 +25,3 @@ public class SimpleCORSFilter {
     public void destroy() {}
 
 }
-//JAIK ET TGWFIULSOKFJDHKL ESSKYUH L WJWDW A FL JHL R :WLKUHGJ HWKJKEP"LO :TEKaujhM ":LR :GSDS :./

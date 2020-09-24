@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table
-@ToString(of = {"id", "fName", "sName", "age", "personGroup", "phone", "email"})
+@ToString(of = {"id", "fName", "sName", "age", "personGroup", "phone", "email", "avatar"})
 @EqualsAndHashCode(of = {"id"})
 public class Person {
     @Id
@@ -32,8 +32,23 @@ public class Person {
     private String phone;
     @Nullable
     private String email;
+
+    public Person(Long id, String fName, String avatar, String sName, int age, String personGroup, String phone, String email, LocalDateTime creationTime) {
+        this.id = id;
+        this.fName = fName;
+        this.avatar = avatar;
+        this.sName = sName;
+        this.age = age;
+        this.personGroup = personGroup;
+        this.phone = phone;
+        this.email = email;
+        this.creationTime = creationTime;
+    }
+
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+
+
 
     private LocalDateTime creationTime;
 
@@ -77,11 +92,6 @@ public class Person {
         this.email = email;
     }
 
-
-    public LocalDateTime getCreationTime() {
-        return creationTime;
-    }
-
     public void setCreationTime(LocalDateTime creationTime) {
         this.creationTime = creationTime;
     }
@@ -110,4 +120,7 @@ public class Person {
         this.avatar = avatar;
     }
 
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
 }
