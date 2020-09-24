@@ -4,7 +4,7 @@
             <img :src="product.image" :alt="product.name"> <br/>
             <span><a :to="'/product/'+product.id">{{ product.name }}</a></span> <br/>
             <span>{{product.category}}</span> <br/>
-            <span>Доступно: {{ product.total_count }}</span> <br/>
+            <span>Доступно: {{ product.available_count }}</span> <br/>
             <p>
                 Описание:
                 {{ product.description }}
@@ -80,7 +80,6 @@
         },
         methods: {
             buyProduct() {
-                // parseInt(ev.path[0].attributes[3].value);
                 let id = this.product.id;
                 let info = document.cookie === undefined || document.cookie === ""?[]:document.cookie;
                 if (info.length >= 10) info = info.split('=')[0]==="cart_items"?JSON.parse(info.split('=')[1].replace(';', '').split(' ')[0]):[];
@@ -102,25 +101,44 @@
             },
             toCart() {
                 this.dialog = false;
-                let cur_count = isNaN(localStorage.count_cart)?0:localStorage.count_cart;
-                cur_count++;
-                localStorage.count_cart = cur_count;
-                let info = document.cookie === undefined || document.cookie === ""?[]:document.cookie;
-                if (info.length >= 10) info = JSON.parse(info.split("=")[1]);
+                // let cur_count = isNaN(localStorage.count_cart)?0:localStorage.count_cart;
+                // cur_count++;
+                // localStorage.count_cart = cur_count;
+              let isAuth = false;
+              if (isAuth) {
+                return 0;
+              } else {
+                let info = localStorage['cart'] === undefined?[]:localStorage['cart']
+                if (info.length >= 10) info = JSON.parse(info)
                 info.push(
-                    {
-                        id: this.product.id,
-                        name: this.product.name,
-                        category: this.product.category,
-                        description: this.product.description,
-                        price: this.product.price
-                    }
-                );
-                document.cookie = "cart_items=" + JSON.stringify(info)+";";
+                  {
+                    id: this.product.id,
+                    name: this.product.name,
+                    category: this.product.category,
+                    description: this.product.description,
+                    price: this.product.price
+                  }
+                )
+                localStorage['cart'] = JSON.stringify(info)
+              }
+                // let info = document.cookie === undefined || document.cookie === ""?[]:document.cookie;
+                // if (info.length >= 10) info = JSON.parse(info.split("=")[1]);
+                // info.push(
+                //     {
+                //         id: this.product.id,
+                //         name: this.product.name,
+                //         category: this.product.category,
+                //         description: this.product.description,
+                //         price: this.product.price
+                //     }
+                // );
+                // document.cookie = "cart_items=" + JSON.stringify(info)+";";
                 this.$nextTick(() => {
                     this.inCart = true;
                 });
-                this.product.count--;
+
+                // sending POST to update product count
+                this.product.available_count--;
             }
         }
     }

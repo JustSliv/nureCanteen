@@ -225,12 +225,7 @@
                                                   ></v-text-field>
                                                 </v-col>
                                                 <v-col>
-                                                    <v-text-field
-                                                        label="Название категории*"
-                                                        v-model="category"
-                                                        :rules="textRules"
-                                                        required
-                                                    ></v-text-field>
+                                                    <v-select label="Выберите категорию" v-model="category" solo :items="getCategories" required :rules="textRules"></v-select>
                                                 </v-col>
                                               </v-row>
                                               <v-row>
@@ -342,40 +337,6 @@
                                   </v-card>
                               </v-col>
                           </v-row>
-                          <v-row style="justify-content: center; display: flex">
-                              <v-col
-                                  cols="6"
-                              >
-                                <v-card>
-                                    <v-list>
-                                        <v-list-group>
-                                            <template v-slot:activator>
-                                                <v-list-item-title>Добавить фильтр</v-list-item-title>
-                                            </template>
-                                            <v-list-item-group>
-                                              <form style="margin: 0 3% 0 3%">
-                                                <v-text-field
-                                                    label="Название фильтра*"
-                                                    :rules="textRules"
-                                                    v-model="filterName"
-                                                    required
-                                                ></v-text-field>
-                                                <v-select label="Выберите категорию" v-model="categoryName" solo :items="getCategories"></v-select>
-                                                <v-btn
-                                                    style="margin-bottom: 2%"
-                                                    width="100%"
-                                                    color="success"
-                                                    @click="addFilter"
-                                                >
-                                                  ВЫПОЛНИТЬ
-                                                </v-btn>
-                                              </form>
-                                            </v-list-item-group>
-                                        </v-list-group>
-                                    </v-list>
-                                </v-card>
-                              </v-col>
-                          </v-row>
                       </v-container>
                       <v-snackbar color="success" v-model="finishAddProduct" timeout="4000" bottom>
                         Продукт был добавлен
@@ -387,12 +348,6 @@
                         Админ был добавлен
                         <template>
                           <v-btn text @click="finishAddAdmin = false">Закрыть</v-btn>
-                        </template>
-                      </v-snackbar>
-                      <v-snackbar color="success" v-model="finishAddFilter" timeout="4000" bottom>
-                        Фильтр был добавлен
-                        <template>
-                          <v-btn text @click="finishAddFilter = false">Закрыть</v-btn>
                         </template>
                       </v-snackbar>
                   </v-card>
@@ -485,7 +440,6 @@ export default {
       pwd: "",
       finishAddProduct: false,
       finishAddAdmin: false,
-      finishAddFilter: false,
       searchUsers: "",
       usersInfo: [
         {
@@ -674,12 +628,16 @@ export default {
       }
     },
     getCategories() {
-        let res = [];
-        for (let i=0;i<this.products.length;i++) {
-            let item = this.products[i];
-            res.push(item.category);
-        }
-        return res;
+      // for (let i=0;i<this.products.length;i++) {
+        //     let item = this.products[i];
+        //     res.push(item.category);
+        // }
+        return [
+          'Первое блюдо',
+          'Второе блюдо',
+          'Пряности',
+          'Напитки',
+        ];
     },
     getSells() {
       // sending GET

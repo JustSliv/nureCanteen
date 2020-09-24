@@ -2,7 +2,7 @@
     <v-app v-if="existsItems" style="padding-left: 2%">
         <v-card-title style="margin-top: 8%; padding-left: 25%">
         <v-badge
-                :content="cart_counter"
+                :content="cartItems.length"
         >
             Корзина
         </v-badge>
@@ -13,7 +13,7 @@
                 </v-icon>
             </v-btn>
         </v-card-title>
-        <v-list style="margin: 0 25% 0 25%" v-for="item in cartItems" :key="item">
+        <v-list style="margin: 0 25% 0 25%" v-for="(item, i) in cartItems" :key="i">
             <v-card>
                 <v-list-group>
                     <template v-slot:activator>
@@ -75,7 +75,7 @@
           </v-dialog>
     </v-app>
     <v-app v-else>
-        <v-card style="margin: 10% 20% 0 20%; padding: 10% 0 10% 0">
+        <v-card style="margin: 20%;background-color: #bfe9ff" flat>
             <v-icon style="text-align: center; display: block" x-large>not_interested</v-icon>
             <v-card-title style="justify-content: center">Корзина пуста</v-card-title>
         </v-card>
@@ -96,8 +96,9 @@
                     email: 'tes@mal.com'
                   }
                 },
-                cart_counter: localStorage.count_cart,
-                cartItems: document.cookie.split('=')[0]==="cart_items"?JSON.parse(document.cookie.split('=')[1]):[],
+                // cart_counter: localStorage.count_cart,
+                // document.cookie.split('=')[0]==="cart_items"?JSON.parse(document.cookie.split('=')[1]):[]
+                cartItems: localStorage['cart'] === undefined?[]:JSON.parse(localStorage['cart']),
                 buyingItems: false,
                 errBuy: false,
                 textRules: [
@@ -111,73 +112,72 @@
         },
         methods: {
             delCartItem(ev) {
-                this.cart_counter--;
-                localStorage.count_cart = this.cart_counter;
+                // this.cart_counter--;
+                // localStorage.count_cart = this.cart_counter;
                 let id = parseInt(ev.path[0].attributes[2].value);
                 this.cartItems = this.cartItems.filter(function (item) {
                     return item.id !== id
                 });
-                document.cookie = "cart_items=" + JSON.stringify(this.cartItems)+";";
+                localStorage['cart'] = JSON.stringify(this.cartItems);
             },
             acceptOrder() {
-                if (document.cookie.split('=')[0] === 'uid') {
-                  this.getReceipt()
-                } else {
-                  this.buyingItems = true;
-                }
+              let isAuth = false
+              if (isAuth) {
+                this.getReceipt()
+              } else {
+                this.buyingItems = true;
+              }
             },
             getReceipt() {
-                if ((this.fname && this.sname && this.group) !== null) {
-                    let codeReceipt = "";
-                    let data;
-                    for(let i=0;i<6;i++){
-                        codeReceipt += Math.floor(Math.random()*10).toString();
-                    }
-                    let now = new Date();
-                    let day = now.getDate();
-                    if (day < 10) day = "0"+now.getDate().toString();
-                    let month = now.getMonth();
-                    if (month < 10) month = "0"+now.getMonth().toString();
-                    let year = now.getFullYear();
-                    data = {
-                        code: codeReceipt,
-                        fname: this.fname,
-                        sname: this.sname,
-                        email: this.email,
-                        group: this.group,
-                        purchaseDate: day+"."+month+"."+year
-                    };
-                    let time = now.getTime();
-                    let expTime = time + 1000*36000;
-                    now.setTime(expTime);
-                    this.itemsForBuy = [];
-                    this.buyingItems = false;
-                    localStorage.count_cart = 0;
-                    document.cookie = "cart_items="+JSON.stringify([]);
-                    document.cookie = "info_receipt="+JSON.stringify(data) + ";expires="+now.toUTCString()+";path=/";
-                    this.$router.push('/receipt');
+              if ((this.fname && this.sname && this.group) !== null) {
+                let codeReceipt = "";
+                let data;
+                for(let i=0;i<6;i++){
+                    codeReceipt += Math.floor(Math.random()*10).toString();
                 }
-                else {
-                    return this.errBuy = true;
-                }
+                let now = new Date();
+                let day = now.getDate();
+                if (day < 10) day = "0"+now.getDate().toString();
+                let month = now.getMonth();
+                if (month < 10) month = "0"+now.getMonth().toString();
+                let year = now.getFullYear();
+                data = {
+                    code: codeReceipt,
+                    fname: this.fname,
+                    sname: this.sname,
+                    email: this.email,
+                    group: this.group,
+                    purchaseDate: day+"."+month+"."+year
+                };
+                let time = now.getTime();
+                let expTime = time + 1000*36000;
+                now.setTime(expTime);
+                this.buyingItems = false;
+                localStorage.removeItem('cart')
+                localStorage['receipt'] = JSON.stringify(data)
+                this.$router.push('/receipt');
+              }
+              else {
+                  return this.errBuy = true;
+              }
             }
         },
         computed: {
-            totalPrice() {
-                let total = 0;
-                const items = this.cartItems;
-                for (let i=0; i<items.length; i++){
-                    total += items[i].price;
-                }
-                return total;
-            },
-            existsItems() {
-                try {
-                    return this.cartItems.length > 0;
-                } catch (err) {
-                    return false
-                }
+          totalPrice() {
+            let total = 0;
+            const items = this.cartItems;
+            for (let i=0; i<items.length; i++){
+                total += items[i].price;
             }
+            return total;
+          },
+          existsItems() {
+            try {
+              return this.cartItems.length > 0;
+            } catch (err) {
+              return false
+            }
+          }
         }
     }
 </script>

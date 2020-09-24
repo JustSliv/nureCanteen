@@ -78,8 +78,8 @@
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list dense nav>
-        <v-list-item-group v-if="info.user_info.login" color="primary">
+      <v-list dense nav flat>
+        <v-list-item-group v-if="info.user_info.login">
           <v-list-item>
             <v-list-item-icon>
               <v-icon>
@@ -87,9 +87,7 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <router-link to="/cabinet" class="text-decoration-none">
-                <v-list-item-title>Личный кабинет</v-list-item-title>
-              </router-link>
+              <v-list-item-title @click="$router.push('/cabinet')">Личный кабинет</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="logout">
@@ -103,7 +101,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
-        <v-list-item-group v-else color="primary">
+        <v-list-item-group v-else>
           <v-list-item>
             <v-list-item-icon>
               <v-icon>
@@ -111,11 +109,9 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <router-link to="/login" class="text-decoration-none">
-                <v-list-item-title>
-                  Войти
-                </v-list-item-title>
-              </router-link>
+              <v-list-item-title @click="$router.push('/login')">
+                Войти
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
@@ -125,16 +121,14 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <router-link to="/register" class="text-decoration-none">
-                <v-list-item-title>
-                  Регистрация
-                </v-list-item-title>
-              </router-link>
+              <v-list-item-title @click="$router.push('/register')">
+                Регистрация
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
         <v-divider></v-divider>
-        <v-list-item-group color="primary">
+        <v-list-item-group>
           <v-list-item>
             <v-list-item-icon>
               <v-icon>
@@ -142,11 +136,11 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <router-link to="/" class="text-decoration-none">Главная</router-link>
+              <v-list-item-title @click="$router.push('/')">Главная</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
-        <v-list-item-group color="primary">
+        <v-list-item-group>
           <v-list-item>
             <v-list-item-icon>
               <v-icon>
@@ -154,7 +148,8 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <router-link to="/products" class="text-decoration-none">Каталог</router-link>
+<!--              <router-link to="/products" class="text-decoration-none">Каталог</router-link>-->
+                <v-list-item-title @click="$router.push('/products')">Каталог</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

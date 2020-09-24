@@ -353,14 +353,6 @@
                     ((this.fname || this.sName || this.age || this.group || this.email || this.phone) !== '');
             }
         },
-        computed: {
-            loadImg() {
-              return 0;
-              // let b64encode = btoa([].reduce.call(new Uint8Array(arrayBuffer),function(p,c){return p+String.fromCharCode(c)},''));
-              // let mimetype = "image/jpeg";
-              // return "data:"+mimetype+";base64,"+b64encode;
-            }
-        },
         mounted() {
           axios.get('http://192.168.0.109:25016/api/person/5/', {
             headers: {

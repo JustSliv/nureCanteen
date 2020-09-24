@@ -17,16 +17,17 @@
                     color="success"
                     style="justify-content: center; display: flex"
                     to="/products"
+                    @click="delReceipt"
             >
                 Вернуться к продуктам
             </v-btn>
 
         </v-card>
-        <div style="margin-top: 8%; margin-left: 40%" v-else>
-            <v-icon x-large style="margin-top: 22%; padding-left: 11%">
+        <div style="margin: 20%" v-else>
+            <v-icon x-large style="text-align: center; display: flex">
                 warning
             </v-icon>
-            <v-card-title>
+            <v-card-title style="justify-content: center; display: flex">
                 <v-icon>navigate_next</v-icon>Чек недоступен<v-icon>navigate_before</v-icon>
             </v-card-title>
         </div>
@@ -35,25 +36,31 @@
 
 <script>
     export default {
-        name: "Receipt",
-        computed: {
+      name: "Receipt",
+      methods: {
+        delReceipt() {
+          localStorage.removeItem('receipt')
+        }
+      },
+      computed: {
             validateReceipt() {
                 // let idReceipt = this.$router.currentRoute.params.id.toString();
-                try {
-                    let receiptInfo = JSON.parse(document.cookie.split(' ')[1].split('=')[1]);
-                    return {
-                        status: true,
-                        id: receiptInfo.code,
-                        fname: receiptInfo.fname,
-                        sname: receiptInfo.sname,
-                        email: receiptInfo.email,
-                        group: receiptInfo.group,
-                        purchaseDate: receiptInfo.purchaseDate
-                    };
-                } catch (err) {
-                    console.log(err);
-                    return false;
-                }
+              let receiptInfo = localStorage['receipt'] === undefined?[]:JSON.parse(localStorage['receipt'])
+              if (receiptInfo.length > 0) {
+                return {
+                  status: true,
+                  id: receiptInfo.code,
+                  fname: receiptInfo.fname,
+                  sname: receiptInfo.sname,
+                  email: receiptInfo.email,
+                  group: receiptInfo.group,
+                  purchaseDate: receiptInfo.purchaseDate
+                };
+              } else {
+                return {
+                  status: false,
+                };
+              }
             },
             getQrCode() {
                 // let receiptInfo = JSON.parse(document.cookie.split(' ')[1].split('=')[1]);

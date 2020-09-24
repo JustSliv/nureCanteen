@@ -74,6 +74,7 @@
 </template>
 
 <script>
+    const axios = require('axios')
     export default {
         name: "Register",
         data() {
@@ -107,7 +108,15 @@
         methods: {
             doRegist() {
                 if ((this.login && this.password && this.fname && this.sname && this.group) !== "") {
-                    return false;
+                    axios.post('http://192.168.0.109:25016/api/person/', {
+                      login: this.login,
+                      password: this.password,
+                      fName: this.fname,
+                      sName: this.sname,
+                      personGroup: this.group,
+                      email: this.email
+                    }).then(resp => console.log(resp))
+                    this.$router.push('cabinet')
                 }
             }
         }
