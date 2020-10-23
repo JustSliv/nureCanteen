@@ -102,13 +102,6 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-<!--              {{getCountColumns(ind)}}-->
-<!--              <v-col v-for="(item, j) in infoCols" :key="j">-->
-<!--                <v-card>-->
-<!--                  <v-card-title>{{item.name}}</v-card-title>-->
-<!--                </v-card>-->
-<!--              </v-col>-->
-<!--              {{doIncrease}}-->
             </v-row>
           </v-container>
         </div>
@@ -332,20 +325,7 @@ export default {
       ind: 0,
       infoCols: null
     }),
-    computed: {
-      getCountRows() {
-        console.log(Math.ceil(this.info.products.length/3))
-        return Math.ceil(this.info.products.length/3)
-      }
-    },
     methods: {
-      doIncrease() {
-        this.ind += 3
-      },
-      getCountColumns(ind) {
-        this.infoCols = this.info.products.slice(ind, ind+3)
-        console.log(this.infoCols)
-      },
       getSearchItems() {
         // sending GET to DB
 

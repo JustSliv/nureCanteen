@@ -163,8 +163,6 @@
         }
       },
       updateProductsList(newValue) {
-        console.log('emited')
-        console.log(newValue)
         this.info.products = newValue
       }
     },
