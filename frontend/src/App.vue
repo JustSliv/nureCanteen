@@ -27,19 +27,19 @@
           <v-divider></v-divider>
         </v-list>
       </v-card>
-      <v-form @submit.prevent="searching" style="margin-left: 70%">
-            <v-row>
-              <v-text-field
-                  style="width: 100%"
-                  v-model="searchText"
-                  @input="getSearchItems"
-                  color="primary"
-                  placeholder="Поиск..."
-                  single-line
-                  hide-details
-                  append-icon="search"
-              ></v-text-field>
-            </v-row>
+      <v-form style="margin-left: 70%">
+        <v-row>
+          <v-text-field
+              style="width: 100%"
+              v-model="searchText"
+              @input="getSearchItems"
+              color="primary"
+              placeholder="Поиск..."
+              single-line
+              hide-details
+              append-icon="search"
+          ></v-text-field>
+        </v-row>
       </v-form>
       <v-card
           v-model="searchText"
@@ -49,21 +49,70 @@
           max-width="450"
           @mouseleave="leaveSearchBar"
       >
-        <v-card
-            flat
-            v-for="item in getSearchItems.products"
-            :key="item"
-        >
-          <v-img class="float-right" style="position: absolute; top: 10%; left: 85%" width="50" height="50" :src="item.image" :alt="item.name"></v-img>
-          <router-link :to="'/product/'+item.id" class="text-decoration-none">
-            <v-card-title>
-              {{item.name}}
-            </v-card-title>
-          </router-link>
-          <v-card-subtitle>{{item.price}} UAH</v-card-subtitle>
-          <v-divider></v-divider>
-        </v-card>
-          <div v-if="getSearchItems.products.length <= 0">
+        <div style="text-align: center; display: block; margin: 5%">
+          <v-hover v-slot:default="{hover}">
+            <v-btn outlined color="primary" @click="searchView = 'default'">
+              <span v-if="hover">
+                Вид сплошлые
+              </span>
+              <v-icon>
+                view_agenda
+              </v-icon>
+            </v-btn>
+          </v-hover>
+          <v-hover v-slot:default="{hover}">
+            <v-btn outlined color="primary" @click="searchView = 'column'">
+              <span v-if="hover">
+                Вид колонок
+              </span>
+              <v-icon>
+                view_column
+              </v-icon>
+            </v-btn>
+          </v-hover>
+        </div>
+        <v-divider></v-divider>
+        <div v-if="searchView === 'default'">
+          <v-card
+              flat
+              v-for="(item, i) in searchItems.products"
+              :key="i"
+          >
+            <v-img class="float-right" style="position: absolute; top: 10%; left: 85%" width="50" height="50" :src="item.image" :alt="item.name"></v-img>
+            <router-link :to="'/product/'+item.id" class="text-decoration-none">
+              <v-card-title>
+                {{item.name}}
+              </v-card-title>
+            </router-link>
+            <v-card-subtitle>{{item.price}} UAH</v-card-subtitle>
+            <v-divider></v-divider>
+          </v-card>
+        </div>
+        <div v-if="searchView === 'column'">
+          <v-container>
+            <v-row>
+              <v-col cols="4" v-for="(item, j) in searchItems.products" :key="j">
+                <v-card>
+                  <v-img :src="item.image"></v-img>
+                  <v-card-text>
+                    <router-link :to="'/product/'+item.id" class="text-decoration-none">
+                      {{item.name}} <br/>
+                    </router-link>
+                    {{item.price}} {{item.currency}}
+                  </v-card-text>
+                </v-card>
+              </v-col>
+<!--              {{getCountColumns(ind)}}-->
+<!--              <v-col v-for="(item, j) in infoCols" :key="j">-->
+<!--                <v-card>-->
+<!--                  <v-card-title>{{item.name}}</v-card-title>-->
+<!--                </v-card>-->
+<!--              </v-col>-->
+<!--              {{doIncrease}}-->
+            </v-row>
+          </v-container>
+        </div>
+        <div v-if="searchItems.products.length <= 0">
              <v-card style="padding: 5% 0 5% 0">
                 <v-icon style="text-align: center; display: block">warning</v-icon>
                 <v-card-title style="justify-content: center">Результата нет</v-card-title>
@@ -166,185 +215,160 @@ export default {
     components: {
     },
     data: () => ({
-        info: {
-          user_info: {
-            login: true,
-            name: "tester",
-            avatar: "https://media1.tenor.com/images/5af3ea60a7715372c434c5ff1877485c/tenor.gif?itemid=15299640",
-            university: ""
-          },
-          filters: [
-            {
-              id: 0,
-              name: "Test1"
-            },
-            {
-              id: 1,
-              name: "Test2"
-            },
-            {
-              id: 2,
-              name: "Test3"
-            },
-            {
-              id: 3,
-              name: "Test4"
-            }
-          ],
-          products: [
-            {
-              id: 0,
-              name: "Пирожок",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 1,
-              name: "Пирожок1",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 2,
-              name: "Пирожок2",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 3,
-              name: "Пирожок3",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 4,
-              name: "Пирожок4",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 5,
-              name: "Пирожок5",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 6,
-              name: "Пирожок6",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 7,
-              name: "Пирожок7",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 8,
-              name: "Пирожок8",
-              price: 54,
-              currency: "UAH",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            }
-          ]
+      info: {
+        user_info: {
+          login: true,
+          name: "tester",
+          avatar: "https://media1.tenor.com/images/5af3ea60a7715372c434c5ff1877485c/tenor.gif?itemid=15299640",
+          university: ""
         },
-        drawer: false,
-        notify: false,
-        searchText: ""
+        filters: [
+          {
+            id: 0,
+            name: "Test1"
+          },
+          {
+            id: 1,
+            name: "Test2"
+          },
+          {
+            id: 2,
+            name: "Test3"
+          },
+          {
+            id: 3,
+            name: "Test4"
+          }
+        ],
+        products: [
+          {
+            id: 0,
+            name: "Пирожок",
+            price: 54,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 1,
+            name: "Пирожок1",
+            price: 4,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 2,
+            name: "Пирожок2",
+            price: 51,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 3,
+            name: "Пирожок3",
+            price: 34,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 4,
+            name: "Пирожок4",
+            price: 14,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 5,
+            name: "Пирожок5",
+            price: 74,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 6,
+            name: "Пирожок6",
+            price: 55,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 7,
+            name: "Пирожок7",
+            price: 53,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          },
+          {
+            id: 8,
+            name: "Пирожок8",
+            price: 23,
+            currency: "UAH",
+            description: "вкусный",
+            available_count: 20,
+            image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+          }
+        ]
+      },
+      drawer: false,
+      notify: false,
+      searchText: "",
+      searchItems: null,
+      searchView: 'default',
+      ind: 0,
+      infoCols: null
     }),
     computed: {
-      getSearchItems() {
-        // sending GET to DB
-        return {
-          products: []
-        }
-        // return {
-        //   products: [
-        //     {
-        //       id: 0,
-        //       name: "Пирожок",
-        //       price: 54,
-        //       currency: "UAH",
-        //       description: "вкусный",
-        //       available_count: 20,
-        //       image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-        //     },
-        //     {
-        //       id: 0,
-        //       name: "Пирожок",
-        //       price: 54,
-        //       currency: "UAH",
-        //       description: "вкусный",
-        //       available_count: 20,
-        //       image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-        //     },
-        //     {
-        //       id: 0,
-        //       name: "Пирожок",
-        //       price: 54,
-        //       currency: "UAH",
-        //       description: "вкусный",
-        //       available_count: 20,
-        //       image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-        //     },
-        //     {
-        //       id: 0,
-        //       name: "Пирожок",
-        //       price: 54,
-        //       currency: "UAH",
-        //       description: "вкусный",
-        //       available_count: 20,
-        //       image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-        //     }
-        //   ]
-        // }
+      getCountRows() {
+        console.log(Math.ceil(this.info.products.length/3))
+        return Math.ceil(this.info.products.length/3)
       }
     },
     methods: {
-        showNotify() {
-            this.$nextTick(() => {
-                this.notify = !this.notify;
-            });
-        },
-        searching() {
-            alert(0)
-            localStorage.search_query = this.searchText
-            window.location.href = '/search'
-        },
-        leaveSearchBar() {
-            this.searchText = ""
-            this.searchItems = []
-        },
-        logout() {
-            // breaking session
-        }
+      doIncrease() {
+        this.ind += 3
+      },
+      getCountColumns(ind) {
+        this.infoCols = this.info.products.slice(ind, ind+3)
+        console.log(this.infoCols)
+      },
+      getSearchItems() {
+        // sending GET to DB
+
+        let regex = new RegExp(this.searchText, 'i');
+        let items = this.info.products.filter(i => regex.test(i.name))
+        this.searchItems = items === undefined?[]:{products: items};
+      },
+      showNotify() {
+          this.$nextTick(() => {
+              this.notify = !this.notify;
+          });
+      },
+      searching() {
+          localStorage.search_query = this.searchText
+          window.location.href = '/search'
+      },
+      leaveSearchBar() {
+          this.searchText = ""
+          this.searchItems = []
+      },
+      logout() {
+          // breaking session
+      }
     }
 };
 </script>

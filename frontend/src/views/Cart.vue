@@ -121,7 +121,7 @@
                 localStorage['cart'] = JSON.stringify(this.cartItems);
             },
             acceptOrder() {
-              let isAuth = false
+              let isAuth = true
               if (isAuth) {
                 this.getReceipt()
               } else {
@@ -129,7 +129,7 @@
               }
             },
             getReceipt() {
-              if ((this.fname && this.sname && this.group) !== null) {
+              if ((this.info.userInfo.fname && this.info.userInfo.sname && this.info.userInfo.group) !== null) {
                 let codeReceipt = "";
                 let data;
                 for(let i=0;i<6;i++){
@@ -143,10 +143,10 @@
                 let year = now.getFullYear();
                 data = {
                     code: codeReceipt,
-                    fname: this.fname,
-                    sname: this.sname,
-                    email: this.email,
-                    group: this.group,
+                    fname: this.info.userInfo.fname,
+                    sname: this.info.userInfo.sname,
+                    email: this.info.userInfo.email,
+                    group: this.info.userInfo.group,
                     purchaseDate: day+"."+month+"."+year
                 };
                 let time = now.getTime();

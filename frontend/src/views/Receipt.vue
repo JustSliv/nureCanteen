@@ -45,8 +45,8 @@
       computed: {
             validateReceipt() {
                 // let idReceipt = this.$router.currentRoute.params.id.toString();
-              let receiptInfo = localStorage['receipt'] === undefined?[]:JSON.parse(localStorage['receipt'])
-              if (receiptInfo.length > 0) {
+              let receiptInfo = localStorage['receipt'] === undefined?{}:JSON.parse(localStorage['receipt'])
+              if (Object.keys(receiptInfo).length > 0) {
                 return {
                   status: true,
                   id: receiptInfo.code,
