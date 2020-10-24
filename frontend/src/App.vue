@@ -334,17 +334,18 @@ export default {
         this.searchItems = items === undefined?[]:{products: items};
       },
       showNotify() {
-          this.$nextTick(() => {
-              this.notify = !this.notify;
-          });
+        this.$nextTick(() => {
+            this.notify = !this.notify;
+        });
       },
       searching() {
-          localStorage.search_query = this.searchText
-          window.location.href = '/search'
+        localStorage.search_query = this.searchText
+        window.location.href = '/search'
       },
       leaveSearchBar() {
-          this.searchText = ""
-          this.searchItems = []
+        localStorage.removeItem('search_query')
+        this.searchText = ""
+        this.searchItems = []
       },
       logout() {
           // breaking session

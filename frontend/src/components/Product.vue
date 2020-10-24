@@ -1,29 +1,53 @@
 <template>
-  <v-card width="150px" :data-id="product.id">
-    <div style="justify-content: center; display: flex">
-      <v-btn icon x-large title="Описание товара" @click="infoProduct = !infoProduct">
-        <v-icon x-large>
-          keyboard_arrow_down
-        </v-icon>
-      </v-btn>
-    </div>
-    <div v-if="infoProduct">
-      <v-card-text>
-        <b>Категория:</b> {{product.category}} <br/>
-        <b>Доступно:</b> {{ product.available_count }} шт. <br/>
-        <b>Описание:</b> {{ product.description }} <br/>
-      </v-card-text>
-    </div>
-    <div v-else>
-      <v-img :src="product.image" :alt="product.name"></v-img>
-      <v-card-subtitle
-          style="cursor: pointer"
-          @click="$router.push('/product/'+product.id)"
-      >
-        {{product.name}} <br/> {{product.price}} UAH
-      </v-card-subtitle>
-      <v-btn @click="buyProduct" color="success" width="100%">В КОРЗИНУ</v-btn>
-    </div>
+  <v-card max-width="220px" :data-id="product.id">
+    <v-menu transition="fab-transition" offset-y v-model="infoProduct">
+      <template v-slot:activator="{on, attrs}">
+        <div style="justify-content: center; display: flex">
+          <v-btn
+              icon
+              x-large
+              title="Описание товара"
+              v-bind="attrs"
+              v-on="on"
+              v-if="!activeInfoProduct"
+              @click="activeInfoProduct = true"
+          >
+            <v-icon x-large>
+              keyboard_arrow_down
+            </v-icon>
+          </v-btn>
+          <v-btn
+              icon
+              x-large
+              v-bind="attrs"
+              v-on="on"
+              v-if="activeInfoProduct"
+              @click="activeInfoProduct = false"
+              @mouseleave="reRenderInfoBtn"
+          >
+            <v-icon x-large>
+              keyboard_arrow_up
+            </v-icon>
+          </v-btn>
+        </div>
+        <div>
+          <v-img :src="product.image" :alt="product.name"></v-img>
+          <v-card-subtitle>
+            <router-link class="text-decoration-none" :to="'/product/'+product.id">
+              {{product.name}}
+            </router-link> <br/> {{product.price}} UAH
+          </v-card-subtitle>
+          <v-btn @click="buyProduct" color="success" width="100%">В КОРЗИНУ</v-btn>
+        </div>
+      </template>
+      <v-card>
+        <v-card-text>
+          <b>Категория:</b> {{product.category}} <br/>
+          <b>Доступно:</b> {{ product.available_count }} шт. <br/>
+          <b>Описание:</b> {{ product.description }} <br/>
+        </v-card-text>
+      </v-card>
+    </v-menu>
     <v-dialog v-model="dialog" max-width="320" v-if="dialog">
       <v-card>
         <v-card-title class="headline">
@@ -45,7 +69,7 @@
               text
               @click="toCart"
           >
-            Продолжить покупки
+            Продолжить
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -55,7 +79,7 @@
         v-model="duplicate"
         v-if="duplicate"
         multi-line
-        timeout="4000"
+        timeout="2000"
         color="success"
     >
       Данный товар уже в корзине
@@ -65,10 +89,11 @@
         v-model="inCart"
         v-if="inCart"
         multi-line
-        timeout="4000"
+        timeout="2000"
         color="success"
     >
       Товар добавлен в корзине
+      <v-btn text to="/cart">В корзину</v-btn>
     </v-snackbar>
   </v-card>
 </template>
@@ -87,15 +112,19 @@ export default {
       dialog: false,
       duplicate: false,
       inCart: false,
-      infoProduct: false
+      infoProduct: false,
+      activeInfoProduct: false
     }
   },
   methods: {
+    reRenderInfoBtn() {
+      this.activeInfoProduct = false;
+      this.infoProduct = false;
+    },
     buyProduct() {
-      let id = this.product.id;
-      let info = document.cookie === undefined || document.cookie === ""?[]:document.cookie;
-      if (info.length >= 10) info = info.split('=')[0]==="cart_items"?JSON.parse(info.split('=')[1].replace(';', '').split(' ')[0]):[];
       let choose = false;
+      let id = this.product.id;
+      let info = localStorage['cart'] === undefined?[]:JSON.parse(localStorage['cart']);
       for (let i=0;i<info.length;i++) {
         if (id === info[i].id) {
           choose = true;
@@ -113,9 +142,6 @@ export default {
     },
     toCart() {
       this.dialog = false;
-      // let cur_count = isNaN(localStorage.count_cart)?0:localStorage.count_cart;
-      // cur_count++;
-      // localStorage.count_cart = cur_count;
       let isAuth = false;
       if (isAuth) {
         return 0;
@@ -133,18 +159,6 @@ export default {
         )
         localStorage['cart'] = JSON.stringify(info)
       }
-      // let info = document.cookie === undefined || document.cookie === ""?[]:document.cookie;
-      // if (info.length >= 10) info = JSON.parse(info.split("=")[1]);
-      // info.push(
-      //     {
-      //         id: this.product.id,
-      //         name: this.product.name,
-      //         category: this.product.category,
-      //         description: this.product.description,
-      //         price: this.product.price
-      //     }
-      // );
-      // document.cookie = "cart_items=" + JSON.stringify(info)+";";
       this.$nextTick(() => {
         this.inCart = true;
       });
@@ -157,8 +171,5 @@ export default {
 </script>
 
 <style scoped>
-.product {
-  padding: 10%;
-  margin: 0 0 3% 3%;
-}
+
 </style>

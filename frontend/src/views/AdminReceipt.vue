@@ -21,6 +21,7 @@
                   Группа: {{getReceiptInfo.receiptInfo.user.group}} <br/>
                   Телефон: {{getReceiptInfo.receiptInfo.user.phone}} <br/>
                   E-mail: {{getReceiptInfo.receiptInfo.user.email}}
+
                 </v-card-text>
               </v-col>
             </v-row>
@@ -64,8 +65,6 @@
                           label="Полная сумма"
                           v-model.number="fullAmount"
                           @input="pollChange"
-                          :rules="numRules"
-                          required
                       ></v-text-field>
                     </v-col>
                     <v-col>
@@ -133,101 +132,104 @@ export default {
     },
     getReceiptInfo() {
       return {
-        receiptInfo: {
-          id: 123456,
-          date: "09.09.2020",
-          paid: false,
-          userCart: [
-            {
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },{
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },{
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-              id: 0,
-              name: "Пирожок0",
-              price: 21,
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            }
-          ],
-          user: {
-            fname: "Tim",
-            sname: "Livr",
-            group: "PZPI-18-7",
-            email: "test@test.com",
-            phone: "12345678910",
-            avatar: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-          }
-        }
+        receiptInfo: JSON.parse(localStorage['receipt'])
       }
+      // return {
+      //   receiptInfo: {
+      //     id: 123456,
+      //     date: "09.09.2020",
+      //     paid: false,
+      //     userCart: [
+      //       {
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },
+      //       {
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },
+      //       {
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },{
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },
+      //       {
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },{
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },
+      //       {
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },
+      //       {
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       },
+      //       {
+      //         id: 0,
+      //         name: "Пирожок0",
+      //         price: 21,
+      //         category: "Духовный",
+      //         description: "вкусный",
+      //         available_count: 20,
+      //         image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //       }
+      //     ],
+      //     user: {
+      //       fname: "Tim",
+      //       sname: "Livr",
+      //       group: "PZPI-18-7",
+      //       email: "test@test.com",
+      //       phone: "12345678910",
+      //       avatar: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      //     }
+      //   }
+      // }
     }
   }
 }

@@ -54,6 +54,7 @@
                   sname: receiptInfo.sname,
                   email: receiptInfo.email,
                   group: receiptInfo.group,
+                  canteen: receiptInfo.activeCanteen,
                   purchaseDate: receiptInfo.purchaseDate
                 };
               } else {
