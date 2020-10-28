@@ -24,7 +24,7 @@
                 label="Введите своё имя фамилию"
                 :rules="rulesText"
                 solo
-                v-model="initials"
+                v-model="personName"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -43,7 +43,7 @@ export default {
   name: "RestoreAcc",
   data() {
     return {
-      initials: '',
+      personName: '',
       rulesText: [
           v => v.length > 0 || 'Поле не может быть пустым'
       ],
@@ -54,7 +54,12 @@ export default {
   },
   methods: {
     doRecovery() {
-
+      if (this.personName !== '') {
+        this.successForm = true
+      } else {
+        this.errForm = true
+        this.errText = 'Введите имя и фамилию!'
+      }
     }
   }
 }
