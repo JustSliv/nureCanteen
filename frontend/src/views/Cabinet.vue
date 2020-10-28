@@ -87,129 +87,72 @@
                 <v-tab-item>
                     <v-card>
                         <v-form>
-                            <v-container style="margin-left: 18%">
+                            <v-container>
                                 <v-row>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                        style="padding: 3%"
-                                    >
-                                        <v-row>
-                                            Имя:
-                                        </v-row>
-                                        <v-row>
-                                            <v-text-field
-                                                v-model="info.user_info.fName"
-                                            ></v-text-field>
-                                        </v-row>
+                                    <v-col>
+                                      <v-text-field
+                                          label="Имя"
+                                          solo
+                                          v-model="info.user_info.fName"
+                                      ></v-text-field>
                                     </v-col>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                        style="padding: 3%"
-                                    >
-                                        <v-row>
-                                            Фамилия:
-                                        </v-row>
-                                        <v-row>
-                                            <v-text-field
-                                                v-model="info.user_info.sName"
-                                            ></v-text-field>
-                                        </v-row>
+                                    <v-col>
+                                      <v-text-field
+                                          label="Фамилия"
+                                          solo
+                                          v-model="info.user_info.sName"
+                                      ></v-text-field>
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                        style="padding: 3%"
-                                    >
-                                        <v-row>
-                                            Возраст:
-                                        </v-row>
-                                        <v-row>
-                                            <v-text-field type="number"
-                                                v-model="info.user_info.age"
-                                            ></v-text-field>
-                                        </v-row>
+                                    <v-col>
+                                      <v-text-field
+                                          type="number"
+                                          label="Возраст"
+                                          solo
+                                          v-model="info.user_info.age"
+                                      ></v-text-field>
                                     </v-col>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                        style="padding: 3%"
-                                    >
-                                        <v-row>
-                                            Группа:
-                                        </v-row>
-                                        <v-row>
-                                            <v-text-field
-                                                v-model="info.user_info.personGroup"
-                                                :rules="groupRules"
-                                            ></v-text-field>
-                                        </v-row>
+                                    <v-col>
+                                      <v-text-field
+                                          label="Группа"
+                                          solo
+                                          v-model="info.user_info.personGroup"
+                                          :rules="groupRules"
+                                      ></v-text-field>
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                        style="padding: 3%"
-                                    >
-                                        <v-row>
-                                            E-mail:
-                                        </v-row>
-                                        <v-row>
-                                            <v-text-field type="email"
-                                                v-model="info.user_info.email"
-                                                :rules="emailRules"
-                                            ></v-text-field>
-                                        </v-row>
+                                    <v-col>
+                                      <v-text-field
+                                          label="E-mail"
+                                          solo
+                                          v-model="info.user_info.email"
+                                          :rules="emailRules"
+                                      ></v-text-field>
                                     </v-col>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                        style="padding: 3%"
-                                    >
-                                        <v-row>
-                                            Телефон:
-                                        </v-row>
-                                        <v-row>
-                                            <v-text-field
-                                                v-model="info.user_info.phone"
-                                            ></v-text-field>
-                                        </v-row>
+                                    <v-col>
+                                      <v-text-field
+                                          label="Телефон"
+                                          solo
+                                          v-model="info.user_info.phone"
+                                      ></v-text-field>
                                     </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                    >
-                                        <v-img width="50" height="50" :src="info.user_info.avatar" v-model="info.user_info.avatar"></v-img>
-                                    </v-col>
-                                    <v-col
-                                        cols="10"
-                                        md="4"
-                                        sm="2"
-                                    >
+                                  <v-col title="Ваш аватар" cols="12">
+                                    <v-row no-gutters align="end">
+                                      <v-col>
+                                        <v-img width="150" height="150" :src="info.user_info.avatar" v-model="info.user_info.avatar"></v-img>
+                                      </v-col>
+                                      <v-col>
                                         <v-file-input
-                                            accept="image/png, image/jpeg, image/jpg"
-                                            placeholder="Иконка профиля"
                                             @change="reRenderImg"
-                                        >
-
-                                        </v-file-input>
-                                    </v-col>
+                                        ></v-file-input>
+                                      </v-col>
+                                    </v-row>
+                                  </v-col>
                                 </v-row>
+                              <v-btn block color="success" @click="editMyData">ИЗМЕНИТЬ ДАННЫЕ</v-btn>
                             </v-container>
-                            <v-btn width="100%" color="success" @click="editMyData">ИЗМЕНИТЬ ДАННЫЕ</v-btn>
                         </v-form>
                     </v-card>
                     <v-snackbar
