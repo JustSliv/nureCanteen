@@ -1,39 +1,36 @@
 <template>
-    <v-app>
-<!--        <v-card style="margin-top: 8%" max-width="240px" max-height="100%">-->
-<!--            <FilterList :info="info"/>-->
-<!--        </v-card>-->
-      <v-card style="margin: 10%; background-color: #bfe9ff" flat>
-        <v-menu v-model="showFilters" max-width="180">
-          <template v-slot:activator="{on}">
-            <v-card-title>
-              Все продукты
-              <v-btn v-on="on" icon @click="showFilters = !showFilters">
-                <v-icon>
-                  filter_list
-                </v-icon>
-              </v-btn>
-            </v-card-title>
-          </template>
-          <v-card>
-            <v-card-title>
-              Фильтры:
-              <v-radio-group>
-                <v-radio
-                    v-for="item in info.filters"
-                    :key="item.id"
-                    :label="item.category"
-                    :value="item.category"
-                    @click="execFilter"
-                    :data-id="item.id"
-                ></v-radio>
-              </v-radio-group>
-            </v-card-title>
-          </v-card>
-        </v-menu>
-        <ProductList :info="info" @update-products="updateProductsList" v-model="info.products"/>
-      </v-card>
-    </v-app>
+  <v-app>
+    <v-card style="margin: 10%; background-color: #bfe9ff" flat>
+      <v-menu v-model="showFilters" max-width="180">
+        <template v-slot:activator="{on}">
+          <v-card-title>
+            {{curLocale.productInfo.title}}
+            <v-btn v-on="on" icon @click="showFilters = !showFilters">
+              <v-icon>
+                filter_list
+              </v-icon>
+            </v-btn>
+          </v-card-title>
+        </template>
+        <v-card>
+          <v-card-title>
+            {{curLocale.productInfo.filterTitle}}
+            <v-radio-group>
+              <v-radio
+                  v-for="item in info.filters"
+                  :key="item.id"
+                  :label="item.category"
+                  :value="item.category"
+                  @click="execFilter"
+                  :data-id="item.id"
+              ></v-radio>
+            </v-radio-group>
+          </v-card-title>
+        </v-card>
+      </v-menu>
+      <ProductList :info="info" @update-products="updateProductsList" v-model="info.products"/>
+    </v-card>
+  </v-app>
 </template>
 
 <script>
@@ -163,7 +160,77 @@
         ]
         },
       drawer: false,
-      showFilters: false
+      showFilters: false,
+      translate: false,
+      curLocale: {},
+      locales: {
+        'en-EN': {
+          productInfo: {
+            title: 'All goods',
+            filterTitle: 'Filters:',
+            currency: 'UAH.',
+            toCart: {
+              toCartTitle: 'To cart',
+              tip: 'Item will be put to cart',
+              btns: [
+                'Cancel', 'Continue'
+              ],
+              alerts: [
+                'This item already in cart', 'Item added to cart'
+              ],
+              alertBtn: 'Cart'
+            },
+            info: [
+              'Category:', 'Available:', '', 'Description:'
+            ],
+          }
+        },
+        'ru-RU': {
+          productInfo: {
+            title: 'Все продукты',
+            filterTitle: 'Фильтры:',
+            currency: 'ГРН.',
+            toCart: {
+              toCartTitle: 'В корзину',
+              tip: 'Товар будет занесен к вам в корзину',
+              btns: [
+                  'Отмена', 'Продолжить'
+              ],
+              alerts: [
+                  'Данный товар уже в корзине', 'Товар добавлен в корзине'
+              ],
+              alertBtn: 'Корзина'
+            },
+            info: [
+                'Категория:', 'Доступно:', 'шт.', 'Описание:'
+            ],
+          }
+        },
+        'ua-UA': {
+          productInfo: {
+            title: 'Усі продукті',
+            filterTitle: 'Фільтри:',
+            currency: 'ГРН.',
+            toCart: {
+              toCartTitle: 'До корзини',
+              tip: 'Товар буде додан до вашої корзини',
+              btns: [
+                'Відміна', 'Продовжити'
+              ],
+              alerts: [
+                'Данний товар вже у корзині', 'Товар додан до корзини'
+              ],
+              alertBtn: 'Корзина'
+            },
+            info: [
+              'Категорія:', 'Доступно:', 'шт.', 'Опис:'
+            ],
+          }
+        }
+      },
+      langOne: false,
+      langSecond: false,
+      langThird: false
     }),
     methods: {
       execFilter(ev) {
@@ -184,6 +251,18 @@
       },
       updateProductsList(newValue) {
         this.info.products = newValue
+      }
+    },
+    beforeMount() {
+      if (localStorage['lang'] === 'ru-RU') {
+        this.curLocale = this.locales["ru-RU"];
+      } else if (localStorage['lang'] === 'en-EN') {
+        this.curLocale = this.locales["en-EN"];
+      } else if (localStorage['lang'] === 'ua-UA') {
+        this.curLocale = this.locales["ua-UA"];
+      } else {
+        localStorage.setItem('lang', 'ua-UA')
+        this.curLocale = this.locales["ua-UA"];
       }
     }
   }

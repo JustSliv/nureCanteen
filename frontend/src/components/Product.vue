@@ -35,16 +35,16 @@
           <v-card-subtitle>
             <router-link class="text-decoration-none" :to="'/product/'+product.id">
               {{product.name}}
-            </router-link> <br/> {{product.price}} UAH
+            </router-link> <br/> {{product.price}} {{curLocale.productInfo.currency}}
           </v-card-subtitle>
-          <v-btn @click="buyProduct" color="success" width="100%">В КОРЗИНУ</v-btn>
+          <v-btn @click="buyProduct" color="success" width="100%">{{curLocale.productInfo.toCart.toCartTitle}}</v-btn>
         </div>
       </template>
       <v-card>
         <v-card-text>
-          <b>Категория:</b> {{product.category}} <br/>
-          <b>Доступно:</b> {{ product.available_count }} шт. <br/>
-          <b>Описание:</b> {{ product.description }} <br/>
+          <b>{{curLocale.productInfo.info[0]}}</b> {{product.category}} <br/>
+          <b>{{curLocale.productInfo.info[1]}}</b> {{ product.available_count }} {{curLocale.productInfo.info[2]}} <br/>
+          <b>{{curLocale.productInfo.info[3]}}</b> {{ product.description }} <br/>
         </v-card-text>
       </v-card>
     </v-menu>
@@ -54,7 +54,7 @@
           {{product.name}}
         </v-card-title>
         <v-card-text>
-          Товар будет занесен к вам в корзину
+          {{curLocale.productInfo.toCart.tip}}
         </v-card-text>
         <v-card-actions>
           <v-btn
@@ -62,14 +62,14 @@
               text
               @click="dialog = false"
           >
-            Отмена
+            {{curLocale.productInfo.toCart.btns[0]}}
           </v-btn>
           <v-btn
               color="green"
               text
               @click="toCart"
           >
-            Продолжить
+            {{curLocale.productInfo.toCart.btns[1]}}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -82,7 +82,7 @@
         timeout="2000"
         color="success"
     >
-      Данный товар уже в корзине
+      {{curLocale.productInfo.toCart.alerts[0]}}
     </v-snackbar>
     <v-snackbar
         top
@@ -92,8 +92,9 @@
         timeout="2000"
         color="success"
     >
-      Товар добавлен в корзине
-      <v-btn text to="/cart">В корзину</v-btn>
+      {{curLocale.productInfo}}
+      {{curLocale.productInfo.toCart.alerts[1]}}
+      <v-btn text to="/cart">{{curLocale.productInfo.toCart.alertBtn}}</v-btn>
     </v-snackbar>
   </v-card>
 </template>
@@ -109,11 +110,89 @@ export default {
   },
   data() {
     return {
+      curLocale: null,
+      locales: {
+        'en-EN': {
+          productInfo: {
+            title: 'All goods',
+            filterTitle: 'Filters:',
+            currency: 'UAH.',
+            toCart: {
+              toCartTitle: 'To cart',
+              tip: 'Item will be put to cart',
+              btns: [
+                'Cancel', 'Continue'
+              ],
+              alerts: [
+                'This item already in cart', 'Item added to cart'
+              ],
+              alertBtn: 'Cart'
+            },
+            info: [
+              'Category:', 'Available:', '', 'Description:'
+            ],
+          }
+        },
+        'ru-RU': {
+          productInfo: {
+            title: 'Все продукты',
+            filterTitle: 'Фильтры:',
+            currency: 'ГРН.',
+            toCart: {
+              toCartTitle: 'В корзину',
+              tip: 'Товар будет занесен к вам в корзину',
+              btns: [
+                'Отмена', 'Продолжить'
+              ],
+              alerts: [
+                'Данный товар уже в корзине', 'Товар добавлен в корзине'
+              ],
+              alertBtn: 'Корзина'
+            },
+            info: [
+              'Категория:', 'Доступно:', 'шт.', 'Описание:'
+            ],
+          }
+        },
+        'ua-UA': {
+          productInfo: {
+            title: 'Усі продукті',
+            filterTitle: 'Фільтри:',
+            currency: 'ГРН.',
+            toCart: {
+              toCartTitle: 'До корзини',
+              tip: 'Товар буде додан до вашої корзини',
+              btns: [
+                'Відміна', 'Продовжити'
+              ],
+              alerts: [
+                'Данний товар вже у корзині', 'Товар додан до корзини'
+              ],
+              alertBtn: 'Корзина'
+            },
+            info: [
+              'Категорія:', 'Доступно:', 'шт.', 'Опис:'
+            ],
+          }
+        }
+      },
       dialog: false,
       duplicate: false,
       inCart: false,
       infoProduct: false,
       activeInfoProduct: false
+    }
+  },
+  beforeMount() {
+    if (localStorage['lang'] === 'ru-RU') {
+      this.curLocale = this.locales["ru-RU"];
+    } else if (localStorage['lang'] === 'en-EN') {
+      this.curLocale = this.locales["en-EN"];
+    } else if (localStorage['lang'] === 'ua-UA') {
+      this.curLocale = this.locales["ua-UA"];
+    } else {
+      localStorage.setItem('lang', 'ua-UA')
+      this.curLocale = this.locales["ua-UA"];
     }
   },
   methods: {

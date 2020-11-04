@@ -1,8 +1,8 @@
 <template>
     <div id="grid">
         <Product
-                v-for="(product, i) in info.products" v-bind:key="i"
-                v-bind:product="product"
+            v-for="(product, i) in info.products" v-bind:key="i"
+            v-bind:product="product"
         />
     </div>
 </template>

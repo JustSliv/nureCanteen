@@ -4,10 +4,10 @@
     <v-badge
             :content="cartItems.length"
     >
-      Корзина
+      {{curLocale.titlePage}}
     </v-badge>
       <v-btn style="margin-left: 42%" @click="acceptOrder">
-        Оформить заказ
+        {{curLocale.btnSuccess}}
         <v-icon style="margin-left: 2%">
           check_circle
         </v-icon>
@@ -19,13 +19,13 @@
           <template v-slot:activator>
             <v-list-item-title>{{item.name}}</v-list-item-title>
             <v-item-group>
-                <v-list-item-title>Цена: {{item.price}} UAH</v-list-item-title>
+                <v-list-item-title>{{curLocale.infoCart[0]}} {{item.price}} {{curLocale.infoCart[1]}}</v-list-item-title>
             </v-item-group>
           </template>
           <v-list-item-group style="margin-left: 5%">
             <v-list-item-content>
-              <v-list-item-title>Описание: {{item.description}}</v-list-item-title>
-              <v-list-item-subtitle>Категория: {{item.category}}</v-list-item-subtitle>
+              <v-list-item-title>{{curLocale.infoCart[2]}} {{item.description}}</v-list-item-title>
+              <v-list-item-subtitle>{{curLocale.infoCart[3]}} {{item.category}}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item-group>
       </v-list-group>
@@ -37,32 +37,55 @@
       </v-card>
     </v-list>
       <v-card-title style="margin-top: 0; padding-left: 25%">
-          Всего к оплате: <span style="margin-left: 46.5%">{{totalPrice}} UAH</span>
+          {{curLocale.totalPay[0]}} <span style="margin-left: 46.5%">{{totalPrice}} {{curLocale.totalPay[1]}}</span>
     </v-card-title>
       <v-dialog v-model="buyingItems" width="650" persistent>
         <v-card>
           <v-card-title>
-            <span class="headline">Ваши Данные</span>
+            <span class="headline">
+              {{curLocale.userData.title}}
+            </span>
           </v-card-title>
           <v-divider></v-divider>
           <v-alert type="error" v-if="errBuy">
-            Проверьте все поля
+            {{curLocale.userData.alertErr}}
           </v-alert>
           <v-container>
             <v-row>
               <v-col>
-                <v-text-field v-model="info.userInfo.fName" :rules="textRules" label="Имя*" required></v-text-field>
+                <v-text-field
+                    v-model="info.userInfo.fName"
+                    :rules="textRules"
+                    :label="curLocale.userData.form.labels[0]"
+                    required
+                ></v-text-field>
               </v-col>
               <v-col>
-                <v-text-field v-model="info.userInfo.sName" :rules="textRules" label="Фамилия*" required></v-text-field>
+                <v-text-field
+                    v-model="info.userInfo.sName"
+                    :rules="textRules"
+                    :label="curLocale.userData.form.labels[1]"
+                    required
+                ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field v-model="info.userInfo.group" :rules="textRules" label="Группа*" required></v-text-field>
+                <v-text-field
+                    v-model="info.userInfo.group"
+                    :rules="textRules"
+                    :label="curLocale.userData.form.labels[2]"
+                    required
+                ></v-text-field>
               </v-col>
               <v-col>
-                <v-text-field v-model="info.userInfo.email" :rules="emailRules" label="Email" hint="Для рассылки акций и т.п." persistent-hint></v-text-field>
+                <v-text-field
+                    v-model="info.userInfo.email"
+                    :rules="emailRules"
+                    :label="curLocale.userData.form.labels[3]"
+                    :hint="curLocale.userData.form.hintEmail"
+                    persistent-hint
+                ></v-text-field>
               </v-col>
             </v-row>
             <v-row style="text-align: center; display: block">
@@ -72,15 +95,30 @@
                 </v-icon>
               </v-btn>
               <v-col>
-                <v-select v-model="info.userInfo.activeCanteen" label="Выберите столовую:" style="padding: 4%" v-if="chooseCanteen" :items="['dsa']"></v-select>
-                <v-select v-model="info.userInfo.typePay" label="Оплата" :items="['Картой', 'На кассе']" v-if="chooseCanteen"></v-select>
+                <v-select
+                    v-model="info.userInfo.activeCanteen"
+                    :label="curLocale.userData.form.chooseCanteen"
+                    style="padding: 4%"
+                    v-if="chooseCanteen"
+                    :items="['dsa']"
+                ></v-select>
+                <v-select
+                    v-model="info.userInfo.typePay"
+                    :label="curLocale.userData.form.payTitle"
+                    :items="curLocale.userData.form.typePay"
+                    v-if="chooseCanteen"
+                ></v-select>
               </v-col>
             </v-row>
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red" text @click="buyingItems = false">Отмена</v-btn>
-            <v-btn color="blue" text @click="getReceipt">Подтвердить</v-btn>
+            <v-btn color="red" text @click="buyingItems = false">
+              {{curLocale.userData.form.btns[0]}}
+            </v-btn>
+            <v-btn color="blue" text @click="getReceipt">
+              {{curLocale.userData.form.btns[1]}}
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -88,7 +126,9 @@
   <v-app v-else>
     <v-card style="margin: 20%;background-color: #bfe9ff" flat>
       <v-icon style="text-align: center; display: block" x-large>not_interested</v-icon>
-      <v-card-title style="justify-content: center">Корзина пуста</v-card-title>
+      <v-card-title style="justify-content: center">
+        {{curLocale.notFound}}
+      </v-card-title>
     </v-card>
   </v-app>
 </template>
@@ -98,6 +138,111 @@
     name: "Cart",
     data() {
       return {
+        curLocale: {},
+        locales: {
+          'en-EN': {
+            titlePage: 'Cart',
+            btnSuccess: 'Confirm the order',
+            infoCart: [
+                'Price:', 'UAH', 'Description:', 'Category:'
+            ],
+            totalPay: [
+              'Total to pay', 'UAH'
+            ],
+            userData: {
+              title: 'Your personal info',
+              alertErr: 'Check all fields',
+              form: {
+                labels: [
+                  'First Name*',
+                  'Second Name*',
+                  'Group*',
+                  'Email'
+                ],
+                hintEmail: 'For stocks and other/',
+                chooseCanteen: 'Choose a canteen:',
+                payTitle: 'Payment',
+                typePay: [
+                    'Credit Card',
+                    'On the checkout'
+                ],
+                btns: [
+                    'Cancel',
+                    'Confirm'
+                ]
+              }
+            },
+            notFound: 'Cart is empty'
+          },
+          'ru-RU': {
+            titlePage: 'Корзина',
+            btnSuccess: 'Оформить заказ',
+            infoCart: [
+              'Цена:', 'ГРН', 'Описание:', 'Категория:'
+            ],
+            totalPay: [
+              'Всего к оплате', 'ГРН'
+            ],
+            userData: {
+              title: 'Ваши данные',
+              alertErr: 'Проверьте все поля',
+              form: {
+                labels: [
+                  'Имя*',
+                  'Фамилия*',
+                  'Группа*',
+                  'Email'
+                ],
+                hintEmail: 'Для рассылки акций',
+                chooseCanteen: 'Выберите столовую:',
+                payTitle: 'Оплата',
+                typePay: [
+                  'Кредитной картой',
+                  'На кассе'
+                ],
+                btns: [
+                  'Отменить',
+                  'Подтвердить'
+                ]
+              }
+            },
+            notFound: 'Корзина пуста'
+          },
+          'ua-UA': {
+            titlePage: 'Кошук',
+            btnSuccess: 'Оформити замовлення',
+            infoCart: [
+              'Ціна:', 'ГРН', 'Опис:', 'Категорія:'
+            ],
+            totalPay: [
+              'Усього до сплати', 'ГРН'
+            ],
+            userData: {
+              title: 'Ваші данні',
+              alertErr: 'Перевірте усі поля',
+              form: {
+                labels: [
+                  "Ім'я*",
+                  'Прізвище*',
+                  'Група*',
+                  'Email'
+                ],
+                hintEmail: 'Для розсилки акцій',
+                chooseCanteen: 'Виберіть їдальню:',
+                payTitle: 'Оплата',
+                typePay: [
+                  'Кредитна карта',
+                  'На касі'
+                ],
+                btns: [
+                  'Відміна',
+                  'Підтвердити'
+                ]
+              }
+            },
+            notFound: 'Кошук пуст'
+          }
+        },
         info: {
           userInfo: {
             fName: 'Tim',
@@ -108,8 +253,6 @@
             activeCanteen: ''
           }
         },
-        // cart_counter: localStorage.count_cart,
-        // document.cookie.split('=')[0]==="cart_items"?JSON.parse(document.cookie.split('=')[1]):[]
         cartItems: localStorage['cart'] === undefined?[]:JSON.parse(localStorage['cart']),
         buyingItems: false,
         errBuy: false,
@@ -121,6 +264,18 @@
         emailRules: [
             v => (v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")!==null?v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")[0]:null) !== null || "Введите верный e-mail"
         ]
+      }
+    },
+    beforeMount() {
+      if (localStorage['lang'] === 'ru-RU') {
+        this.curLocale = this.locales["ru-RU"];
+      } else if (localStorage['lang'] === 'en-EN') {
+        this.curLocale = this.locales["en-EN"];
+      } else if (localStorage['lang'] === 'ua-UA') {
+        this.curLocale = this.locales["ua-UA"];
+      } else {
+        localStorage.setItem('lang', 'ua-UA')
+        this.curLocale = this.locales["ua-UA"];
       }
     },
     methods: {

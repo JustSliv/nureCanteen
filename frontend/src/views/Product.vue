@@ -10,14 +10,14 @@
               </v-col>
               <v-col cols="6" md="6">
                 <v-row style="margin-left: 55%">
-                  <v-card-text><b>Цена:</b> {{getProduct.price}} UAH</v-card-text>
+                  <v-card-text><b>{{curLocale.info[0]}}</b> {{getProduct.price}} {{curLocale.info[1]}}</v-card-text>
                 </v-row>
                 <v-row style="margin-left: 55%">
-                  <v-card-text><b>Описание:</b> <br/>{{getProduct.description}}</v-card-text>
+                  <v-card-text><b>{{curLocale.info[2]}}</b> <br/>{{getProduct.description}}</v-card-text>
                 </v-row>
                 <v-row style="margin-left: 55%">
                   <v-card-text>
-                    <b>Кол-во, шт:</b>
+                    <b>{{curLocale.info[3]}}</b>
                     <v-text-field
                         type="number"
                         style="max-width: 20%; position: absolute"
@@ -28,7 +28,7 @@
             </v-row>
             <v-divider></v-divider>
             <v-card-title>
-              Отзывы
+              {{curLocale.comment.title}}
               <v-btn title="Добавить отзыв" @click="addReview" icon>
                 <v-icon>
                   add_circle_outline
@@ -37,7 +37,7 @@
             </v-card-title>
             <v-dialog v-model="newReview" max-width="550">
                 <v-card>
-                  <v-card-title>Добавить отзыв для {{getProduct.name}}</v-card-title>
+                  <v-card-title>{{curLocale.comment.addCmnTitle}} {{getProduct.name}}</v-card-title>
                   <v-divider></v-divider>
                   <form>
                     <v-container style="padding: 0 4% 0 4%">
@@ -49,7 +49,7 @@
                       </v-row>
                       <v-row>
                         <v-text-field
-                            label="Введите отзыв"
+                            :label="curLocale.comment.labelText"
                             v-model="contentReview"
                             :rules="textRules"
                             required
@@ -57,7 +57,7 @@
                         ></v-text-field>
                       </v-row>
                     </v-container>
-                    <v-btn width="100%" color="success" text>Завершить</v-btn>
+                    <v-btn width="100%" color="success" text>{{curLocale.comment.btnTitle}}</v-btn>
                   </form>
                 </v-card>
             </v-dialog>
@@ -76,11 +76,11 @@
                 </div>
                 <v-divider></v-divider>
                 <div v-if="getProduct.comments.length <= 0">
-                    <v-card-title>Отзывы отсутствуют</v-card-title>
+                    <v-card-title>{{curLocale.comment.notFound}}</v-card-title>
                 </div>
             </v-card>
             <v-btn color="success" width="100%" top absolute style="margin-top: -1.8%">
-              В Корзину
+              {{curLocale.toCart}}
             </v-btn>
       </v-card>
   </v-app>
@@ -93,7 +93,64 @@ export default {
     return {
       newReview: false,
       contentReview: "",
-      fullname: "Tim Livr"
+      fullname: "Tim Livr",
+      curLocale: {},
+      locales: {
+        'en-EN': {
+          info: [
+            'Price:', 'UAH.', 'Description:', 'Amount:'
+          ],
+          comment: {
+            title: 'Reviews',
+            addCmnTitle: 'Add reviews to',
+            labelText: 'Input a review',
+            btnTitle: 'Ready',
+            notFound: 'Reviews not found'
+          },
+          toCart: 'To cart'
+        },
+        'ru-RU': {
+          info: [
+            'Цена:', 'ГРН.', 'Описание:', 'Кол-во, шт:'
+          ],
+          comment: {
+            title: 'Отзывы',
+            addCmnTitle: 'Добавить отзыв для',
+            labelText: 'Введите отзыв',
+            btnTitle: 'Завершить',
+            notFound: 'Отзывы отсутствуют'
+          },
+          toCart: 'В корзину'
+        },
+        'ua-UA': {
+          info: [
+            'Ціна:', 'ГРН.', 'Опис:', 'Кількість, шт:'
+          ],
+          comment: {
+            title: 'Відгуки',
+            addCmnTitle: 'Додати відгук до',
+            labelText: 'Напишіть відгук',
+            btnTitle: 'Завершити',
+            notFound: 'Відгуки відстутні'
+          },
+          toCart: 'До корзини'
+        }
+      },
+      textRules: [
+          v => v.length > 0 || 'Поле не может быть пустым'
+      ]
+    }
+  },
+  beforeMount() {
+    if (localStorage['lang'] === 'ru-RU') {
+      this.curLocale = this.locales["ru-RU"];
+    } else if (localStorage['lang'] === 'en-EN') {
+      this.curLocale = this.locales["en-EN"];
+    } else if (localStorage['lang'] === 'ua-UA') {
+      this.curLocale = this.locales["ua-UA"];
+    } else {
+      localStorage.setItem('lang', 'ua-UA')
+      this.curLocale = this.locales["ua-UA"];
     }
   },
   methods: {
@@ -102,53 +159,53 @@ export default {
     }
   },
   computed: {
-      getProduct() {
-          return {
-              id: 0,
-              name: "Пирожок",
-              price: 54,
-              currency: "UAH",
-              category: "Духовный",
-              description: "вкусный",
-              available_count: 20,
-              comments: [
-                  {
-                      comment_id: 0,
-                      user_id: 0,
-                      date: "09.09.2020",
-                      fname: "Tim",
-                      sname: "Livr",
-                      msg: "Вкусна <3"
-                  },
-                {
-                  comment_id: 0,
-                  user_id: 0,
-                  date: "09.09.2020",
-                  fname: "Tim",
-                  sname: "Livr",
-                  msg: "Вкусна <3"
-                },
-                {
-                  comment_id: 0,
-                  user_id: 0,
-                  date: "09.09.2020",
-                  fname: "Tim",
-                  sname: "Livr",
-                  msg: "Вкусна <3"
-                },
-                {
-                  comment_id: 0,
-                  user_id: 0,
-                  date: "09.09.2020",
-                  fname: "Tim",
-                  sname: "Livr",
-                  msg: "Вкусна <3"
-                },
-              ],
-              image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-          }
-          // sending GET
-          // return {};
+    getProduct() {
+      return {
+        id: 0,
+        name: "Пирожок",
+        price: 54,
+        currency: "UAH",
+        category: "Духовный",
+        description: "вкусный",
+        available_count: 20,
+        comments: [
+          {
+            comment_id: 0,
+            user_id: 0,
+            date: "09.09.2020",
+            fname: "Tim",
+            sname: "Livr",
+            msg: "Вкусна <3"
+          },
+          {
+            comment_id: 0,
+            user_id: 0,
+            date: "09.09.2020",
+            fname: "Tim",
+            sname: "Livr",
+            msg: "Вкусна <3"
+          },
+          {
+            comment_id: 0,
+            user_id: 0,
+            date: "09.09.2020",
+            fname: "Tim",
+            sname: "Livr",
+            msg: "Вкусна <3"
+          },
+          {
+            comment_id: 0,
+            user_id: 0,
+            date: "09.09.2020",
+            fname: "Tim",
+            sname: "Livr",
+            msg: "Вкусна <3"
+          },
+        ],
+        image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+      }
+        // sending GET
+        // return {};
       }
   }
 }

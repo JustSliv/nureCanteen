@@ -35,40 +35,77 @@
 </template>
 
 <script>
-    export default {
-      name: "Receipt",
-      methods: {
-        delReceipt() {
-          localStorage.removeItem('receipt')
+  export default {
+    name: "Receipt",
+    data() {
+      return {
+        curLocale: {},
+        locales: {
+          'en-EN': {
+            titleReceipt: 'Receipt ',
+            subText: 'To pick up food, show the qr code at the checkout',
+            btnTitle: 'Back to catalog',
+            notFound: 'Receipt is not available'
+          },
+          'ru-RU': {
+            titleReceipt: 'Чек ',
+            subText: 'Чтоб забрать еду покажи код на кассе',
+            btnTitle: 'Вернуться к продуктам',
+            notFound: 'Чек недоступен'
+          },
+          'ua-UA': {
+            titleReceipt: 'Чек ',
+            subText: 'Щоб забрати страву покажи цей код на касі',
+            btnTitle: 'Повернутися до продуктів',
+            notFound: 'Чек недоступен'
+          }
+        },
+      }
+    },
+    beforeMount() {
+      if (localStorage['lang'] === 'ru-RU') {
+        this.curLocale = this.locales["ru-RU"];
+      } else if (localStorage['lang'] === 'en-EN') {
+        this.curLocale = this.locales["en-EN"];
+      } else if (localStorage['lang'] === 'ua-UA') {
+        this.curLocale = this.locales["ua-UA"];
+      } else {
+        localStorage.setItem('lang', 'ua-UA')
+        this.curLocale = this.locales["ua-UA"];
+      }
+    },
+    methods: {
+      delReceipt() {
+        localStorage.removeItem('receipt')
+      }
+    },
+    computed: {
+      validateReceipt() {
+          // let idReceipt = this.$router.currentRoute.params.id.toString();
+        let receiptInfo = localStorage['receipt'] === undefined?{}:JSON.parse(localStorage['receipt'])
+        if (Object.keys(receiptInfo).length > 0) {
+          return {
+            status: true,
+            id: receiptInfo.code,
+            fname: receiptInfo.fname,
+            sname: receiptInfo.sname,
+            email: receiptInfo.email,
+            group: receiptInfo.group,
+            canteen: receiptInfo.activeCanteen,
+            purchaseDate: receiptInfo.purchaseDate
+          };
+        } else {
+          return {
+            status: false,
+          };
         }
       },
-      computed: {
-            validateReceipt() {
-                // let idReceipt = this.$router.currentRoute.params.id.toString();
-              let receiptInfo = localStorage['receipt'] === undefined?{}:JSON.parse(localStorage['receipt'])
-              if (Object.keys(receiptInfo).length > 0) {
-                return {
-                  status: true,
-                  id: receiptInfo.code,
-                  fname: receiptInfo.fname,
-                  sname: receiptInfo.sname,
-                  email: receiptInfo.email,
-                  group: receiptInfo.group,
-                  canteen: receiptInfo.activeCanteen,
-                  purchaseDate: receiptInfo.purchaseDate
-                };
-              } else {
-                return {
-                  status: false,
-                };
-              }
-            },
-            getQrCode() {
-                // let receiptInfo = JSON.parse(document.cookie.split(' ')[1].split('=')[1]);
-                return 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+'https://localhost:8080/admin/receipt/'+this.validateReceipt.id;
-            }
-        }
-    }
+      getQrCode() {
+          // let receiptInfo = JSON.parse(document.cookie.split(' ')[1].split('=')[1]);
+          return 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+'https://localhost:8080/admin/receipt/'+this.validateReceipt.id;
+      }
+      }
+  }
 </script>
 
 <style scoped>
