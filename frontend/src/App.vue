@@ -78,18 +78,22 @@
       </v-menu>
       <v-spacer></v-spacer>
       <v-form>
-        <v-row>
-          <v-text-field
-              style="width: 100%"
-              v-model="searchText"
-              @input="getSearchItems"
-              color="primary"
-              :placeholder="curLocale.search.title"
-              single-line
-              hide-details
-              append-icon="search"
-          ></v-text-field>
-        </v-row>
+        <v-container>
+          <v-row>
+            <v-col>
+              <v-text-field
+                  style="width: 100%"
+                  v-model="searchText"
+                  @input="getSearchItems"
+                  color="primary"
+                  :placeholder="curLocale.search.title"
+                  single-line
+                  hide-details
+                  append-icon="search"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-form>
       <v-card
           v-model="searchText"

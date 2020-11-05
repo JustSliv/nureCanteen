@@ -188,10 +188,10 @@
           v => v.length !== 0 || this.curLocale.textRules[1]
         ],
         emailRules: [
-          v => v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+") || this.curLocale.emailRules
+          v => v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+") !== null || this.curLocale.emailRules
         ],
         groupRules: [
-          v => v.match('^[a-zA-Zа-яА-Я]+-[0-9]{2}-[0-9]{1,2}$') || this.curLocale.groupRules
+          v => v.match('^[a-zA-Zа-яА-Я]+-[0-9]{2}-[0-9]{1,2}$') !== null || this.curLocale.groupRules
         ]
       }
     },
