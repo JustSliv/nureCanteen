@@ -2,15 +2,53 @@
   <v-app style="z-index: 5">
     <v-card>
       <v-toolbar style="justify-content: center; display: flex">
-          <router-link to="/admin/cabinet">
-            <v-btn icon>
-              <v-icon>
-                perm_identity
-              </v-icon>
+        <v-menu v-model="translate" offset-y>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn v-on="on" v-bind="attrs" icon :title="curLocale.translation.tip">
+              <v-icon>translate</v-icon>
             </v-btn>
-          </router-link>
-          <v-toolbar-title>ADMIN PANEL</v-toolbar-title>
-          <v-btn icon @click="logout">
+          </template>
+          <v-card>
+            <v-card-subtitle>{{curLocale.translation.title}}</v-card-subtitle>
+            <v-divider></v-divider>
+            <v-list shaped>
+              <v-list-item-group color="indigo">
+                <v-list-item @click="changeLangEN">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{curLocale.translation.langs[0]}}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-icon>
+                    <v-icon>chevron_right</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+                <v-list-item @click.prevent="changeLangRU">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{curLocale.translation.langs[1]}}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-icon>
+                    <v-icon>chevron_right</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+                <v-list-item @click="changeLangUA">
+                  <v-list-item-content v-model="langThird">
+                    <v-list-item-title>
+                      {{curLocale.translation.langs[2]}}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-icon>
+                    <v-icon>chevron_right</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </v-menu>
+        <v-toolbar-title>ADMIN PANEL</v-toolbar-title>
+        <v-btn icon @click="logout">
               <v-icon>
                   exit_to_app
               </v-icon>
@@ -530,6 +568,13 @@ export default {
                 notFound: 'Items not found'
               }
             }
+          },
+          translation: {
+            tip: 'Choose language for interface',
+            title: 'Language of interface',
+            langs: [
+              'English', 'Russian', 'Ukrainian'
+            ]
           }
         },
         'ru-RU': {
@@ -563,7 +608,7 @@ export default {
             tab2: {
               name: 'Пользователи',
               context: {
-                searchLabel: 'Search',
+                searchLabel: 'Поиск',
                 title: 'Пользователи',
                 filter: 'Фильтры',
                 filterLabels: [
@@ -631,6 +676,13 @@ export default {
                 notFound: 'Товаров не найдено'
               }
             }
+          },
+          translation: {
+            tip: 'Виберите язык интерфейса',
+            title: 'Язык интерфейса',
+            langs: [
+              'English', 'Русский', 'Украинский'
+            ]
           }
         },
         'ua-UA': {
@@ -664,7 +716,7 @@ export default {
             tab2: {
               name: 'Користувачі',
               context: {
-                searchLabel: 'Search',
+                searchLabel: 'Пошук',
                 title: 'Користувачі',
                 filter: 'Фільтри:',
                 filterLabels: [
@@ -732,9 +784,20 @@ export default {
                 notFound: 'Товари не знайдено'
               }
             }
+          },
+          translation: {
+            tip: 'Виберіть мову інтерфейсу',
+            title: 'Мова інтерфейсу',
+            langs: [
+              'English', 'Російська', 'Українська'
+            ]
           }
         }
       },
+      translate: false,
+      langOne: false,
+      langSecond: false,
+      langThird: false,
       tabs: false,
       formOff: false,
       editDialog: false,
@@ -838,6 +901,21 @@ export default {
     }
   },
   methods: {
+    changeLangEN() {
+      localStorage.setItem('lang', 'en-EN')
+      this.curLocale = this.locales["en-EN"];
+      // this.$router.go(this.$router.currentRoute.path);
+    },
+    changeLangRU() {
+      localStorage.setItem('lang', 'ru-RU')
+      this.curLocale = this.locales["ru-RU"];
+      // this.$router.go(this.$router.currentRoute.path);
+    },
+    changeLangUA() {
+      localStorage.setItem('lang', 'ua-UA')
+      this.curLocale = this.locales["ua-UA"];
+      // this.$router.go(this.$router.currentRoute.path);
+    },
     filterStudents() {
       /** {
           id: 0,
@@ -948,7 +1026,7 @@ export default {
       return res;
     },
     statisticClr() {
-      if (localStorage['color'] !== undefined) {
+      if (localStorage['color'] === undefined) {
         let res = [];
         let nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
         for (let i=0;i<this.products.length;i++) {
@@ -960,7 +1038,7 @@ export default {
         localStorage.setItem('color', res)
         return res;
       } else {
-        return 0;
+        return localStorage.getItem('color').split(',');
       }
     },
     getCategories() {

@@ -76,7 +76,6 @@
           </v-list>
         </v-card>
       </v-menu>
-<!--      style="margin-left: 70%"-->
       <v-spacer></v-spacer>
       <v-form>
         <v-row>
