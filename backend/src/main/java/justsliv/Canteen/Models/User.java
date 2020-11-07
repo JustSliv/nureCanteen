@@ -29,6 +29,24 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    public User() {
+    }
+
+    public User(Long id, String username, String password, String fName, String avatar, String sName, String personGroup, String phone, String email, boolean active, int age, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fName = fName;
+        this.avatar = avatar;
+        this.sName = sName;
+        this.personGroup = personGroup;
+        this.phone = phone;
+        this.email = email;
+        this.active = active;
+        this.age = age;
+        this.roles = roles;
+    }
+
     public Long getId() {
         return id;
     }
