@@ -15,7 +15,7 @@
                         <img style="margin: 2%" width="200" height="200" alt="Пусто" :src="info.user_info.avatar"/>
                         <div style="position: absolute; top: 14%; left: 65%">
                             <v-card-text>Возраст: {{info.user_info.age}}</v-card-text>
-                            <v-card-text>Ваша группа: {{ info.user_info.personGroup }}</v-card-text>
+                            <v-card-text>Ваша группа: {{ info.user_info.userGroup }}</v-card-text>
                             <v-card-text>Ваш e-mail: {{info.user_info.email}}</v-card-text>
                             <v-card-text>Ваш номер: {{info.user_info.phone}}</v-card-text>
                         </div>
@@ -147,7 +147,7 @@
                                         </v-row>
                                         <v-row>
                                             <v-text-field
-                                                v-model="info.user_info.personGroup"
+                                                v-model="info.user_info.userGroup"
                                                 :rules="groupRules"
                                             ></v-text-field>
                                         </v-row>
@@ -348,7 +348,7 @@
                 return this.fname === this.info.user_info.fName ||
                     this.sName === this.info.user_info.sName ||
                     this.age === this.info.user_info.age ||
-                    this.group === this.info.user_info.personGroup ||
+                    this.group === this.info.user_info.userGroup ||
                     this.email === this.info.user_info.email ||
                     ((this.fname || this.sName || this.age || this.group || this.email || this.phone) !== '');
             }
@@ -362,7 +362,7 @@
             }
         },
         mounted() {
-          axios.get('http://192.168.0.109:25016/api/person/5/', {
+          axios.get('http://192.168.0.109:25016/api/user/5/', {
             headers: {
               'Access-Control-Allow-Origin': '*'
             }
