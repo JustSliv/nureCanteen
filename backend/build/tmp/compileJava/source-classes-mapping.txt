@@ -22,3 +22,5 @@ justsliv/Canteen/service/UserService.java
  justsliv.Canteen.service.UserService
 justsliv/Canteen/Config/WebSecurityConfig.java
  justsliv.Canteen.Config.WebSecurityConfig
+justsliv/Canteen/Controller/LoginController.java
+ justsliv.Canteen.Controller.LoginController
