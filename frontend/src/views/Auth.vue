@@ -22,6 +22,7 @@
                   :label="curLocale.formLabels[1]"
                   v-model="pwd"
                   :rules="pwdRules"
+                  type="password"
                   outlined
                   required
               ></v-text-field>
@@ -51,6 +52,9 @@
 </template>
 
 <script>
+  const axios = require('axios')
+  const ip = 'localhost'
+  const port = 25016;
   export default {
     name: "Auth",
     data() {
@@ -139,6 +143,18 @@
       doAuth() {
         this.load = true;
         // sending POST
+        axios.post(`http://${ip}:${port}/login`, {
+          // username: this.login,
+          // password: this.pwd
+        }, {
+          headers: {
+            Authorization: 'Basic ' + btoa(`${this.login}:${this.pwd}`)
+          }
+        }).then(resp => {
+          console.log(resp)
+          this.load = false;
+          this.$router.push('/cabinet')
+        }).catch(err => console.log(err))
       }
     }
   }
