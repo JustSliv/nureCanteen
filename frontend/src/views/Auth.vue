@@ -49,6 +49,36 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-snackbar
+          outlined top
+          timeout="2500"
+          color="success"
+          v-model="alertSuccess"
+      >
+        Успешная авторизация!
+        <template v-slot:action="{attrs}">
+          <v-btn icon outlined v-bind="attrs">
+            <v-icon>
+              close
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+          outlined top
+          timeout="2500"
+          color="red"
+          v-model="alertErr"
+      >
+        Ошибка авторизации!
+        <template v-slot:action="{attrs}">
+          <v-btn icon outlined v-bind="attrs">
+            <v-icon>
+              close
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-card>
     <v-card v-else style="margin: 15% 35% 0 35%">
       <div style="margin: 10%">
@@ -139,7 +169,9 @@
           v => !!v || this.curLocale.pwdRules[0],
           v => v.length !== 0 || this.curLocale.pwdRules[1]
         ],
-        load: false
+        load: false,
+        alertErr: false,
+        alertSuccess: false
     }
     },
     beforeMount() {
@@ -176,12 +208,16 @@
             }
           }).then(resp => {
             console.log(resp)
-            localStorage.setItem('sid', resp.data['id_token'])
-            this.load = false;
+            this.alertSuccess = true
+            setTimeout(() => {
+              localStorage.setItem('sid', resp.data['id_token'])
+              this.load = false;
+            }, 1500)
             window.location.href = '/cabinet';
           })
         } catch (e) {
           console.error(e)
+          this.alertErr = true
           this.load = false;
         }
       }
