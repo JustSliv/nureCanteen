@@ -36,47 +36,47 @@
       <v-form>
         <v-container>
           <v-row>
-            <v-col>
+            <v-col cols="6">
               <v-text-field
                   :label="curLocale.form.login"
                   :rules="loginRules"
                   v-model="login"
+                  prepend-inner-icon="person"
                   solo
                   required
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols="6">
               <v-text-field
                   type="password"
                   :label="curLocale.form.password"
                   :rules="pwdRules"
                   v-model="password"
+                  prepend-inner-icon="security"
                   solo
                   required
               ></v-text-field>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
+            <v-col cols="6">
               <v-text-field
                   :label="curLocale.form.email"
                   :rules="emailRules"
                   v-model="email"
+                  prepend-inner-icon="email"
                   solo
                   required
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols="6">
               <v-text-field
                   :label="curLocale.form.group"
                   :rules="groupRules"
                   v-model="group"
+                  prepend-inner-icon="group"
                   solo
               ></v-text-field>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
+            <v-col cols="4">
               <v-text-field
                   :label="curLocale.form.fname"
                   :rules="textRules"
@@ -85,7 +85,18 @@
                   required
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols="4">
+              <v-text-field
+                  type="number"
+                  :label="curLocale.form.age"
+                  :rules="numRules"
+                  v-model="age"
+                  prepend-inner-icon="access_time"
+                  solo
+                  required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4">
               <v-text-field
                   :label="curLocale.form.lName"
                   :rules="textRules"
@@ -136,6 +147,7 @@
               lName: "Second Name*",
               email: "E-mail",
               group: "Group*",
+              age: 'Age*'
             },
             btnTitle: 'CREATE ACCOUNT',
             loginRules: [
@@ -152,6 +164,7 @@
               'This field is required',
               'Field cannot be empty'
             ],
+            numRules: 'Age cannot be less than 0',
             notAvailable: 'You are already logged in!'
           },
           'ru-RU': {
@@ -164,6 +177,7 @@
               lName: "Фамилия*",
               email: "E-mail",
               group: "Группа*",
+              age: 'Возраст*'
             },
             btnTitle: 'Создать аккаунт',
             loginRules: [
@@ -180,6 +194,7 @@
                 'Это поле обязательно',
                 'Поле не может быть пусто'
             ],
+            numRules: 'Возраст не может быть меньше 0',
             notAvailable: 'Вы уже авторизованы!'
           },
           'ua-UA': {
@@ -208,6 +223,7 @@
               'Це поле важливе',
               'Поле не може бути пустим'
             ],
+            numRules: 'Вік повинен бути більш 0',
             notAvailable: 'Ви вже авторизовані!'
           }
         },
@@ -217,6 +233,10 @@
         lName: "",
         email: "",
         group: "",
+        age: "",
+        numRules: [
+            v => v > 0 || this.curLocale.numRules
+        ],
         loginRules: [
           v => !!v || this.curLocale.loginRules[0],
           v => v.length !== 0 || this.curLocale.loginRules[1]

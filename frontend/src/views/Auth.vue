@@ -10,6 +10,7 @@
               <v-text-field
                   :label="curLocale.formLabels[0]"
                   v-model="login"
+                  prepend-inner-icon="person"
                   :rules="loginRules"
                   outlined
                   required
@@ -21,6 +22,7 @@
               <v-text-field
                   :label="curLocale.formLabels[1]"
                   v-model="pwd"
+                  prepend-inner-icon="security"
                   :rules="pwdRules"
                   type="password"
                   outlined
