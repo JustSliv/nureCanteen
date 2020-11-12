@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-card style="margin: 15% 35% 0 35%">
+    <v-card style="margin: 15% 35% 0 35%" v-if="reachAuth">
       <v-card-title style="text-align: center; display: block">{{ curLocale.authTitle }}</v-card-title>
       <v-divider></v-divider>
       <v-form v-model="valid">
@@ -48,6 +48,16 @@
         </v-card>
       </v-dialog>
     </v-card>
+    <v-card v-else style="margin: 15% 35% 0 35%">
+      <div style="margin: 10%">
+        <v-icon style="text-align: center;display: block">
+          warning
+        </v-icon>
+        <v-card-title style="justify-content: center">
+          {{curLocale.notAvailable}}
+        </v-card-title>
+      </div>
+    </v-card>
   </v-app>
 </template>
 
@@ -77,6 +87,7 @@
               'Password is required',
               'Password field cannot be empty'
             ],
+            notAvailable: 'You are already logged in!'
           },
           'ru-RU': {
             authTitle: 'Авторизация',
@@ -94,6 +105,7 @@
               'Пароль обязателен',
               'Пароль не может быть пуст'
             ],
+            notAvailable: ' Вы уже авторизованы!'
           },
           'ua-UA': {
             authTitle: 'Авторизація',
@@ -111,6 +123,7 @@
               'Пароль важливий',
               'Пароль логіна не може бути пустим'
             ],
+            notAvailable: ' Вы вже авторизовані!'
           }
         },
         valid: false,
@@ -139,22 +152,36 @@
         this.curLocale = this.locales["ua-UA"];
       }
     },
+    computed: {
+      reachAuth() {
+        return localStorage['sid'] === undefined || localStorage['sid'] === null;
+      }
+    },
     methods: {
       doAuth() {
         this.load = true;
-        // sending POST
-        axios.post(`http://${ip}:${port}/login`, {
-          // username: this.login,
-          // password: this.pwd
-        }, {
-          headers: {
-            Authorization: 'Basic ' + btoa(`${this.login}:${this.pwd}`)
-          }
-        }).then(resp => {
-          console.log(resp)
+        try {
+          axios({
+            method: "POST",
+            url: `http://${ip}:${port}/api/authenticate`,
+            data: {
+              username: this.login,
+              password: this.pwd
+            }
+          }, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          }).then(resp => {
+            console.log(resp)
+            localStorage.setItem('sid', resp.data['id_token'])
+            this.load = false;
+            window.location.href = '/cabinet';
+          })
+        } catch (e) {
+          console.error(e)
           this.load = false;
-          this.$router.push('/cabinet')
-        }).catch(err => console.log(err))
+        }
       }
     }
   }

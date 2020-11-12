@@ -66,7 +66,7 @@
                 <div v-for="item in getProduct.comments" :key="item">
                     <v-card-text>
                         <v-card-title>
-                          {{item.fname}} {{item.sname}}
+                          {{item.fname}} {{item.lName}}
                           <span style="font-size: 10pt; margin-left: 80%">{{item.date}}</span>
                         </v-card-title>
                         <v-card-text style="margin-left: 5%">
@@ -174,7 +174,7 @@ export default {
             user_id: 0,
             date: "09.09.2020",
             fname: "Tim",
-            sname: "Livr",
+            lName: "Livr",
             msg: "Вкусна <3"
           },
           {
@@ -182,7 +182,7 @@ export default {
             user_id: 0,
             date: "09.09.2020",
             fname: "Tim",
-            sname: "Livr",
+            lName: "Livr",
             msg: "Вкусна <3"
           },
           {
@@ -190,7 +190,7 @@ export default {
             user_id: 0,
             date: "09.09.2020",
             fname: "Tim",
-            sname: "Livr",
+            lName: "Livr",
             msg: "Вкусна <3"
           },
           {
@@ -198,7 +198,7 @@ export default {
             user_id: 0,
             date: "09.09.2020",
             fname: "Tim",
-            sname: "Livr",
+            lName: "Livr",
             msg: "Вкусна <3"
           },
         ],

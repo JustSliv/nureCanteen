@@ -238,7 +238,7 @@
           <v-card flat id="grid" :style="'display: grid; grid-template-columns: repeat('+isMoreItems+', auto);grid-gap:' +isMoreItems+ 'px;margin: 0 0 2% 5%;'">
             <v-card v-for="(user, i) in usersInfo" :key="i" width="220" v-model="usersInfo">
               <v-img :src="user.avatar" width="220" height="220"></v-img>
-              <v-card-subtitle>{{user.fName}} {{user.sName}}, {{user.age}}</v-card-subtitle>
+              <v-card-subtitle>{{user.fName}} {{user.lName}}, {{user.age}}</v-card-subtitle>
               <v-card-text>
                 <b>{{curLocale.tabs.tab2.context.userInfo[0]}}</b> <u>{{user.email}}</u> <br/>
                 <b>{{curLocale.tabs.tab2.context.userInfo[1]}}</b> <u>{{user.group}}</u> <br/>
@@ -831,7 +831,7 @@ export default {
         {
           id: 0,
           fName: 'Tim',
-          sName: 'Livr',
+          lName: 'Livr',
           age: 20,
           group: '',
           email: 'tes@mai.xom',
@@ -842,7 +842,7 @@ export default {
         {
           id: 1,
           fName: 'Lim',
-          sName: 'Tivr',
+          lName: 'Tivr',
           age: 22,
           group: 'PZPI-18-4',
           email: 'tes@mai.xom',
@@ -920,7 +920,7 @@ export default {
       /** {
           id: 0,
           fName: 'Tim',
-          sName: 'Livr',
+          lName: 'Livr',
           age: 20,
           group: '',
           email: 'tes@mai.xom',

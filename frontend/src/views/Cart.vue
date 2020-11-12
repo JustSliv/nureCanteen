@@ -62,7 +62,7 @@
               </v-col>
               <v-col>
                 <v-text-field
-                    v-model="info.userInfo.sName"
+                    v-model="info.userInfo.lName"
                     :rules="textRules"
                     :label="curLocale.userData.form.labels[1]"
                     required
@@ -246,7 +246,7 @@
         info: {
           userInfo: {
             fName: 'Tim',
-            sName: 'Livr',
+            lName: 'Livr',
             group: 'PZPI',
             email: 'tes@mal.com',
             typePay: '',
@@ -310,7 +310,7 @@
       },
       doValidateForm() {
         return (this.info.userInfo.fname &&
-            this.info.userInfo.sname &&
+            this.info.userInfo.lName &&
             this.info.userInfo.group &&
             this.info.userInfo.activeCanteen) !== ''
       },
@@ -325,7 +325,7 @@
           data = {
             code: codeReceipt,
             fname: this.info.userInfo.fname,
-            sname: this.info.userInfo.sname,
+            lName: this.info.userInfo.lName,
             email: this.info.userInfo.email,
             group: this.info.userInfo.group,
             cart: this.cartItems,

@@ -17,7 +17,7 @@
               <v-col>
                 <v-card-text>
                   {{curLocale.form[0]}} {{getReceiptInfo.receiptInfo.user.fname}} <br/>
-                  {{curLocale.form[1]}} {{getReceiptInfo.receiptInfo.user.sname}} <br/>
+                  {{curLocale.form[1]}} {{getReceiptInfo.receiptInfo.user.lName}} <br/>
                   {{curLocale.form[2]}} {{getReceiptInfo.receiptInfo.user.group}} <br/>
                   {{curLocale.form[3]}} {{getReceiptInfo.receiptInfo.user.phone}} <br/>
                   {{curLocale.form[4]}} {{getReceiptInfo.receiptInfo.user.email}}
@@ -329,7 +329,7 @@ export default {
       //     ],
       //     user: {
       //       fname: "Tim",
-      //       sname: "Livr",
+      //       lName: "Livr",
       //       group: "PZPI-18-7",
       //       email: "test@test.com",
       //       phone: "12345678910",

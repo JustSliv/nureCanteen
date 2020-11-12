@@ -175,7 +175,7 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list dense nav flat>
-        <v-list-item-group v-if="info.user_info.login">
+        <v-list-item-group v-if="validAuth">
           <v-list-item>
             <v-list-item-icon>
               <v-icon>
@@ -205,7 +205,7 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title @click="$router.push('/login')">
+              <v-list-item-title @click="$router.push('/auth')">
                 {{curLocale.drawer.listItem[2]}}
               </v-list-item-title>
             </v-list-item-content>
@@ -264,7 +264,6 @@ export default {
   data: () => ({
     info: {
       user_info: {
-        login: true,
         name: "tester",
         avatar: "https://media1.tenor.com/images/5af3ea60a7715372c434c5ff1877485c/tenor.gif?itemid=15299640",
         university: ""
@@ -470,6 +469,11 @@ export default {
     ind: 0,
     infoCols: null
   }),
+  computed: {
+    validAuth() {
+      return !(localStorage['sid'] === undefined || localStorage['sid'] === null);
+    }
+  },
   beforeMount() {
     if (localStorage['lang'] === 'ru-RU') {
       this.curLocale = this.locales["ru-RU"];
@@ -509,7 +513,8 @@ export default {
       this.searchItems = []
     },
     logout() {
-        // breaking session
+      localStorage.removeItem('sid')
+      window.location.href = '/'
     }
   }
 };

@@ -64,8 +64,8 @@
                     </v-col>
                     <v-col>
                       <v-text-field
-                          :label="curLocale.tabs.tab1.context.userInfo.sname"
-                          v-model="info.user_info.sName"
+                          :label="curLocale.tabs.tab1.context.userInfo.lName"
+                          v-model="info.user_info.lName"
                           readonly
                           rounded
                       ></v-text-field>
@@ -160,7 +160,7 @@
                           </v-icon>
                         </template>
                         <v-card-title>
-                          ФИО: {{info.user_info.fName}} {{info.user_info.sName}}
+                          ФИО: {{info.user_info.fName}} {{info.user_info.lName}}
                         </v-card-title>
                       </v-tooltip>
                     </v-col>
@@ -526,7 +526,7 @@
                     <v-text-field
                         :label="curLocale.tabs.tab3.context.labels[1]"
                         solo
-                        v-model="info.user_info.sName"
+                        v-model="info.user_info.lName"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -603,7 +603,7 @@
       <div v-else style="margin: 10%">
         <v-icon style="text-align: center;display: block">warning</v-icon>
         <v-card-title style="justify-content: center">
-          Кабинет не доступен
+          {{curLocale.tabs.notFound}}
         </v-card-title>
       </div>
     </v-card>
@@ -633,7 +633,7 @@
                   title: 'Personal info',
                   userInfo: {
                     fname: 'First name',
-                    sname: 'Second name',
+                    lName: 'Second name',
                     age: 'Age:',
                     group: 'Group:',
                     email: 'E-mail:',
@@ -720,7 +720,8 @@
                   }
                 }
               }
-            }
+            },
+            notFound: 'Cabinet is not available'
           },
           'ru-RU': {
             tabs: {
@@ -735,7 +736,7 @@
                   title: 'Личные данные',
                   userInfo: {
                     fname: 'Имя',
-                    sname: 'Фамилия',
+                    lName: 'Фамилия',
                     age: 'Возраст:',
                     group: 'Группа:',
                     email: 'Е-mail:',
@@ -813,7 +814,8 @@
                   }
                 }
               }
-            }
+            },
+            notFound: 'Кабинет не доступен'
           },
           'ua-UA': {
             tabs: {
@@ -828,7 +830,7 @@
                   title: 'Особисті данні',
                   userInfo: {
                     fname: 'Ім`я',
-                    sname: 'Прізвище',
+                    lName: 'Прізвище',
                     age: 'Вік:',
                     group: 'Група:',
                     email: 'Е-mail:',
@@ -906,7 +908,8 @@
                   }
                 }
               }
-            }
+            },
+            notFound: 'Кабінет не доступен'
           }
         },
         tabs: false,
@@ -1086,11 +1089,11 @@
       },
       checkChange() {
         return this.fname === this.info.user_info.fName ||
-            this.sName === this.info.user_info.sName ||
+            this.lName === this.info.user_info.lName ||
             this.age === this.info.user_info.age ||
             this.group === this.info.user_info.personGroup ||
             this.email === this.info.user_info.email ||
-            ((this.fname || this.sName || this.age || this.group || this.email || this.phone) !== '');
+            ((this.fname || this.lName || this.age || this.group || this.email || this.phone) !== '');
       }
     },
     computed: {
@@ -1110,9 +1113,9 @@
       }
     },
     mounted() {
-      axios.get(`http://${ip}:${port}/api/user/1`, {
+      axios.get(`http://${ip}:${port}/api/user`, {
         headers: {
-          JSESSIONID: 'B62BEFF61A0B3BB6433ADA694AA5DCAC'
+          Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(resp => {
         console.log(resp)

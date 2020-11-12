@@ -88,7 +88,7 @@
             status: true,
             id: receiptInfo.code,
             fname: receiptInfo.fname,
-            sname: receiptInfo.sname,
+            lName: receiptInfo.lName,
             email: receiptInfo.email,
             group: receiptInfo.group,
             canteen: receiptInfo.activeCanteen,
