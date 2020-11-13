@@ -1124,7 +1124,7 @@
           this.info.user_info['templates'] =[
             {
               id: 0,
-              name: 'Херата на завтрак',
+              name: 'Еда на завтрак',
               products: [
                 {
                   id: 0,

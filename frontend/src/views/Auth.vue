@@ -214,6 +214,10 @@
               this.load = false;
               window.location.href = '/cabinet';
             }, 1500)
+          }).catch(e => {
+            console.error(e)
+            this.alertErr = true
+            this.load = false;
           })
         } catch (e) {
           console.error(e)
