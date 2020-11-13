@@ -57,7 +57,7 @@
       >
         Успешная авторизация!
         <template v-slot:action="{attrs}">
-          <v-btn icon outlined v-bind="attrs">
+          <v-btn icon outlined v-bind="attrs" @click="alertSuccess = false">
             <v-icon>
               close
             </v-icon>
@@ -72,7 +72,7 @@
       >
         Ошибка авторизации!
         <template v-slot:action="{attrs}">
-          <v-btn icon outlined v-bind="attrs">
+          <v-btn icon outlined v-bind="attrs" @click="alertErr = false">
             <v-icon>
               close
             </v-icon>
@@ -162,7 +162,7 @@
         login: "",
         pwd: "",
         loginRules: [
-          v => !!v || this.curLocale.loginRules[0],
+          v => !!v  || this.curLocale.loginRules[0],
           v => v.length !== 0 || this.curLocale.loginRules[1]
         ],
         pwdRules: [
@@ -195,30 +195,32 @@
       doAuth() {
         this.load = true;
         try {
-          axios({
-            method: "POST",
-            url: `http://${ip}:${port}/api/authenticate`,
-            data: {
-              username: this.login,
-              password: this.pwd
-            }
-          }, {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            }
-          }).then(resp => {
-            console.log(resp)
-            this.alertSuccess = true
-            setTimeout(() => {
-              localStorage.setItem('sid', resp.data['id_token'])
+          if (this.login && this.pwd !== '') {
+            axios({
+              method: "POST",
+              url: `http://${ip}:${port}/api/authenticate`,
+              data: {
+                username: this.login,
+                password: this.pwd
+              }
+            }, {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              }
+            }).then(resp => {
+              console.log(resp)
+              this.alertSuccess = true
+              setTimeout(() => {
+                localStorage.setItem('sid', resp.data['id_token'])
+                this.load = false;
+                window.location.href = '/cabinet';
+              }, 1500)
+            }).catch(e => {
+              console.error(e)
+              this.alertErr = true
               this.load = false;
-              window.location.href = '/cabinet';
-            }, 1500)
-          }).catch(e => {
-            console.error(e)
-            this.alertErr = true
-            this.load = false;
-          })
+            })
+          }
         } catch (e) {
           console.error(e)
           this.alertErr = true

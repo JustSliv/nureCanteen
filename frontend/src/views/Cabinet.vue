@@ -582,21 +582,40 @@
             </v-form>
           </v-card>
           <v-snackbar
-              v-model="editAlert"
+              v-model="editAlertSuccess"
               color="success"
               multi-line
               top
-              timeout="4000"
+              timeout="2500"
           >
               {{curLocale.tabs.tab3.context.alert[0]}}
-              <template v-slot:action>
+              <template v-slot:action="{attrs}">
                   <v-btn
+                      v-bind="attrs"
                       text
-                      @click="editAlert = false"
+                      @click="editAlertSuccess = false"
                   >
                     {{curLocale.tabs.tab3.context.alert[1]}}
                   </v-btn>
               </template>
+          </v-snackbar>
+          <v-snackbar
+              v-model="editAlertErr"
+              color="red"
+              multi-line
+              top
+              timeout="2500"
+          >
+            {{curLocale.tabs.tab3.context.alert[2]}}
+            <template v-slot:action="{attrs}">
+              <v-btn
+                  v-bind="attrs"
+                  text
+                  @click="editAlertErr = false"
+              >
+                {{curLocale.tabs.tab3.context.alert[1]}}
+              </v-btn>
+            </template>
           </v-snackbar>
         </v-tab-item>
       </v-tabs>
@@ -672,7 +691,8 @@
                   btnTitle: 'Change',
                   alert: [
                     'Data were changing',
-                    'Close'
+                    'Close',
+                    'Error on the server. Try later...'
                   ]
                 }
               },
@@ -775,7 +795,8 @@
                   btnTitle: 'Изменить',
                   alert: [
                     'Данные изменены',
-                    'Закрыть'
+                    'Закрыть',
+                    'Ошибка на сервере. Попробуйте позже...'
                   ]
                 }
               },
@@ -869,7 +890,8 @@
                   btnTitle: 'Изменить',
                   alert: [
                     'Данні були змінені',
-                    'Закрити'
+                    'Закрити',
+                    'Помилка на сервері. Спробуйте пізніше...'
                   ]
                 }
               },
@@ -914,7 +936,8 @@
         },
         tabs: false,
         viewsData: 'default',
-        editAlert: false,
+        editAlertSuccess: false,
+        editAlertErr: false,
         addForm: false,
         templateForm: {
           add: {
@@ -928,7 +951,14 @@
         editForm: false,
         deleteForm: false,
         info: {
-          user_info: null,
+          user_info: {
+            fName: '',
+            lName: '',
+            email: '',
+            phone: '',
+            personGroup: '',
+            age: ''
+          },
           last_buy: {
             total_price: 23,
             date: "12.09.2020",
@@ -1074,17 +1104,102 @@
         reader.readAsDataURL(ev);
       },
       editMyData() {
-        if (this.checkChange() && !this.editAlert) {
+        if (this.checkChange() && !this.editAlertSuccess) {
           // sending POST
-          //-------------
-          // after success sending POST
-          this.$nextTick(() => {
-              this.editAlert = true;
+          axios.put(`http://${ip}:${port}/api/user`,{
+            fName: this.info.user_info.fName,
+            lName: this.info.user_info.lName,
+            email: this.info.user_info.email,
+            phone: this.info.user_info.phone,
+            personGroup: this.info.user_info.personGroup,
+            age: this.info.user_info.age
+          }, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage['sid']
+            }
+          }).then(() => {
+            axios.get(`http://${ip}:${port}/api/user`, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }
+            }).then(resp => {
+              console.log(resp.data)
+              this.editAlertSuccess = true;
+              this.info.user_info = resp.data
+              if (resp.data['templates'] === undefined) {
+                this.info.user_info['templates'] = [
+                  {
+                    id: 0,
+                    name: 'Еда на завтрак',
+                    products: [
+                      {
+                        id: 0,
+                        name: "Пирожок",
+                        price: 54,
+                        category: "Пряности",
+                        description: "вкусный",
+                        total_count: 20,
+                        available_count: 20,
+                        image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+                      },
+                      {
+                        id: 1,
+                        name: "Пирожок1",
+                        price: 54,
+                        category: "Пряности",
+                        description: "вкусный",
+                        total_count: 20,
+                        available_count: 20,
+                        image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+                      },
+                      {
+                        id: 2,
+                        name: "Пирожок2",
+                        price: 54,
+                        category: "Напиток",
+                        description: "вкусный",
+                        total_count: 20,
+                        available_count: 20,
+                        image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+                      }
+                    ]
+                  },
+                  {
+                    id: 1,
+                    name: 'Ланч на вечер',
+                    products: [
+                      {
+                        id: 1,
+                        name: "Пирожок1",
+                        price: 54,
+                        category: "Пряности",
+                        description: "вкусный",
+                        total_count: 20,
+                        available_count: 20,
+                        image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+                      },
+                      {
+                        id: 2,
+                        name: "Пирожок2",
+                        price: 54,
+                        category: "Напиток",
+                        description: "вкусный",
+                        total_count: 20,
+                        available_count: 20,
+                        image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+                      }
+                    ]
+                  }
+                ]
+              }
+            }).catch(err => {
+              console.error(err)
+              this.editAlertErr = true
+            })
+          }).catch(err => {
+            console.error(err)
+            this.editAlertErr = true
           })
-          setTimeout(function (){
-              window.location.reload();
-          }, 1500)
-          return 0;
         }
       },
       checkChange() {
@@ -1118,7 +1233,6 @@
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(resp => {
-        console.log(resp)
         this.info.user_info=resp.data
         if (resp.data['templates'] === undefined) {
           this.info.user_info['templates'] =[
