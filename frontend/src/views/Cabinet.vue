@@ -543,7 +543,7 @@
                     <v-text-field
                         :label="curLocale.tabs.tab3.context.labels[3]"
                         solo
-                        v-model="info.user_info.group"
+                        v-model="info.user_info.personGroup"
                     ></v-text-field>
                   </v-col>
                   </v-row>
