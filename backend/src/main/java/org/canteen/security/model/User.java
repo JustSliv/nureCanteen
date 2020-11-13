@@ -14,7 +14,6 @@ import java.util.Set;
 @Table(name = "usr")
 public class User {
 
-   @JsonIgnore
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +29,9 @@ public class User {
    @NotNull
    @Size(min = 4, max = 100)
    private String password;
+
+   @Version
+   private Long version = 0L;
 
    @Column(name = "fName", length = 50)
    @NotNull
@@ -47,7 +49,6 @@ public class User {
    private String email;
 
    @Column(name = "avatar", length = 10000)
-   @NotNull
    @Size(min = 4, max = 10000)
    private String avatar;
 
@@ -181,6 +182,14 @@ public class User {
       this.age = age;
    }
 
+   public Long getVersion() {
+      return version;
+   }
+
+   public void setVersion(Long version) {
+      this.version = version;
+   }
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
@@ -202,7 +211,9 @@ public class User {
          ", fName='" + fName + '\'' +
          ", lName='" + lName + '\'' +
          ", email='" + email + '\'' +
-         ", activated=" + activated +
+         ", phone=" + phone +
+         ", age=" + age +
+         ", authorities=" + authorities +
          '}';
    }
 
@@ -224,4 +235,6 @@ public class User {
       this.passwordConfirm = passwordConfirm;
       this.authorities = authorities;
    }
+
+
 }
