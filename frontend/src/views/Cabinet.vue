@@ -603,7 +603,7 @@
       <div v-else style="margin: 10%">
         <v-icon style="text-align: center;display: block">warning</v-icon>
         <v-card-title style="justify-content: center">
-          {{curLocale.tabs.notFound}}
+          {{curLocale.notFound}}
         </v-card-title>
       </div>
     </v-card>
