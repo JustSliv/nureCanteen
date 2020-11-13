@@ -62,22 +62,33 @@ public class UserRestController {
 
       User userToChange = userRepository.findByUsername(authUser.getUsername());
 
-      userToChange.setPhone(user.getPhone());
-      userToChange.setlName(user.getlName());
-      userToChange.setfName(user.getfName());
-      userToChange.setEmail(user.getEmail());
-      userToChange.setAge(user.getAge());
-      userToChange.setPersonGroup(user.getPersonGroup());
+      if(user.getPhone() != null) {
+         userToChange.setPhone(user.getPhone());
+      }
+      if(user.getlName() != null) {
+         userToChange.setlName(user.getlName());
+      }
+      if(user.getfName() != null) {
+         userToChange.setfName(user.getfName());
+      }
+      if(user.getEmail() != null) {
+         userToChange.setEmail(user.getEmail());
+      }
+      if(user.getAge() != null) {
+         userToChange.setAge(user.getAge());
+      }
+      if(user.getPersonGroup() != null) {
+         userToChange.setPersonGroup(user.getPersonGroup());
+      }
+      if(user.getAvatar() != null){
+         userToChange.setPersonGroup(user.getAvatar());
+      }
 
       if(user == null){
          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
 
-
-
-
       this.userService.save(userToChange);
-
 
       return new ResponseEntity<>(user, headers, HttpStatus.OK);
    }
