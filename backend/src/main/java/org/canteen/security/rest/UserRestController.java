@@ -85,6 +85,7 @@ public class UserRestController {
       }
 
       if(user == null){
+         System.out.println(user.getlName());
          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
 

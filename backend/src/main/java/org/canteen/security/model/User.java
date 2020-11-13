@@ -30,9 +30,6 @@ public class User {
    @Size(min = 4, max = 100)
    private String password;
 
-   @Version
-   private Long version = 0L;
-
    @Column(name = "fName", length = 50)
    @NotNull
    @Size(min = 4, max = 50)
@@ -182,13 +179,6 @@ public class User {
       this.age = age;
    }
 
-   public Long getVersion() {
-      return version;
-   }
-
-   public void setVersion(Long version) {
-      this.version = version;
-   }
 
    @Override
    public boolean equals(Object o) {
