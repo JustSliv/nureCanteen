@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         root = findViewById(R.id.root_element);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 showRegisterWindow();
@@ -66,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.setPositiveButton("Авторизоваться", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                if(TextUtils.isEmpty(username.getText().toString())){
+                if (TextUtils.isEmpty(username.getText().toString())) {
                     Snackbar.make(root, "Введите логин", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(password.getText().toString().length() < 5){
+                if (password.getText().toString().length() < 5) {
                     Snackbar.make(root, "Введите пароль, который более 5 символов", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
@@ -79,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 // Auth User
                 startActivity(new Intent(MainActivity.this, MenuActivity.class));
                 finish();
-
             }
         });
 
@@ -110,22 +108,22 @@ public class MainActivity extends AppCompatActivity {
         dialog.setPositiveButton("Зарегистрироваться", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                if(TextUtils.isEmpty(email.getText().toString())){
+                if (TextUtils.isEmpty(email.getText().toString())) {
                     Snackbar.make(root, "Введите почту", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(TextUtils.isEmpty(username.getText().toString())){
+                if (TextUtils.isEmpty(username.getText().toString())) {
                     Snackbar.make(root, "Введите логин", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(TextUtils.isEmpty(phone.getText().toString())){
+                if (TextUtils.isEmpty(phone.getText().toString())) {
                     Snackbar.make(root, "Введите номер телефона", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(password.getText().toString().length() < 5){
+                if (password.getText().toString().length() < 5) {
                     Snackbar.make(root, "Введите пароль, который более 5 символов", Snackbar.LENGTH_SHORT).show();
                     return;
                 }

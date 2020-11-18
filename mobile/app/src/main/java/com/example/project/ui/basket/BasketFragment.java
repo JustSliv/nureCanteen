@@ -1,4 +1,4 @@
-package com.example.project.ui.gallery;
+package com.example.project.ui.basket;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project.R;
 
-public class GalleryFragment extends Fragment {
+public class BasketFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private BasketViewModel basketViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        basketViewModel =
+                new ViewModelProvider(this).get(BasketViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_basket, container, false);
+        final TextView textView = root.findViewById(R.id.text_basket);
+        basketViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
