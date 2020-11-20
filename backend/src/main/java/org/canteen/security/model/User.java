@@ -31,12 +31,10 @@ public class User {
    private String password;
 
    @Column(name = "fName", length = 50)
-   @NotNull
    @Size(min = 4, max = 50)
    private String fName;
 
    @Column(name = "lName", length = 50)
-   @NotNull
    @Size(min = 4, max = 50)
    private String lName;
 
@@ -50,7 +48,6 @@ public class User {
    private String avatar;
 
    @Column(name = "personGroup", length = 50)
-   @NotNull
    @Size(min = 4, max = 50)
    private String personGroup;
 
@@ -60,12 +57,10 @@ public class User {
    private String phone;
 
    @Column(name = "age", length = 50)
-   @NotNull
    private String age;
 
    @JsonIgnore
    @Column(name = "activated")
-   @NotNull
    private boolean activated;
 
    @Transient
