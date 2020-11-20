@@ -1,28 +1,39 @@
 package com.example.project;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.project.ui.basket.BasketFragment;
+import com.example.project.ui.home.HomeFragment;
+import com.example.project.ui.slideshow.SlideshowFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Salads extends AppCompatActivity {
-
     public FloatingActionButton plus, minus, plus1, minus1, plus2, minus2;
     public TextView textCount, textCount1, textCount2, checkout, textSum, textSum1, textSum2;
     private int count, count1, count2, checkoutCount, sumCount, sum, sum1, sum2;
     public String str, checkoutString;
     public Button btn;
+    RelativeLayout root;
 
     @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salads);
+        root = findViewById(R.id.relativeLayoutCheckout);
 
         plus = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         minus = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
@@ -145,7 +156,104 @@ public class Salads extends AppCompatActivity {
                 Check(minus2, textCount2, count2, checkoutCount);
             }
         });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCheckoutWindow();
+            }
+        });
     }
+
+//    private void showCheckoutWindow(){
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+//        dialog.setTitle("Checkout");
+//        dialog.setMessage("Желаете перейти в");
+//
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//        View checkout_window = inflater.inflate(R.layout.checkout_window, null);
+//        dialog.setView(checkout_window);
+//
+//        dialog.setNeutralButton("Отменить", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int which) {
+//                dialogInterface.dismiss();
+//            }
+//        });
+//
+////        dialog.setNegativeButton("Меню", new DialogInterface.OnClickListener() {
+////            @Override
+////            public void onClick(DialogInterface dialogInterface, int which) {
+////                FragmentManager fm = getSupportFragmentManager();
+////                HomeFragment homeFragment = new HomeFragment();
+////                fm.beginTransaction().replace(R.id.relativeLayoutSalads, homeFragment).commit();
+////                finish();
+////            }
+////        });
+//
+//       dialog.setPositiveButton("Корзина", new DialogInterface.OnClickListener() {
+//           @Override
+//           public void onClick(DialogInterface dialogInterface, int which) {
+//               SlideshowFragment slideshowFragment = new SlideshowFragment();
+//               FragmentManager fm = getSupportFragmentManager();
+//               FragmentTransaction ft = fm.beginTransaction();
+//               ft.replace(R.id.relativeLayoutSalads, slideshowFragment);
+//               ft.commit();
+//               finish();
+//           }
+//       });
+//        dialog.show();
+//    }
+
+    private void showCheckoutWindow(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Checkout");
+        dialog.setMessage("Желаете оформить заказ?");
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View checkout_window = inflater.inflate(R.layout.checkout_window, null);
+        dialog.setView(checkout_window);
+
+        dialog.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        dialog.setPositiveButton("Подтвердить", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                startActivity(new Intent(Salads.this, MenuActivity.class));
+                finish();
+            }
+        });
+
+
+//        dialog.setNegativeButton("Меню", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int which) {
+//                FragmentManager fm = getSupportFragmentManager();
+//                HomeFragment homeFragment = new HomeFragment();
+//                fm.beginTransaction().replace(R.id.relativeLayoutSalads, homeFragment).commit();
+//                finish();
+//            }
+//        });
+
+//       dialog.setPositiveButton("Корзина", new DialogInterface.OnClickListener() {
+//           @Override
+//           public void onClick(DialogInterface dialogInterface, int which) {
+//               SlideshowFragment slideshowFragment = new SlideshowFragment();
+//               FragmentManager fm = getSupportFragmentManager();
+//               FragmentTransaction ft = fm.beginTransaction();
+//               ft.replace(R.id.relativeLayoutSalads, slideshowFragment);
+//               ft.commit();
+//               finish();
+//           }
+//       });
+        dialog.show();
+    }
+
 
     public void Check(FloatingActionButton minus, TextView textCount, int count, int checkoutCount) {
         if (count < 1) {

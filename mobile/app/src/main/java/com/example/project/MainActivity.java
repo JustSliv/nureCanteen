@@ -11,14 +11,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnSignIn, btnRegister;
     RelativeLayout root;
+    private static final String URL_REGIST = "http://localhost:25016/api/register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +145,74 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Registration User
-
-
+                jsonParse(username, password, phone, email);
+                dialog.show();
             }
         });
+    }
 
-        dialog.show();
+    private void jsonParse(MaterialEditText username, MaterialEditText password,
+                           MaterialEditText phone, MaterialEditText email){
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL_REGIST, null,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                error.printStackTrace();
+//            }
+//        });
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGIST,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")){
+                                Toast.makeText(MainActivity.this, "Register Success)", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MainActivity.this, "Register Error(" + e.toString(), Toast.LENGTH_SHORT).show();
+
+//                            loading.setVisibility(View.GONE);
+//                            btn_regist.setVisibility(View.VISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, "Register Error(" + error.toString(), Toast.LENGTH_SHORT).show();
+
+//                        loading.setVisibility(View.GONE);
+//                        btn_regist.setVisibility(View.VISIBLE);
+                    }
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username.getText().toString());
+                params.put("email", email.getText().toString());
+                params.put("password", password.getText().toString());
+                params.put("phone", phone.getText().toString());
+
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

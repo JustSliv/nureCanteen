@@ -1,16 +1,16 @@
-package com.example.project.ui.basket;
+package com.example.project.ui.logout;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class BasketViewModel extends ViewModel {
+public class LogoutViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public BasketViewModel() {
+    public LogoutViewModel() {
         mText = new MutableLiveData<>();
-//        mText.setValue("This is home fragment");
+        //mText.setValue("This is Logout fragment");
     }
 
     public LiveData<String> getText() {
