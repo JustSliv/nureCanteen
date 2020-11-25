@@ -31,7 +31,7 @@ public class ProductController {
    }
 
    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-   public ResponseEntity<Product> saveLPR(@RequestBody Product product){
+   public ResponseEntity<Product> saveProduct(@RequestBody Product product){
       HttpHeaders headers = new HttpHeaders();
 
       if(product == null){
@@ -43,7 +43,7 @@ public class ProductController {
    }
 
    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-   public ResponseEntity<Product> putOne(@RequestBody Product newProd, @PathVariable Long id){
+   public ResponseEntity<Product> putProduct(@RequestBody Product newProd, @PathVariable Long id){
       HttpHeaders headers = new HttpHeaders();
 
       Product prodToChange = productRepo.findById(id).get();
