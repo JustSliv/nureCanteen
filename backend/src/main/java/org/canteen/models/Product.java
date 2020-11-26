@@ -17,27 +17,27 @@ public class Product {
    @NotNull
    private String name;
 
-   @Column(name = "price", length = 50, unique = true)
+   @Column(name = "price", length = 50)
    @NotNull
    private int price;
 
-   @Column(name = "category", length = 50, unique = true)
+   @Column(name = "category", length = 50)
    @NotNull
    private String category;
 
-   @Column(name = "description", length = 50, unique = true)
+   @Column(name = "description", length = 50)
    @NotNull
    private String description;
 
-   @Column(name = "total_count", length = 50, unique = true)
+   @Column(name = "total_count", length = 50)
    @NotNull
    private int total_count;
 
-   @Column(name = "available_count", length = 50, unique = true)
+   @Column(name = "available_count", length = 50)
    @NotNull
    private int available_count;
 
-   @Column(name = "image", length = 50, unique = true)
+   @Column(name = "image", length = 50)
    @NotNull
    private String image;
 
