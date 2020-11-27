@@ -1,7 +1,10 @@
 package org.canteen.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.canteen.config.EntityIdResolver;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,11 +15,16 @@ import java.util.Set;
 @Entity
 @Table(name = "product")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "comments"})
+@JsonIdentityInfo(
+   generator = ObjectIdGenerators.PropertyGenerator.class,
+   property = "product_id",
+   resolver = EntityIdResolver.class,
+   scope=Product.class)
 public class Product {
 
    @Id
    @Column(name = "product_id")
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long product_id;
 
 

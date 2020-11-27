@@ -1,6 +1,7 @@
 package org.canteen.models;
 
 import com.fasterxml.jackson.annotation.*;
+import org.canteen.config.EntityIdResolver;
 import org.canteen.security.model.User;
 
 import javax.persistence.*;
@@ -12,11 +13,11 @@ public class Comment {
 
    @Id
    @Column(name = "comment_id")
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long comment_id;
 
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="username")
+//   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="username")
    @JsonIdentityReference(alwaysAsId = true)
    @JsonIgnoreProperties("costSuppliers")
    @JoinColumn(name = "id_user")
@@ -25,7 +26,7 @@ public class Comment {
 
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
    @JoinColumn(name = "id_product")
-   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="product_id")
+//   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="product_id")
    @JsonIdentityReference(alwaysAsId = true)
    private Product product_id;
 
@@ -78,31 +79,31 @@ public class Comment {
       this.product_id = product_id;
    }
 
-   @Override
-   public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      Comment comment = (Comment) o;
-      return Objects.equals(comment_id, comment.comment_id) &&
-         Objects.equals(user, comment.user) &&
-         Objects.equals(product_id, comment.product_id) &&
-         Objects.equals(date, comment.date) &&
-         Objects.equals(msg, comment.msg);
-   }
-
-   @Override
-   public int hashCode() {
-      return Objects.hash(comment_id, user, product_id, date, msg);
-   }
-
-   @Override
-   public String toString() {
-      return "Comment{" +
-         "comment_id=" + comment_id +
-         ", user=" + user +
-         ", product_id=" + product_id +
-         ", date='" + date + '\'' +
-         ", msg='" + msg + '\'' +
-         '}';
-   }
+//   @Override
+//   public boolean equals(Object o) {
+//      if (this == o) return true;
+//      if (o == null || getClass() != o.getClass()) return false;
+//      Comment comment = (Comment) o;
+//      return Objects.equals(comment_id, comment.comment_id) &&
+//         Objects.equals(user, comment.user) &&
+//         Objects.equals(product_id, comment.product_id) &&
+//         Objects.equals(date, comment.date) &&
+//         Objects.equals(msg, comment.msg);
+//   }
+//
+//   @Override
+//   public int hashCode() {
+//      return Objects.hash(comment_id, user, product_id, date, msg);
+//   }
+//
+//   @Override
+//   public String toString() {
+//      return "Comment{" +
+//         "comment_id=" + comment_id +
+//         ", user=" + user +
+//         ", product_id=" + product_id +
+//         ", date='" + date + '\'' +
+//         ", msg='" + msg + '\'' +
+//         '}';
+//   }
 }

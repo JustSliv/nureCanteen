@@ -1,6 +1,7 @@
 package org.canteen.security.model;
 
 import com.fasterxml.jackson.annotation.*;
+import org.canteen.config.EntityIdResolver;
 import org.canteen.models.Comment;
 import org.hibernate.annotations.BatchSize;
 
@@ -13,11 +14,16 @@ import java.util.Set;
 
 @Entity
 @Table(name = "usr")
+@JsonIdentityInfo(
+   generator = ObjectIdGenerators.PropertyGenerator.class,
+   property = "id",
+   resolver = EntityIdResolver.class,
+   scope=User.class)
 public class User {
 
    @Id
    @Column(name = "id")
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ", allocationSize = 1)
    private Long id;
 
