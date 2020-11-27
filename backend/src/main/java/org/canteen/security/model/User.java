@@ -1,6 +1,7 @@
 package org.canteen.security.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
+import org.canteen.models.Comment;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -63,22 +64,26 @@ public class User {
    @Column(name = "activated")
    private boolean activated;
 
+   @OneToMany(mappedBy = "user")
+   @JsonIgnore
+   private Set<Comment> comments = new HashSet<Comment>();
+
    @Transient
    private String passwordConfirm;
 
    @ManyToMany
    @JoinTable(
       name = "USER_AUTHORITY",
-      joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+      joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "id")},
       inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_NAME", referencedColumnName = "NAME")})
    @BatchSize(size = 20)
    private Set<Authority> authorities = new HashSet<>();
 
-   public Long getId() {
+   public Long getid() {
       return id;
    }
 
-   public void setId(Long id) {
+   public void setid(Long id) {
       this.id = id;
    }
 
@@ -122,26 +127,6 @@ public class User {
       this.email = email;
    }
 
-   public boolean isActivated() {
-      return activated;
-   }
-
-   public void setActivated(boolean activated) {
-      this.activated = activated;
-   }
-
-   public Set<Authority> getAuthorities() {
-      return authorities;
-   }
-
-   public void setAuthorities(Set<Authority> authorities) {
-      this.authorities = authorities;
-   }
-
-   public void setPasswordConfirm(String passwordConfirm) {
-      this.passwordConfirm = passwordConfirm;
-   }
-
    public String getAvatar() {
       return avatar;
    }
@@ -174,6 +159,37 @@ public class User {
       this.age = age;
    }
 
+   public boolean isActivated() {
+      return activated;
+   }
+
+   public void setActivated(boolean activated) {
+      this.activated = activated;
+   }
+
+   public Set<Comment> getComments() {
+      return comments;
+   }
+
+   public void setComments(Set<Comment> comments) {
+      this.comments = comments;
+   }
+
+   public String getPasswordConfirm() {
+      return passwordConfirm;
+   }
+
+   public void setPasswordConfirm(String passwordConfirm) {
+      this.passwordConfirm = passwordConfirm;
+   }
+
+   public Set<Authority> getAuthorities() {
+      return authorities;
+   }
+
+   public void setAuthorities(Set<Authority> authorities) {
+      this.authorities = authorities;
+   }
 
    @Override
    public boolean equals(Object o) {
@@ -199,27 +215,26 @@ public class User {
          ", phone=" + phone +
          ", age=" + age +
          ", authorities=" + authorities +
+         ", comments=" + comments +
          '}';
    }
 
-   public String getPasswordConfirm() {
-      return passwordConfirm;
-   }
 
    public User() {
    }
 
-   public User(Long id, @NotNull @Size(min = 4, max = 50) String username, @NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String fName, @NotNull @Size(min = 4, max = 50) String lName, @NotNull @Size(min = 4, max = 50) String email, @NotNull boolean activated, String passwordConfirm, Set<Authority> authorities) {
-      this.id = id;
-      this.username = username;
-      this.password = password;
-      this.fName = fName;
-      this.lName = lName;
-      this.email = email;
-      this.activated = activated;
-      this.passwordConfirm = passwordConfirm;
-      this.authorities = authorities;
-   }
+//   public User(Long id, @NotNull @Size(min = 4, max = 50) String username, @NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String fName, @NotNull @Size(min = 4, max = 50) String lName, @NotNull @Size(min = 4, max = 50) String email, @NotNull boolean activated, String passwordConfirm, Set<Authority> authorities, Set<Comment> comments) {
+//      this.id = id;
+//      this.username = username;
+//      this.password = password;
+//      this.fName = fName;
+//      this.lName = lName;
+//      this.email = email;
+//      this.activated = activated;
+//      this.passwordConfirm = passwordConfirm;
+//      this.authorities = authorities;
+//      this.comments = comments;
+//   }
 
 
 }

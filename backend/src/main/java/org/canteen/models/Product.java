@@ -1,16 +1,23 @@
 package org.canteen.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "Product")
+@Table(name = "product")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "comments"})
 public class Product {
 
    @Id
    @Column(name = "product_id")
    @GeneratedValue(strategy = GenerationType.AUTO)
-   private Long id;
+   private Long product_id;
 
 
    @Column(name = "name", length = 50, unique = true)
@@ -37,16 +44,23 @@ public class Product {
    @NotNull
    private int available_count;
 
-   @Column(name = "image", length = 50)
+   @Column(name = "image", length = 10000)
    @NotNull
    private String image;
 
-   public Long getId() {
-      return id;
+
+   @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private Set<Comment> comments = new HashSet<Comment>();
+
+   public Product() {
    }
 
-   public void setId(Long id) {
-      this.id = id;
+   public Long getProduct_id() {
+      return product_id;
+   }
+
+   public void setProduct_id(Long product_id) {
+      this.product_id = product_id;
    }
 
    public String getName() {
@@ -103,5 +117,49 @@ public class Product {
 
    public void setImage(String image) {
       this.image = image;
+   }
+
+   public Set<Comment> getComments() {
+      return comments;
+   }
+
+   public void setComments(Set<Comment> comments) {
+      this.comments = comments;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Product product = (Product) o;
+      return price == product.price &&
+         total_count == product.total_count &&
+         available_count == product.available_count &&
+         Objects.equals(product_id, product.product_id) &&
+         Objects.equals(name, product.name) &&
+         Objects.equals(category, product.category) &&
+         Objects.equals(description, product.description) &&
+         Objects.equals(image, product.image) &&
+         Objects.equals(comments, product.comments);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(product_id, name, price, category, description, total_count, available_count, image, comments);
+   }
+
+   @Override
+   public String toString() {
+      return "Product{" +
+         "product_id=" + product_id +
+         ", name='" + name + '\'' +
+         ", price=" + price +
+         ", category='" + category + '\'' +
+         ", description='" + description + '\'' +
+         ", total_count=" + total_count +
+         ", available_count=" + available_count +
+         ", image='" + image + '\'' +
+         ", comments=" + comments +
+         '}';
    }
 }

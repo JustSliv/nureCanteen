@@ -1,6 +1,8 @@
 package org.canteen.Controller;
 
+import org.canteen.Repositories.CommentRepo;
 import org.canteen.Repositories.ProductRepo;
+import org.canteen.models.Comment;
 import org.canteen.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,16 +20,19 @@ public class ProductController {
    @Autowired
    private ProductRepo productRepo;
 
+   @Autowired
+   private CommentRepo commentRepo;
+
    @GetMapping("/all")
    public ResponseEntity<List<Product>> allProducts(){
 
    return ResponseEntity.ok(productRepo.findAll());
    }
 
-   @GetMapping("/")
+   @GetMapping("/{id}")
    public ResponseEntity<Product> getOne(@PathVariable Long id){
 
-      return ResponseEntity.ok(productRepo.getOne(id));
+      return ResponseEntity.ok(productRepo.findById(id).get());
    }
 
    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -78,5 +83,11 @@ public class ProductController {
       productRepo.deleteById(id);
 
       return new ResponseEntity<>(HttpStatus.OK);
+   }
+
+   @GetMapping("/comments/{id}")
+   public ResponseEntity<List<Comment>> getComments(@PathVariable Long id){
+
+      return ResponseEntity.ok(commentRepo.findCommentsForProduct(id));
    }
 }
