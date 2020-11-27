@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app>
+    <v-app-bar app color="deep-purple" dark>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title @click="$router.push('/')" style="cursor: pointer">
         NUFOOD
@@ -8,7 +8,13 @@
       <v-btn icon :title="curLocale.workingTime">
         <v-icon>watch_later</v-icon>
       </v-btn>
-      <router-link to="/cart"><v-icon>shopping_cart</v-icon></router-link>
+      <router-link to="/cart">
+        <v-btn icon>
+          <v-icon>
+            shopping_cart
+          </v-icon>
+        </v-btn>
+      </router-link>
       <v-menu offset-y>
         <template v-slot:activator="{on, attrs}">
           <v-btn icon v-on="on" v-bind="attrs">
@@ -167,7 +173,7 @@
           </div>
       </v-card>
     </v-app-bar>
-    <v-navigation-drawer app v-model="drawer">
+    <v-navigation-drawer app v-model="drawer" color="deep-purple" dark>
       <v-list-item>
         <v-list-item-content class="title" style="margin-top: 3.2%">
           {{curLocale.drawer.title}}
