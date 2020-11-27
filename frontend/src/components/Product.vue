@@ -35,7 +35,8 @@
           <v-card-subtitle>
             <router-link class="text-decoration-none" :to="'/product/'+product.id">
               {{product.name}}
-            </router-link> <br/> {{product.price}} {{curLocale.productInfo.currency}}
+            </router-link> <br/>
+            {{product.price}} {{curLocale.productInfo.currency}}
           </v-card-subtitle>
           <v-btn @click="buyProduct" color="success" width="100%">{{curLocale.productInfo.toCart.toCartTitle}}</v-btn>
         </div>

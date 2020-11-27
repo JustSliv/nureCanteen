@@ -166,6 +166,10 @@
                     'Credit Card',
                     'On the checkout'
                 ],
+                textRules: [
+                    'Field cannot be empty!',
+                    'Fill this field!'
+                ],
                 btns: [
                     'Cancel',
                     'Confirm'
@@ -199,6 +203,10 @@
                 typePay: [
                   'Кредитной картой',
                   'На кассе'
+                ],
+                textRules: [
+                  'Поле не может быть пустым',
+                  'Заполните поле!'
                 ],
                 btns: [
                   'Отменить',
@@ -234,6 +242,10 @@
                   'Кредитна карта',
                   'На касі'
                 ],
+                textRules: [
+                  'Поле не може бути пустим!',
+                  'Заповніть це поле!'
+                ],
                 btns: [
                   'Відміна',
                   'Підтвердити'
@@ -258,8 +270,8 @@
         errBuy: false,
         chooseCanteen: false,
         textRules: [
-            v => !!v || 'Это поле обязательно',
-            v => v.length !== 0 || "Поле не может быть пусто"
+            v => !!v || this.curLocale.userData.form.textRules[0],
+            v => v.length !== 0 || this.curLocale.userData.form.textRules[1]
         ],
         emailRules: [
             v => (v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")!==null?v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")[0]:null) !== null || "Введите верный e-mail"
