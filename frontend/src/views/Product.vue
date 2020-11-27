@@ -1,99 +1,130 @@
 <template>
   <v-app>
-      <v-card style="margin: 12% 20% 0 20%; padding: 2% 0 0 0;">
-          <v-card-title>{{getProduct.name}}</v-card-title>
-          <v-card-subtitle>{{getProduct.category}}</v-card-subtitle>
-          <v-divider></v-divider>
-            <v-row>
-              <v-col cols="12" md="6" sm="4">
-                <v-img :src="getProduct.image" style="margin: 2%" width="280" height="280"></v-img>
-              </v-col>
-              <v-col cols="6" md="6">
-                <v-row style="margin-left: 55%">
-                  <v-card-text><b>{{curLocale.info[0]}}</b> {{getProduct.price}} {{curLocale.info[1]}}</v-card-text>
-                </v-row>
-                <v-row style="margin-left: 55%">
-                  <v-card-text><b>{{curLocale.info[2]}}</b> <br/>{{getProduct.description}}</v-card-text>
-                </v-row>
-                <v-row style="margin-left: 55%">
-                  <v-card-text>
-                    <b>{{curLocale.info[3]}}</b>
+    <v-card style="margin: 8% 30% 0 30%">
+      <v-card-title>{{info.product.name}}</v-card-title>
+      <v-card-subtitle>{{info.product.category}}</v-card-subtitle>
+      <v-divider></v-divider>
+        <v-container>
+          <v-row>
+            <v-col>
+              <v-img :src="info.product.image" width="280" height="280"></v-img>
+            </v-col>
+            <v-col>
+              <v-row>
+                <v-col>
+                  <b>{{curLocale.info[0]}}</b>
+                  {{info.product.price}} {{curLocale.info[1]}}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <b>{{curLocale.info[2]}}</b>
+                  {{info.product.description}}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <b>{{curLocale.info[3]}}</b>
+                  <v-text-field
+                      type="number"
+                      :rules="numRules"
+                      outlined
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col></v-col>
+          </v-row>
+        </v-container>
+        <v-divider></v-divider>
+        <v-card-title>
+          {{curLocale.comment.title}}
+          <v-btn :title="curLocale.comment.commentTip" @click="addReview" icon>
+            <v-icon>
+              add_circle_outline
+            </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-dialog v-model="newReview" max-width="550">
+          <v-card>
+            <v-card-title>{{curLocale.comment.addCmnTitle}} {{info.product.name}}</v-card-title>
+            <v-divider></v-divider>
+            <form>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
                     <v-text-field
-                        type="number"
-                        style="max-width: 20%; position: absolute"
+                        :label="curLocale.comment.labelText[0]"
+                        required
+                        outlined
+                        v-model="fullname"
                     ></v-text-field>
-                  </v-card-text>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                        :label="curLocale.comment.labelText[1]"
+                        v-model="contentReview"
+                        :rules="textRules"
+                        required
+                        outlined
+                        counter="250"
+                    ></v-text-field>
+                  </v-col>
                 </v-row>
-              </v-col>
-            </v-row>
-            <v-divider></v-divider>
-            <v-card-title>
-              {{curLocale.comment.title}}
-              <v-btn title="Добавить отзыв" @click="addReview" icon>
-                <v-icon>
-                  add_circle_outline
-                </v-icon>
-              </v-btn>
-            </v-card-title>
-            <v-dialog v-model="newReview" max-width="550">
-                <v-card>
-                  <v-card-title>{{curLocale.comment.addCmnTitle}} {{getProduct.name}}</v-card-title>
-                  <v-divider></v-divider>
-                  <form>
-                    <v-container style="padding: 0 4% 0 4%">
-                      <v-row>
-                        <v-text-field
-                            disabled
-                            v-model="fullname"
-                        ></v-text-field>
-                      </v-row>
-                      <v-row>
-                        <v-text-field
-                            :label="curLocale.comment.labelText"
-                            v-model="contentReview"
-                            :rules="textRules"
-                            required
-                            counter="250"
-                        ></v-text-field>
-                      </v-row>
-                    </v-container>
-                    <v-btn width="100%" color="success" text>{{curLocale.comment.btnTitle}}</v-btn>
-                  </form>
-                </v-card>
-            </v-dialog>
-            <v-divider></v-divider>
-            <v-card v-model="getProduct.comments" flat>
-                <div v-for="item in getProduct.comments" :key="item">
-                    <v-card-text>
-                        <v-card-title>
-                          {{item.fname}} {{item.lName}}
-                          <span style="font-size: 10pt; margin-left: 80%">{{item.date}}</span>
-                        </v-card-title>
-                        <v-card-text style="margin-left: 5%">
-                            {{item.msg}}
-                        </v-card-text>
-                    </v-card-text>
-                </div>
-                <v-divider></v-divider>
-                <div v-if="getProduct.comments.length <= 0">
-                    <v-card-title>{{curLocale.comment.notFound}}</v-card-title>
-                </div>
-            </v-card>
-            <v-btn color="success" width="100%" top absolute style="margin-top: -1.8%">
-              {{curLocale.toCart}}
-            </v-btn>
-      </v-card>
+              </v-container>
+              <v-btn width="100%" color="success" text>{{curLocale.comment.btnTitle}}</v-btn>
+            </form>
+          </v-card>
+        </v-dialog>
+        <v-divider></v-divider>
+        <v-card v-for="(item, i) in info.comments" :key="i" outlined rounded>
+          <v-card-title>
+            {{item.user}}
+            <v-spacer></v-spacer>
+            <v-card-subtitle>
+              {{item.date}}
+            </v-card-subtitle>
+          </v-card-title>
+          <v-card-text style="margin-left: 5%">
+            {{item.msg}}
+          </v-card-text>
+        </v-card>
+        <div v-if="info.comments.length <= 0">
+          <v-card-title>{{curLocale.comment.notFound}}</v-card-title>
+        </div>
+        <v-btn
+            color="success"
+            elevation="6"
+            rounded
+            icon
+            outlined
+            x-large
+            absolute
+            top
+            right
+            :title="curLocale.toCart"
+            @click="doOrder"
+        >
+          <v-icon>
+            add_shopping_cart
+          </v-icon>
+        </v-btn>
+    </v-card>
   </v-app>
 </template>
 
 <script>
+const ip = 'localhost'
+const port = 25016;
+const axios = require('axios')
+
 export default {
   name: "Product",
   data() {
     return {
       newReview: false,
       contentReview: "",
-      fullname: "Tim Livr",
+      fullname: '',
       curLocale: {},
       locales: {
         'en-EN': {
@@ -102,8 +133,14 @@ export default {
           ],
           comment: {
             title: 'Reviews',
+            commentTip: 'Add comment',
             addCmnTitle: 'Add reviews to',
-            labelText: 'Input a review',
+            labelText: [
+              'Fullname:',
+              'Input a review'
+            ],
+            textRules: 'Field cannot be empty!',
+            numRules: 'Amount cannot be less than 0',
             btnTitle: 'Ready',
             notFound: 'Reviews not found'
           },
@@ -115,8 +152,14 @@ export default {
           ],
           comment: {
             title: 'Отзывы',
+            commentTip: 'Добавить отзыв',
             addCmnTitle: 'Добавить отзыв для',
-            labelText: 'Введите отзыв',
+            labelText: [
+              'Ваше ФИО:',
+              'Введите отзыв'
+            ],
+            textRules: 'Поле не может быть пустым',
+            numRules: 'Кол-во должно быть больше 0',
             btnTitle: 'Завершить',
             notFound: 'Отзывы отсутствуют'
           },
@@ -128,16 +171,29 @@ export default {
           ],
           comment: {
             title: 'Відгуки',
+            commentTip: 'Додати відгук',
             addCmnTitle: 'Додати відгук до',
-            labelText: 'Напишіть відгук',
+            labelText: [
+              'Ваше ПІБ',
+              'Напишіть відгук'
+            ],
+            textRules: 'Поле не може бути пустим!',
+            numRules: 'Кількість не може бути менш 0',
             btnTitle: 'Завершити',
             notFound: 'Відгуки відстутні'
           },
-          toCart: 'До корзини'
+          toCart: 'До кошуку'
         }
       },
+      info: {
+        product: {},
+        comments: []
+      },
       textRules: [
-          v => v.length > 0 || 'Поле не может быть пустым'
+          v => v.length > 0 || this.curLocale.comment.textRules
+      ],
+      numRules: [
+          v => v > 0 || this.curLocale.comment.numRules
       ]
     }
   },
@@ -153,60 +209,31 @@ export default {
       this.curLocale = this.locales["ua-UA"];
     }
   },
+  mounted() {
+    let curProduct = this.$route.path.split('/')
+    console.log(curProduct)
+    axios.get(`http://${ip}:${port}/api/product/`+curProduct[curProduct.length-1], {
+      headers: {
+        Authorization: 'Bearer ' + localStorage['sid']
+      }
+    }).then(resp => {
+      this.info.product = resp.data
+      axios.get(`http://${ip}:${port}/api/product/comments/`+curProduct[curProduct.length-1], {
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      }).then(cmts => {
+        this.info.comments = cmts.data
+      })
+    })
+  },
   methods: {
+    doOrder() {
+
+    },
     addReview() {
       this.newReview = true;
     }
-  },
-  computed: {
-    getProduct() {
-      return {
-        id: 0,
-        name: "Пирожок",
-        price: 54,
-        currency: "UAH",
-        category: "Духовный",
-        description: "вкусный",
-        available_count: 20,
-        comments: [
-          {
-            comment_id: 0,
-            user_id: 0,
-            date: "09.09.2020",
-            fname: "Tim",
-            lName: "Livr",
-            msg: "Вкусна <3"
-          },
-          {
-            comment_id: 0,
-            user_id: 0,
-            date: "09.09.2020",
-            fname: "Tim",
-            lName: "Livr",
-            msg: "Вкусна <3"
-          },
-          {
-            comment_id: 0,
-            user_id: 0,
-            date: "09.09.2020",
-            fname: "Tim",
-            lName: "Livr",
-            msg: "Вкусна <3"
-          },
-          {
-            comment_id: 0,
-            user_id: 0,
-            date: "09.09.2020",
-            fname: "Tim",
-            lName: "Livr",
-            msg: "Вкусна <3"
-          },
-        ],
-        image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-      }
-        // sending GET
-        // return {};
-      }
   }
 }
 </script>

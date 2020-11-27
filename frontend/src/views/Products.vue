@@ -34,7 +34,11 @@
 </template>
 
 <script>
-    import ProductList from "../components/ProductList";
+  import ProductList from "../components/ProductList";
+
+  const ip = 'localhost'
+  const port = 25016;
+  const axios = require('axios')
 
   export default {
     name: "Products",
@@ -244,8 +248,14 @@
         for (let i=0;i<this.info.filters.length;i++) {
           let item = this.info.filters[i]
           if (item.id === filter_id) {
-            this.info.products = this.info.products.filter(i => i.category === item.category)
-
+            axios.get(`http://${ip}:${port}/api/product/all`, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }
+            }).
+            then(resp => {
+              this.info.products = resp.data.filter(i => i.category === item.category)
+            })
           }
         }
       },
@@ -264,6 +274,17 @@
         localStorage.setItem('lang', 'ua-UA')
         this.curLocale = this.locales["ua-UA"];
       }
+    },
+    mounted() {
+      axios.get(`http://${ip}:${port}/api/product/all`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      }).
+        then(resp => {
+          console.log(resp.data)
+          this.info.products = resp.data
+      })
     }
   }
 </script>

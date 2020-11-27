@@ -133,7 +133,7 @@
               :key="i"
           >
             <v-img class="float-right" style="position: absolute; top: 10%; left: 85%" width="50" height="50" :src="item.image" :alt="item.name"></v-img>
-            <router-link :to="'/product/'+item.id" class="text-decoration-none">
+            <router-link :to="'/product/'+item.product_id" class="text-decoration-none">
               <v-card-title>
                 {{item.name}}
               </v-card-title>
@@ -149,10 +149,10 @@
                 <v-card>
                   <v-img :src="item.image"></v-img>
                   <v-card-text>
-                    <router-link :to="'/product/'+item.id" class="text-decoration-none">
+                    <router-link :to="'/product/'+item.product_id" class="text-decoration-none">
                       {{item.name}} <br/>
                     </router-link>
-                    {{item.price}} {{item.currency}}
+                    {{item.price}} UAH
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -256,6 +256,9 @@
 </template>
 
 <script>
+const ip = 'localhost'
+const port = 25016;
+const axios = require('axios')
 
 export default {
   name: 'App',
@@ -516,6 +519,16 @@ export default {
       localStorage.removeItem('sid')
       window.location.href = '/'
     }
+  },
+  mounted() {
+    axios.get(`http://${ip}:${port}/api/product/all`, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage['sid']
+      }
+    }).
+    then(resp => {
+      this.info.products = resp.data
+    })
   }
 };
 </script>

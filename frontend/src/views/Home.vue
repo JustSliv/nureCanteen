@@ -1,32 +1,55 @@
 <template>
-    <v-app style="background-color: #bfe9ff">
-        <div style="margin-top: 20%">
-            <v-card-title style="justify-content: center">NUFOOD</v-card-title>
-            <v-card-text style="text-align: center; display: block">{{ curLocale.subTextPage }}</v-card-text>
-            <div style="text-align: center; display: block" class="btns" v-if="info.user_info.login">
-                <v-btn to="/products" color="primary" class="v--btn">{{curLocale.btnsPage[0]}}</v-btn>
-                <v-btn to="/cabinet" color="secondary" class="v--btn">{{curLocale.btnsPage[1]}}</v-btn>
-                <v-btn to="/cabinet/orders" class="v--btn">{{curLocale.btnsPage[2]}}</v-btn>
-            </div>
-            <div style="text-align: center; display: block" class="btns" v-else>
-                <v-btn to="/products" color="primary" class="v--btn">{{curLocale.btnsPage[3]}}</v-btn>
-                <v-btn to="/auth" color="secondary" class="v--btn">{{curLocale.btnsPage[4]}}</v-btn>
-                <v-btn to="/register" class="v--btn">{{curLocale.btnsPage[5]}}</v-btn>
-            </div>
-        </div>
-    </v-app>
+  <v-app>
+    <v-card flat style="margin-top: 15%; background-color: #bfe9ff">
+      <v-card-title style="justify-content: center" class="display-4 deep-purple--text">NUFOOD</v-card-title>
+      <v-card-text style="text-align: center; display: block;" class="display-3 purple--text">
+        {{ curLocale.subTextPage }}
+      </v-card-text>
+      <v-container style="text-align: center; display: block" v-if="info.user_info.login">
+        <v-row>
+          <v-col cols="12">
+            <v-btn elevation="9" rounded dark x-large to="/products" color="purple">{{curLocale.btnsPage[0]}}</v-btn>
+          </v-col>
+          <v-col cols="12">
+            <v-btn elevation="9" rounded dark x-large to="/cabinet" color="deep-purple">{{curLocale.btnsPage[1]}}</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-container style="text-align: center; display: block" v-else>
+        <v-row>
+          <v-col cols="12">
+            <v-btn elevation="10" rounded dark x-large to="/auth" color="deep-purple">
+              {{curLocale.btnsPage[4]}}
+            </v-btn>
+          </v-col>
+          <v-col cols="12">
+            <v-btn elevation="10" rounded dark x-large to="/products" color="purple" >
+              {{curLocale.btnsPage[3]}}
+            </v-btn>
+          </v-col>
+          <v-col cols="12">
+            <v-btn elevation="10" rounded dark x-large to="/register" color="indigo">
+              {{curLocale.btnsPage[5]}}
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-app>
 </template>
 
 <script>
+const ip = 'localhost'
+const port = 25016;
+const axios = require('axios')
+
   export default {
     name: "Home",
     data() {
       return {
         info: {
           user_info: {
-            login: false,
-            name: "tester",
-            university: ""
+            login: false
           }
         },
         translate: false,
@@ -70,12 +93,25 @@
         localStorage.setItem('lang', 'ua-UA')
         this.curLocale = this.locales["ua-UA"];
       }
+    },
+    mounted() {
+     try {
+       axios.get(`http://${ip}:${port}/api/user`, {
+         headers: {
+           Authorization: 'Bearer ' + localStorage['sid']
+         }
+       }).then(() => {
+         this.info.user_info.login = true
+       }).catch(() => {
+         this.info.user_info.login = false
+       })
+     } catch {
+       console.log()
+     }
     }
   }
 </script>
 
 <style scoped>
-    .btns .v--btn {
-        margin: 5px;
-    }
+
 </style>

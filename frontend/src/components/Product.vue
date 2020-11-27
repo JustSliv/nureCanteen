@@ -33,7 +33,7 @@
         <div>
           <v-img :src="product.image" :alt="product.name"></v-img>
           <v-card-subtitle>
-            <router-link class="text-decoration-none" :to="'/product/'+product.id">
+            <router-link class="text-decoration-none" :to="'/product/'+product.product_id">
               {{product.name}}
             </router-link> <br/>
             {{product.price}} {{curLocale.productInfo.currency}}

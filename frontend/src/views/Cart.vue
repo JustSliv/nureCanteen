@@ -170,6 +170,7 @@
                     'Field cannot be empty!',
                     'Fill this field!'
                 ],
+                emailRule: "Input correct e-mail!",
                 btns: [
                     'Cancel',
                     'Confirm'
@@ -208,6 +209,7 @@
                   'Поле не может быть пустым',
                   'Заполните поле!'
                 ],
+                emailRule: "Введите правильный e-mail!",
                 btns: [
                   'Отменить',
                   'Подтвердить'
@@ -246,13 +248,14 @@
                   'Поле не може бути пустим!',
                   'Заповніть це поле!'
                 ],
+                emailRule: "Напишіть правильний e-mail!",
                 btns: [
                   'Відміна',
                   'Підтвердити'
                 ]
               }
             },
-            notFound: 'Кошук пуст'
+            notFound: 'Кошук порожній'
           }
         },
         info: {
@@ -274,7 +277,7 @@
             v => v.length !== 0 || this.curLocale.userData.form.textRules[1]
         ],
         emailRules: [
-            v => (v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")!==null?v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")[0]:null) !== null || "Введите верный e-mail"
+            v => (v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")!==null?v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")[0]:null) !== null || this.curLocale.userData.form.emailRule
         ]
       }
     },
