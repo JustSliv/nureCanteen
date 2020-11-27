@@ -19,4 +19,9 @@ public class CommentController {
 
       return ResponseEntity.ok(commentRepo.findById(id).get());
    }
+
+   @PostMapping("/")
+   public ResponseEntity<Comment> addOne(@RequestBody Comment comment){
+      return ResponseEntity.ok(commentRepo.save(comment));
+   }
 }
