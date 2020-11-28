@@ -19,7 +19,6 @@ public class Comment {
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 //   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="username")
    @JsonIdentityReference(alwaysAsId = true)
-   @JsonIgnoreProperties("costSuppliers")
    @JoinColumn(name = "id_user")
    private User user;
 

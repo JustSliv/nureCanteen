@@ -1,9 +1,6 @@
 package org.canteen.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import org.canteen.config.EntityIdResolver;
 
 import javax.persistence.*;
@@ -60,8 +57,13 @@ public class Product {
    @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Set<Comment> comments = new HashSet<Comment>();
 
+   @JsonIgnore
+   @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private Set<Basket> baskets = new HashSet<Basket>();
+
    public Product() {
    }
+
 
    public Long getProduct_id() {
       return product_id;
@@ -135,25 +137,12 @@ public class Product {
       this.comments = comments;
    }
 
-   @Override
-   public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      Product product = (Product) o;
-      return price == product.price &&
-         total_count == product.total_count &&
-         available_count == product.available_count &&
-         Objects.equals(product_id, product.product_id) &&
-         Objects.equals(name, product.name) &&
-         Objects.equals(category, product.category) &&
-         Objects.equals(description, product.description) &&
-         Objects.equals(image, product.image) &&
-         Objects.equals(comments, product.comments);
+   public Set<Basket> getBaskets() {
+      return baskets;
    }
 
-   @Override
-   public int hashCode() {
-      return Objects.hash(product_id, name, price, category, description, total_count, available_count, image, comments);
+   public void setBaskets(Set<Basket> baskets) {
+      this.baskets = baskets;
    }
 
    @Override
@@ -168,6 +157,21 @@ public class Product {
          ", available_count=" + available_count +
          ", image='" + image + '\'' +
          ", comments=" + comments +
+         ", baskets=" + baskets +
          '}';
+   }
+
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Product product = (Product) o;
+      return Objects.equals(product_id, product.product_id);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(product_id);
    }
 }

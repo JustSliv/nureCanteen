@@ -2,6 +2,7 @@ package org.canteen.security.model;
 
 import com.fasterxml.jackson.annotation.*;
 import org.canteen.config.EntityIdResolver;
+import org.canteen.models.Basket;
 import org.canteen.models.Comment;
 import org.hibernate.annotations.BatchSize;
 
@@ -84,6 +85,10 @@ public class User {
       inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_NAME", referencedColumnName = "NAME")})
    @BatchSize(size = 20)
    private Set<Authority> authorities = new HashSet<>();
+
+   @OneToMany(mappedBy = "user")
+   @JsonIgnore
+   private Set<Basket> baskets = new HashSet<Basket>();
 
    public Long getid() {
       return id;
@@ -197,6 +202,14 @@ public class User {
       this.authorities = authorities;
    }
 
+   public Set<Basket> getBaskets() {
+      return baskets;
+   }
+
+   public void setBaskets(Set<Basket> baskets) {
+      this.baskets = baskets;
+   }
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
@@ -222,6 +235,7 @@ public class User {
          ", age=" + age +
          ", authorities=" + authorities +
          ", comments=" + comments +
+         ", baskets=" + baskets +
          '}';
    }
 
