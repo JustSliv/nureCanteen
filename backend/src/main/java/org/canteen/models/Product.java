@@ -2,6 +2,7 @@ package org.canteen.models;
 
 import com.fasterxml.jackson.annotation.*;
 import org.canteen.config.EntityIdResolver;
+import org.canteen.security.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

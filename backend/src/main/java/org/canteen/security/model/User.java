@@ -3,7 +3,9 @@ package org.canteen.security.model;
 import com.fasterxml.jackson.annotation.*;
 import org.canteen.config.EntityIdResolver;
 import org.canteen.models.Basket;
+import org.canteen.models.Check;
 import org.canteen.models.Comment;
+import org.canteen.models.Product;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -89,6 +91,10 @@ public class User {
    @OneToMany(mappedBy = "user")
    @JsonIgnore
    private Set<Basket> baskets = new HashSet<Basket>();
+
+   @JsonIgnore
+   @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private Set<Check> checks = new HashSet<Check>();
 
    public Long getid() {
       return id;
@@ -210,6 +216,14 @@ public class User {
       this.baskets = baskets;
    }
 
+   public Set<Check> getChecks() {
+      return checks;
+   }
+
+   public void setChecks(Set<Check> checks) {
+      this.checks = checks;
+   }
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
@@ -236,6 +250,7 @@ public class User {
          ", authorities=" + authorities +
          ", comments=" + comments +
          ", baskets=" + baskets +
+         ", checks=" + checks +
          '}';
    }
 

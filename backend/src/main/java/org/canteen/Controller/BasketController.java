@@ -36,6 +36,18 @@ public class BasketController {
       return ResponseEntity.ok(basketRepo.getUserBasket(id));
    }
 
+   @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+   public ResponseEntity<Basket> saveProduct(@RequestBody Basket basket){
+      HttpHeaders headers = new HttpHeaders();
+
+      if(basket == null){
+         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+      basketRepo.save(basket);
+
+      return new ResponseEntity<>(basket, headers, HttpStatus.CREATED);
+   }
+
    @GetMapping("/all")
    public ResponseEntity<List<Basket>> getAll(){
 

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.canteen.security.model.User;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "basket")
@@ -27,6 +29,12 @@ public class Basket {
    @JsonIdentityReference(alwaysAsId = true)
    @JoinColumn(name = "id_user")
    private User user;
+
+   @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="username")
+   @JsonIdentityReference(alwaysAsId = true)
+   @JoinColumn(name = "check_id")
+   private Check check_id;
 
    @Column(name = "count")
    private int count;
@@ -66,15 +74,26 @@ public class Basket {
       this.user = user;
    }
 
+   public Check getCheck_id() {
+      return check_id;
+   }
+
+   public void setCheck_id(Check check_id) {
+      this.check_id = check_id;
+   }
+
    @Override
    public String toString() {
       return "Basket{" +
          "basket_id=" + basket_id +
          ", product_id=" + product_id +
          ", user=" + user +
+         ", checks=" + check_id +
          ", count=" + count +
          '}';
    }
+
+
 
    @Override
    public boolean equals(Object o) {

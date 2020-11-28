@@ -1,6 +1,7 @@
 package org.canteen.Repositories.dto;
 
 public interface BasketDtoRepo {
+
    public Long getBasket_id();
    public Long getProduct_id();
    public String getName();
