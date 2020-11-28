@@ -9,5 +9,6 @@ public interface CheckDTO {
       public String getCanteen();
       public String getDate();
       public String getName();
-      public String getSum();
+      public String getCount();
+      public String getPrice();
 }
