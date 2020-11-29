@@ -276,7 +276,7 @@
     },
     methods: {
       doRegist() {
-        if ((this.login && this.password && this.fname && this.lName && this.group) !== "") {
+        if ((this.login && this.password) !== "") {
           axios.post(`http://${ip}:${port}/api/register`, {
             username: this.login,
             password: this.password,

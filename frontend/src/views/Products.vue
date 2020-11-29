@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-card style="margin: 10%; background-color: #bfe9ff" flat>
+    <v-card style="margin: 10%; background-color: #FFF9C4" flat>
       <v-menu v-model="showFilters" max-width="180">
         <template v-slot:activator="{on}">
           <v-card-title>
@@ -28,7 +28,29 @@
           </v-card-title>
         </v-card>
       </v-menu>
-      <ProductList :info="info" @update-products="updateProductsList" v-model="info.products"/>
+      <ProductList
+          :info="info"
+          @update-products="updateProductsList"
+          v-model="info.products"
+          :alert-unauthorized="alertUnauthorized"
+          :updater="updater"
+      />
+      <v-dialog v-model="alertUnauthorized" width="480">
+        <v-card>
+          <v-card-title style="justify-content: center; display: flex">
+            Войдите в систему чтобы оформить заказ!
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-card-actions style="justify-content: center; display: flex">
+            <v-btn color="deep-purple" text outlined to="/register" @click="doRegisterForProducts">
+              Регистрация
+            </v-btn>
+            <v-btn color="success" text outlined to="/auth" @click="doLoginForProducts">
+              Войти
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </v-app>
 </template>
@@ -234,9 +256,23 @@
       },
       langOne: false,
       langSecond: false,
-      langThird: false
+      langThird: false,
+      alertUnauthorized: false
     }),
     methods: {
+      doRegisterForProducts() {
+        localStorage['redirect'] = this.$route.fullPath
+        this.alertUnauthorized = false;
+        this.$router.push('/register')
+      },
+      doLoginForProducts() {
+        localStorage['redirect'] = this.$route.fullPath
+        this.alertUnauthorized = false;
+        this.$router.push('/auth')
+      },
+      updater(info) {
+        this.alertUnauthorized = info.value
+      },
       execFilter(ev) {
         let filter_id = 0;
         try {
@@ -282,7 +318,6 @@
         }
       }).
         then(resp => {
-          console.log(resp.data)
           this.info.products = resp.data
       })
     }
@@ -290,10 +325,5 @@
 </script>
 
 <style scoped>
-    /*@media screen and (min-width: 1200px) and (max-width: 1700px){*/
-    /*    .products {*/
-    /*        margin-top: 1.5%;*/
-    /*        margin-left: 1.5%;*/
-    /*    }*/
-    /*}*/
+
 </style>

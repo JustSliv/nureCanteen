@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-card flat style="margin-top: 15%; background-color: #bfe9ff">
+    <v-card flat style="margin-top: 15%; background-color: #FFF9C4">
       <v-card-title style="justify-content: center" class="display-4 deep-purple--text">NUFOOD</v-card-title>
       <v-card-text style="text-align: center; display: block;" class="display-3 purple--text">
         {{ curLocale.subTextPage }}
@@ -106,6 +106,7 @@ const axios = require('axios')
          this.info.user_info.login = false
        })
      } catch {
+       this.info.user_info.login = false
        console.log()
      }
     }

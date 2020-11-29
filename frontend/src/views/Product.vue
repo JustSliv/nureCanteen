@@ -109,6 +109,67 @@
             add_shopping_cart
           </v-icon>
         </v-btn>
+      <v-dialog v-model="dialog" max-width="320" v-if="dialog">
+        <v-card>
+          <v-card-title class="headline">
+            {{product.name}}
+          </v-card-title>
+          <v-card-text>
+            {{curLocale.productInfo.toCart.tip}}
+          </v-card-text>
+          <v-container>
+            <v-row>
+              <v-col>
+                <v-text-field
+                    label="Кол-во продукта:"
+                    outlined
+                    type="number"
+                    v-model="countProducts"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn
+                color="red"
+                text
+                @click="dialog = false"
+            >
+              {{curLocale.productInfo.toCart.btns[0]}}
+            </v-btn>
+            <v-btn
+                color="green"
+                text
+                @click="toCart"
+            >
+              {{curLocale.productInfo.toCart.btns[1]}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-snackbar
+          top
+          v-model="duplicate"
+          v-if="duplicate"
+          multi-line
+          timeout="2000"
+          color="success"
+      >
+        {{curLocale.productInfo.toCart.alerts[0]}}
+      </v-snackbar>
+      <v-snackbar
+          top
+          v-model="inCart"
+          v-if="inCart"
+          multi-line
+          timeout="2000"
+          color="success"
+      >
+        {{curLocale.productInfo}}
+        {{curLocale.productInfo.toCart.alerts[1]}}
+        <v-btn text to="/cart">{{curLocale.productInfo.toCart.alertBtn}}</v-btn>
+      </v-snackbar>
     </v-card>
   </v-app>
 </template>
@@ -122,6 +183,10 @@ export default {
   name: "Product",
   data() {
     return {
+      dialog: false,
+      duplicate: false,
+      inCart: false,
+      countProducts: 0,
       newReview: false,
       contentReview: "",
       fullname: '',
@@ -212,22 +277,62 @@ export default {
   mounted() {
     let curProduct = this.$route.path.split('/')
     console.log(curProduct)
-    axios.get(`http://${ip}:${port}/api/product/`+curProduct[curProduct.length-1], {
-      headers: {
-        Authorization: 'Bearer ' + localStorage['sid']
-      }
-    }).then(resp => {
-      this.info.product = resp.data
-      axios.get(`http://${ip}:${port}/api/product/comments/`+curProduct[curProduct.length-1], {
-        headers: {
-          Authorization: 'Bearer ' + localStorage['sid']
-        }
-      }).then(cmts => {
-        this.info.comments = cmts.data
+    axios.get(`http://${ip}:${port}/api/product/`+curProduct[curProduct.length-1]).
+      then(resp => {
+        this.info.product = resp.data
+        axios.get(`http://${ip}:${port}/api/product/comments/`+curProduct[curProduct.length-1]).
+        then(cmts => {
+          this.info.comments = cmts.data
+        })
       })
-    })
   },
   methods: {
+    // обработка кнопки в корзину
+    buyProduct() {
+      this.$nextTick(() => {
+        this.dialog = true;
+      });
+    },
+    // подтверждение нажатия на кнопку в корзину
+    toCart() {
+      this.dialog = false;
+      if (localStorage['sid'] !== undefined || localStorage['sid'] !== null && this.countProducts > 0) {
+        let id = parseInt(this.$route.path.split('/')[2])
+        axios.get(`http://${ip}:${port}/api/user`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
+        }).then(resp => {
+          axios({
+            method: 'POST',
+            url: `http://${ip}:${port}/api/basket`,
+            data: {
+              product_id: id,
+              user: resp.data.id,
+              count: this.countProducts
+            }
+          }).then(cart => {
+            localStorage['cart'] = JSON.stringify(cart.data)
+          })
+        })
+      } else if (localStorage['sid'] === undefined || localStorage['sid'] === null && this.countProducts > 0) {
+        let info = localStorage['cart'] === undefined?[]:localStorage['cart']
+        if (info.length >= 10) info = JSON.parse(info)
+        info.push(
+            {
+              id: this.product.id,
+              name: this.product.name,
+              category: this.product.category,
+              description: this.product.description,
+              price: this.product.price
+            }
+        )
+        localStorage['cart'] = JSON.stringify(info)
+      }
+      this.$nextTick(() => {
+        this.inCart = true;
+      });
+    },
     doOrder() {
 
     },

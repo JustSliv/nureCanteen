@@ -257,7 +257,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <router-view style="background-color: #bfe9ff"/>
+    <router-view style="background-color: #FFF9C4"/>
   </v-app>
 </template>
 
@@ -527,14 +527,10 @@ export default {
     }
   },
   mounted() {
-    axios.get(`http://${ip}:${port}/api/product/all`, {
-      headers: {
-        Authorization: 'Bearer ' + localStorage['sid']
-      }
-    }).
-    then(resp => {
-      this.info.products = resp.data
-    })
+    axios.get(`http://${ip}:${port}/api/product/all`)
+      .then(resp => {
+        this.info.products = resp.data
+      })
   }
 };
 </script>

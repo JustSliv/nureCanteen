@@ -56,6 +56,14 @@
                   <v-row>
                     <v-col>
                       <v-text-field
+                          :label="curLocale.tabs.tab1.context.userInfo.username"
+                          v-model="info.user_info.username"
+                          readonly
+                          rounded
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
                           :label="curLocale.tabs.tab1.context.userInfo.fname"
                           v-model="info.user_info.fName"
                           readonly
@@ -72,7 +80,7 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="6">
+                    <v-col>
                       <v-text-field
                           :label="curLocale.tabs.tab1.context.userInfo.email"
                           v-model="info.user_info.email"
@@ -88,7 +96,7 @@
                           rounded
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col>
                       <v-text-field
                           :label="curLocale.tabs.tab1.context.userInfo.age"
                           v-model="info.user_info.age"
@@ -651,8 +659,9 @@
                   avatarTip: 'Your avatar',
                   title: 'Personal info',
                   userInfo: {
-                    fname: 'First name',
-                    lName: 'Second name',
+                    username: 'Username:',
+                    fname: 'First name:',
+                    lName: 'Second name:',
                     age: 'Age:',
                     group: 'Group:',
                     email: 'E-mail:',
@@ -755,6 +764,7 @@
                   avatarTip: 'Ваш аватар',
                   title: 'Личные данные',
                   userInfo: {
+                    username: 'Логин:',
                     fname: 'Имя',
                     lName: 'Фамилия',
                     age: 'Возраст:',
@@ -850,6 +860,7 @@
                   avatarTip: 'Ваш аватар',
                   title: 'Особисті данні',
                   userInfo: {
+                    username: 'Логін:',
                     fname: 'Ім`я',
                     lName: 'Прізвище',
                     age: 'Вік:',
@@ -1234,6 +1245,11 @@
         }
       }).then(resp => {
         this.info.user_info=resp.data
+        if (this.info.user_info.fName === '') this.info.user_info.fName = 'Не указан'
+        if (this.info.user_info.lName === '') this.info.user_info.lName = 'Не указан'
+        if (this.info.user_info.phone === '') this.info.user_info.phone = 'Не указан'
+        if (this.info.user_info.personGroup === '') this.info.user_info.personGroup = 'Не указан'
+        if (this.info.user_info.email === '') this.info.user_info.email = 'Не указан'
         if (resp.data['templates'] === undefined) {
           this.info.user_info['templates'] =[
             {

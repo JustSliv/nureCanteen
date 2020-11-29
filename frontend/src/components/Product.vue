@@ -38,7 +38,7 @@
             </router-link> <br/>
             {{product.price}} {{curLocale.productInfo.currency}}
           </v-card-subtitle>
-          <v-btn @click="buyProduct" color="success" width="100%">{{curLocale.productInfo.toCart.toCartTitle}}</v-btn>
+          <v-btn @click="showBuyDialog" color="success" width="100%">{{curLocale.productInfo.toCart.toCartTitle}}</v-btn>
         </div>
       </template>
       <v-card>
@@ -57,6 +57,19 @@
         <v-card-text>
           {{curLocale.productInfo.toCart.tip}}
         </v-card-text>
+        <v-container>
+          <v-row no-gutters>
+            <v-col>
+              <v-text-field
+                  label="Кол-во продукта:"
+                  outlined
+                  type="number"
+                  v-model="countProducts"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-divider></v-divider>
         <v-card-actions>
           <v-btn
               color="red"
@@ -93,7 +106,6 @@
         timeout="2000"
         color="success"
     >
-      {{curLocale.productInfo}}
       {{curLocale.productInfo.toCart.alerts[1]}}
       <v-btn text to="/cart">{{curLocale.productInfo.toCart.alertBtn}}</v-btn>
     </v-snackbar>
@@ -101,14 +113,13 @@
 </template>
 
 <script>
+const ip = 'localhost'
+const port = 25016;
+const axios = require('axios')
+
 export default {
   name: "Product",
-  props: {
-    product: {
-      type: Object,
-      required: true
-    }
-  },
+  props: ['product', 'alertUnauthorized', 'updater'],
   data() {
     return {
       curLocale: null,
@@ -181,7 +192,8 @@ export default {
       duplicate: false,
       inCart: false,
       infoProduct: false,
-      activeInfoProduct: false
+      activeInfoProduct: false,
+      countProducts: 1
     }
   },
   beforeMount() {
@@ -201,50 +213,45 @@ export default {
       this.activeInfoProduct = false;
       this.infoProduct = false;
     },
-    buyProduct() {
-      let choose = false;
-      let id = this.product.id;
-      let info = localStorage['cart'] === undefined?[]:JSON.parse(localStorage['cart']);
-      for (let i=0;i<info.length;i++) {
-        if (id === info[i].id) {
-          choose = true;
-        }
+    showBuyDialog(){
+      if (localStorage['sid'] !== undefined && this.countProducts > 0) {
+        this.dialog = true;
       }
-      if (choose === true) {
-        this.$nextTick(() => {
-          this.duplicate = true;
-        });
-      } else {
-        this.$nextTick(() => {
-          this.dialog = true;
-        });
+      else if (localStorage['sid'] === undefined) {
+        this.updater({
+          value: true
+        })
       }
     },
+    // подтверждение нажатия на кнопку в корзину
     toCart() {
       this.dialog = false;
-      let isAuth = false;
-      if (isAuth) {
-        return 0;
-      } else {
-        let info = localStorage['cart'] === undefined?[]:localStorage['cart']
-        if (info.length >= 10) info = JSON.parse(info)
-        info.push(
-            {
-              id: this.product.id,
-              name: this.product.name,
-              category: this.product.category,
-              description: this.product.description,
-              price: this.product.price
-            }
-        )
-        localStorage['cart'] = JSON.stringify(info)
-      }
-      this.$nextTick(() => {
-        this.inCart = true;
-      });
-
-      // sending POST to update product count
-      this.product.available_count--;
+      axios.get(`http://${ip}:${port}/api/user`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      }).then(resp => {
+        axios({
+          method: 'POST',
+          url: `http://${ip}:${port}/api/basket/`,
+          data: {
+            product_id: this.product.product_id,
+            user: resp.data.id,
+            count: this.countProducts
+          }
+        }).then(() => {
+          this.inCart = true;
+          // if (localStorage['cart'] !== undefined) {
+          //   if (JSON.parse(localStorage['cart']).length > 0) {
+          //     localStorage['cart'] = JSON.parse(localStorage['cart']).push(cart.data)
+          //   }
+          // } else {
+          //   let info = []
+          //   info.push(cart.data)
+          //   localStorage['cart'] = JSON.stringify(info)
+          // }
+        })
+      })
     }
   }
 }

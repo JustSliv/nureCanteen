@@ -213,7 +213,11 @@
               setTimeout(() => {
                 localStorage.setItem('sid', resp.data['id_token'])
                 this.load = false;
-                window.location.href = '/cabinet';
+                if (localStorage['redirect'] !== undefined) {
+                  window.location.href = localStorage['redirect']
+                } else {
+                  window.location.href = '/cabinet';
+                }
               }, 1500)
             }).catch(e => {
               console.error(e)
