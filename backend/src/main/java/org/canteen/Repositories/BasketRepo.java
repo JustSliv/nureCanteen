@@ -13,7 +13,7 @@ public interface BasketRepo extends JpaRepository<Basket, Long> {
 
 
    @Query(value = "SELECT basket.basket_id, product.product_id, product.name, product.category, product.description, product.price, basket.count FROM product, basket, usr WHERE usr.id = basket.id_user\n" +
-      "AND basket.id_user = :user_id", nativeQuery = true)
+      "AND basket.id_user = :user_id AND basket.id_product=product.product_id", nativeQuery = true)
    @Transactional
    List<BasketDtoRepo> getUserBasket(@Param("user_id") Long user_id);
 }
