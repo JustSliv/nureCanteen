@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-card flat style="margin-top: 15%; background-color: #FFF9C4">
-      <v-card-title style="justify-content: center" class="display-4 deep-purple--text">NUFOOD</v-card-title>
+      <v-card-title style="justify-content: center" class="display-4 deep-purple--text">Nure Canteen</v-card-title>
       <v-card-text style="text-align: center; display: block;" class="display-3 purple--text">
         {{ curLocale.subTextPage }}
       </v-card-text>
@@ -39,10 +39,6 @@
 </template>
 
 <script>
-const ip = 'localhost'
-const port = 25016;
-const axios = require('axios')
-
   export default {
     name: "Home",
     data() {
@@ -95,20 +91,8 @@ const axios = require('axios')
       }
     },
     mounted() {
-     try {
-       axios.get(`http://${ip}:${port}/api/user`, {
-         headers: {
-           Authorization: 'Bearer ' + localStorage['sid']
-         }
-       }).then(() => {
-         this.info.user_info.login = true
-       }).catch(() => {
-         this.info.user_info.login = false
-       })
-     } catch {
-       this.info.user_info.login = false
-       console.log()
-     }
+      if (localStorage['sid'] !== undefined) this.info.user_info.login = true
+      else this.info.user_info.login = false
     }
   }
 </script>

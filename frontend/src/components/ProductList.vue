@@ -13,14 +13,15 @@
 </template>
 
 <script>
-    import Product from '@/components/Product';
-    export default {
-        name: "ProductList",
-        props: ['info', 'alertUnauthorized', 'updater'],
-        components: {
-            Product
-        }
+  import Product from '@/components/Product';
+
+  export default {
+    name: "ProductList",
+    props: ['info', 'alertUnauthorized', 'updater'],
+    components: {
+        Product
     }
+  }
 </script>
 
 <style scoped>

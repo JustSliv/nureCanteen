@@ -3,7 +3,7 @@
     <v-app-bar app color="deep-purple" dark>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title @click="$router.push('/')" style="cursor: pointer">
-        NUFOOD
+        Nure Canteen
       </v-toolbar-title>
       <v-btn icon :title="curLocale.workingTime">
         <v-icon>watch_later</v-icon>
@@ -182,14 +182,14 @@
       <v-divider></v-divider>
       <v-list dense nav flat>
         <v-list-item-group v-if="validAuth">
-          <v-list-item>
+          <v-list-item @click="$router.push('/cabinet')">
             <v-list-item-icon>
               <v-icon>
                 perm_identity
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title @click="$router.push('/cabinet')">{{curLocale.drawer.listItem[0]}}</v-list-item-title>
+              <v-list-item-title>{{curLocale.drawer.listItem[0]}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="logout">
@@ -204,26 +204,26 @@
           </v-list-item>
         </v-list-item-group>
         <v-list-item-group v-else>
-          <v-list-item>
+          <v-list-item @click="$router.push('/auth')">
             <v-list-item-icon>
               <v-icon>
                 login
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title @click="$router.push('/auth')">
+              <v-list-item-title>
                 {{curLocale.drawer.listItem[2]}}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item>
+          <v-list-item @click="$router.push('/register')">
             <v-list-item-icon>
               <v-icon>
                 group_add
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title @click="$router.push('/register')">
+              <v-list-item-title>
                 {{curLocale.drawer.listItem[3]}}
               </v-list-item-title>
             </v-list-item-content>
@@ -231,29 +231,35 @@
         </v-list-item-group>
         <v-divider></v-divider>
         <v-list-item-group>
-          <v-list-item>
+          <v-list-item @click="$router.push('/')">
             <v-list-item-icon>
               <v-icon>
                 home
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title @click="$router.push('/')">{{curLocale.drawer.listItem[4]}}</v-list-item-title>
+              <v-list-item-title>{{curLocale.drawer.listItem[4]}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
         <v-list-item-group>
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon>
-                fastfood
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-<!--              <router-link to="/products" class="text-decoration-none">Каталог</router-link>-->
-                <v-list-item-title @click="$router.push('/products')">{{curLocale.drawer.listItem[5]}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <v-menu open-on-hover right offset-y>
+            <template v-slot:activator="{on, attrs}">
+              <v-list-item @click="$route.fullPath !== '/products'?$router.push('/products'):''" v-on="on" v-bind="attrs">
+                <v-list-item-icon>
+                  <v-icon>
+                    fastfood
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>{{curLocale.drawer.listItem[5]}}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <CategorySubList
+                :info="info"
+            />
+          </v-menu>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -262,6 +268,7 @@
 </template>
 
 <script>
+import CategorySubList from "@/components/CategorySubList";
 const ip = 'localhost'
 const port = 25016;
 const axios = require('axios')
@@ -269,6 +276,7 @@ const axios = require('axios')
 export default {
   name: 'App',
   components: {
+    CategorySubList
   },
   data: () => ({
     info: {
@@ -280,19 +288,19 @@ export default {
       filters: [
         {
           id: 0,
-          name: "Test1"
+          category: 'Первое блюдо'
         },
         {
           id: 1,
-          name: "Test2"
+          category: 'Второе блюдо'
         },
         {
           id: 2,
-          name: "Test3"
+          category: 'Пряности'
         },
         {
           id: 3,
-          name: "Test4"
+          category: 'Напитки'
         }
       ],
       products: [
@@ -412,6 +420,12 @@ export default {
           title: 'INFORMATION',
           listItem: [
             'Personal Area', 'Logout', 'Login', 'Sign-Up', 'Main Page', 'Catalog'
+          ],
+          filtersItems: [
+            'First dish',
+            'Second Dish',
+            'Spices',
+            'Drinks'
           ]
         }
       },
@@ -440,6 +454,12 @@ export default {
           title: 'ИНФОРМАЦИЯ',
           listItem: [
               'Личный кабинет', 'Выйти', 'Войти', 'Регистрация', 'Главная', 'Каталог'
+          ],
+          filtersItems: [
+            'Первое блюдо',
+            'Второе блюдо',
+            'Пряности',
+            'Напитки'
           ]
         }
       },
@@ -468,6 +488,12 @@ export default {
           title: 'ІНФОРМАЦІЯ',
           listItem: [
             'Особистий кабінет', 'Вийти', 'Увійти', 'Реєстрація', 'Головна', 'Каталог'
+          ],
+          filtersItems: [
+            'Перша страва',
+            'Друга страва',
+            'Прянощі',
+            'Напої'
           ]
         }
       }
@@ -513,10 +539,12 @@ export default {
     },
     getSearchItems() {
       // sending GET to DB
-
       let regex = new RegExp(this.searchText, 'i');
       let items = this.info.products.filter(i => regex.test(i.name))
       this.searchItems = items === undefined?[]:{products: items};
+    },
+    doRedirCategory() {
+      this.$router
     },
     leaveSearchBar() {
       this.searchItems = []
@@ -531,6 +559,9 @@ export default {
       .then(resp => {
         this.info.products = resp.data
       })
+    // for (let i=0;i<this.info.filters.length;i++) {
+    //   this.info.filters[i].category = this.curLocale.drawer.filtersItems[i]
+    // }
   }
 };
 </script>

@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-card style="margin: 10%; background-color: #FFF9C4" flat>
-      <v-menu v-model="showFilters" max-width="180">
-        <template v-slot:activator="{on}">
+    <v-card style="margin: 15% 10% 0 10%; background-color: #FFF9C4" flat>
+      <v-menu v-model="showFilters" max-width="180" offset-y v-if="selCategory === undefined">
+        <template v-slot:activator="{on, attrs}">
           <v-card-title>
             {{curLocale.productInfo.title}}
-            <v-btn v-on="on" icon @click="showFilters = !showFilters">
+            <v-btn v-on="on" v-bind="attrs" icon @click="showFilters = !showFilters">
               <v-icon>
                 filter_list
               </v-icon>
@@ -13,21 +13,24 @@
           </v-card-title>
         </template>
         <v-card>
-          <v-card-title>
-            {{curLocale.productInfo.filterTitle}}
-            <v-radio-group>
-              <v-radio
-                  v-for="item in info.filters"
-                  :key="item.id"
-                  :label="item.category"
-                  :value="item.category"
-                  @click="execFilter"
-                  :data-id="item.id"
-              ></v-radio>
-            </v-radio-group>
-          </v-card-title>
+      <v-card-subtitle>
+        {{curLocale.productInfo.filterTitle}}
+        <v-radio-group>
+          <v-radio
+              v-for="item in info.filters"
+              :key="item.id"
+              :label="item.category"
+              :value="item.category"
+              @click="execFilter"
+              :data-id="item.id"
+          ></v-radio>
+        </v-radio-group>
+      </v-card-subtitle>
         </v-card>
       </v-menu>
+      <v-card-title v-else>
+        {{selCategory}}
+      </v-card-title>
       <ProductList
           :info="info"
           @update-products="updateProductsList"
@@ -70,9 +73,9 @@
     data: () => ({
       info: {
         user_info: {
-            login: false,
-            name: "tester",
-            university: ""
+          login: false,
+          name: "tester",
+          university: ""
         },
         products: [
             {
@@ -184,7 +187,8 @@
             category: 'Напитки'
           }
         ]
-        },
+      },
+      redirTo: '',
       drawer: false,
       showFilters: false,
       translate: false,
@@ -209,6 +213,12 @@
             info: [
               'Category:', 'Available:', '', 'Description:'
             ],
+            filtersItems: [
+                'First dish',
+                'Second Dish',
+                'Spices',
+                'Drinks'
+            ]
           }
         },
         'ru-RU': {
@@ -230,6 +240,12 @@
             info: [
                 'Категория:', 'Доступно:', 'шт.', 'Описание:'
             ],
+            filtersItems: [
+              'Первое блюдо',
+              'Второе блюдо',
+              'Пряности',
+              'Напитки'
+            ]
           }
         },
         'ua-UA': {
@@ -251,28 +267,22 @@
             info: [
               'Категорія:', 'Доступно:', 'шт.', 'Опис:'
             ],
+            filtersItems: [
+              'Перша страва',
+              'Друга страва',
+              'Прянощі',
+              'Напої'
+            ]
           }
         }
       },
       langOne: false,
       langSecond: false,
       langThird: false,
-      alertUnauthorized: false
+      alertUnauthorized: false,
+      selCategory: localStorage['category']
     }),
     methods: {
-      doRegisterForProducts() {
-        localStorage['redirect'] = this.$route.fullPath
-        this.alertUnauthorized = false;
-        this.$router.push('/register')
-      },
-      doLoginForProducts() {
-        localStorage['redirect'] = this.$route.fullPath
-        this.alertUnauthorized = false;
-        this.$router.push('/auth')
-      },
-      updater(info) {
-        this.alertUnauthorized = info.value
-      },
       execFilter(ev) {
         let filter_id = 0;
         try {
@@ -295,6 +305,19 @@
           }
         }
       },
+      doRegisterForProducts() {
+        localStorage['redirect'] = this.$route.fullPath
+        this.alertUnauthorized = false;
+        this.$router.push('/register')
+      },
+      doLoginForProducts() {
+        localStorage['redirect'] = this.$route.fullPath
+        this.alertUnauthorized = false;
+        this.$router.push('/auth')
+      },
+      updater(info) {
+        this.alertUnauthorized = info.value
+      },
       updateProductsList(newValue) {
         this.info.products = newValue
       }
@@ -312,14 +335,16 @@
       }
     },
     mounted() {
-      axios.get(`http://${ip}:${port}/api/product/all`, {
-        headers: {
-          Authorization: 'Bearer ' + localStorage['sid']
-        }
-      }).
-        then(resp => {
-          this.info.products = resp.data
-      })
+      axios.get(`http://${ip}:${port}/api/product/all`)
+        .then(resp => {
+          if (localStorage['category'] !== undefined) {
+            this.info.products = resp.data.filter(i => i.category === localStorage['category'])
+          }
+          else this.info.products = resp.data
+        })
+      // for (let i=0;i<this.info.filters.length;i++) {
+      //   this.info.filters[i].category = this.curLocale.productInfo.filtersItems[i]
+      // }
     }
   }
 </script>
