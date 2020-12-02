@@ -54,6 +54,12 @@ public class Product {
    @NotNull
    private String image;
 
+   @Column(name = "calories")
+   private int calories;
+
+   @Column(name = "weight")
+   private int weight;
+
 
    @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Set<Comment> comments = new HashSet<Comment>();
@@ -146,6 +152,22 @@ public class Product {
       this.baskets = baskets;
    }
 
+   public int getCalories() {
+      return calories;
+   }
+
+   public void setCalories(int calories) {
+      this.calories = calories;
+   }
+
+   public int getWeight() {
+      return weight;
+   }
+
+   public void setWeight(int weight) {
+      this.weight = weight;
+   }
+
    @Override
    public String toString() {
       return "Product{" +
@@ -157,11 +179,12 @@ public class Product {
          ", total_count=" + total_count +
          ", available_count=" + available_count +
          ", image='" + image + '\'' +
+         ", calories=" + calories +
+         ", weight=" + weight +
          ", comments=" + comments +
          ", baskets=" + baskets +
          '}';
    }
-
 
    @Override
    public boolean equals(Object o) {

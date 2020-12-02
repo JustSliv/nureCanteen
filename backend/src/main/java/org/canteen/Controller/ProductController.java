@@ -74,6 +74,12 @@ public class ProductController {
       if(Long.valueOf(newProd.getTotal_count()) != null) {
          prodToChange.setTotal_count(newProd.getTotal_count());
       }
+      if(Long.valueOf(newProd.getCalories()) != null) {
+         prodToChange.setCalories(newProd.getCalories());
+      }
+      if(Long.valueOf(newProd.getWeight()) != null) {
+         prodToChange.setWeight(newProd.getWeight());
+      }
 
       productRepo.save(prodToChange);
       return new ResponseEntity<>(prodToChange, headers, HttpStatus.OK);
