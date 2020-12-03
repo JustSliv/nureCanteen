@@ -1,13 +1,10 @@
 package org.canteen.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.canteen.security.model.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "basket")
@@ -38,6 +35,9 @@ public class Basket {
 
    @Column(name = "count")
    private int count;
+
+   @Column(name = "active")
+   private boolean active;
 
    public Basket() {
    }
@@ -82,32 +82,23 @@ public class Basket {
       this.check_id = check_id;
    }
 
+   public boolean isActive() {
+      return active;
+   }
+
+   public void setActive(boolean active) {
+      this.active = active;
+   }
+
    @Override
    public String toString() {
       return "Basket{" +
          "basket_id=" + basket_id +
          ", product_id=" + product_id +
          ", user=" + user +
-         ", checks=" + check_id +
+         ", check_id=" + check_id +
          ", count=" + count +
+         ", active=" + active +
          '}';
-   }
-
-
-
-   @Override
-   public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      Basket basket = (Basket) o;
-      return count == basket.count &&
-         Objects.equals(basket_id, basket.basket_id) &&
-         Objects.equals(product_id, basket.product_id) &&
-         Objects.equals(user, basket.user);
-   }
-
-   @Override
-   public int hashCode() {
-      return Objects.hash(basket_id, product_id, user, count);
    }
 }

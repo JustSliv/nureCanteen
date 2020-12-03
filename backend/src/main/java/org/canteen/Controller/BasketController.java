@@ -78,6 +78,7 @@ public class BasketController {
    public ResponseEntity<Basket> deleteByUserId(@PathVariable Long id){
 
       basketRepo.deleteByUserUserId(id);
+      basketRepo.changeActive(id);
       return new ResponseEntity<>(HttpStatus.OK);
    }
 
