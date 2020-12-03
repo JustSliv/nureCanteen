@@ -36,16 +36,18 @@
             <router-link class="text-decoration-none" :to="'/product/'+product.product_id">
               {{product.name}}
             </router-link> <br/>
-            {{product.price}} {{curLocale.productInfo.currency}}
+            {{product.price}} {{locale.productInfo.currency}}
           </v-card-subtitle>
-          <v-btn @click="showBuyDialog" color="success" width="100%">{{curLocale.productInfo.toCart.toCartTitle}}</v-btn>
+          <v-btn @click="showBuyDialog" color="success" width="100%">{{locale.productInfo.toCart.toCartTitle}}</v-btn>
         </div>
       </template>
       <v-card>
         <v-card-text>
-          <b>{{curLocale.productInfo.info[0]}}</b> {{product.category}} <br/>
-          <b>{{curLocale.productInfo.info[1]}}</b> {{ product.available_count }} {{curLocale.productInfo.info[2]}} <br/>
-          <b>{{curLocale.productInfo.info[3]}}</b> {{ product.description }} <br/>
+          <b>{{locale.productInfo.info[0]}}</b> {{product.category}} <br/>
+          <b>{{locale.productInfo.info[4]}}</b> {{product.weight}} <br/>
+          <b>{{locale.productInfo.info[5]}}</b> {{product.calories}} <br/>
+          <b>{{locale.productInfo.info[1]}}</b> {{ product.available_count }} {{locale.productInfo.info[2]}} <br/>
+          <b>{{locale.productInfo.info[3]}}</b> {{ product.description }} <br/>
         </v-card-text>
       </v-card>
     </v-menu>
@@ -55,7 +57,7 @@
           {{product.name}}
         </v-card-title>
         <v-card-text>
-          {{curLocale.productInfo.toCart.tip}}
+          {{locale.productInfo.toCart.tip}}
         </v-card-text>
         <v-container>
           <v-row no-gutters>
@@ -76,14 +78,14 @@
               text
               @click="dialog = false"
           >
-            {{curLocale.productInfo.toCart.btns[0]}}
+            {{locale.productInfo.toCart.btns[0]}}
           </v-btn>
           <v-btn
               color="green"
               text
               @click="toCart"
           >
-            {{curLocale.productInfo.toCart.btns[1]}}
+            {{locale.productInfo.toCart.btns[1]}}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -96,7 +98,7 @@
         timeout="2000"
         color="success"
     >
-      {{curLocale.productInfo.toCart.alerts[0]}}
+      {{locale.productInfo.toCart.alerts[0]}}
     </v-snackbar>
     <v-snackbar
         top
@@ -106,8 +108,8 @@
         timeout="2000"
         color="success"
     >
-      {{curLocale.productInfo.toCart.alerts[1]}}
-      <v-btn text to="/cart">{{curLocale.productInfo.toCart.alertBtn}}</v-btn>
+      {{locale.productInfo.toCart.alerts[1]}}
+      <v-btn text to="/cart">{{locale.productInfo.toCart.alertBtn}}</v-btn>
     </v-snackbar>
   </v-card>
 </template>
@@ -119,93 +121,15 @@ const axios = require('axios')
 
 export default {
   name: "Product",
-  props: ['product', 'alertUnauthorized', 'updater'],
+  props: ['product', 'alertUnauthorized', 'updater', 'locale'],
   data() {
     return {
-      curLocale: null,
-      locales: {
-        'en-EN': {
-          productInfo: {
-            title: 'All goods',
-            filterTitle: 'Filters:',
-            currency: 'UAH.',
-            toCart: {
-              toCartTitle: 'To cart',
-              tip: 'Item will be put to cart',
-              btns: [
-                'Cancel', 'Continue'
-              ],
-              alerts: [
-                'This item already in cart', 'Item added to cart'
-              ],
-              alertBtn: 'Cart'
-            },
-            info: [
-              'Category:', 'Available:', '', 'Description:'
-            ],
-          }
-        },
-        'ru-RU': {
-          productInfo: {
-            title: 'Все продукты',
-            filterTitle: 'Фильтры:',
-            currency: 'ГРН.',
-            toCart: {
-              toCartTitle: 'В корзину',
-              tip: 'Товар будет занесен к вам в корзину',
-              btns: [
-                'Отмена', 'Продолжить'
-              ],
-              alerts: [
-                'Данный товар уже в корзине', 'Товар добавлен в корзине'
-              ],
-              alertBtn: 'Корзина'
-            },
-            info: [
-              'Категория:', 'Доступно:', 'шт.', 'Описание:'
-            ],
-          }
-        },
-        'ua-UA': {
-          productInfo: {
-            title: 'Усі продукті',
-            filterTitle: 'Фільтри:',
-            currency: 'ГРН.',
-            toCart: {
-              toCartTitle: 'До корзини',
-              tip: 'Товар буде додан до вашої корзини',
-              btns: [
-                'Відміна', 'Продовжити'
-              ],
-              alerts: [
-                'Данний товар вже у корзині', 'Товар додан до корзини'
-              ],
-              alertBtn: 'Корзина'
-            },
-            info: [
-              'Категорія:', 'Доступно:', 'шт.', 'Опис:'
-            ],
-          }
-        }
-      },
       dialog: false,
       duplicate: false,
       inCart: false,
       infoProduct: false,
       activeInfoProduct: false,
       countProducts: 1
-    }
-  },
-  beforeMount() {
-    if (localStorage['lang'] === 'ru-RU') {
-      this.curLocale = this.locales["ru-RU"];
-    } else if (localStorage['lang'] === 'en-EN') {
-      this.curLocale = this.locales["en-EN"];
-    } else if (localStorage['lang'] === 'ua-UA') {
-      this.curLocale = this.locales["ua-UA"];
-    } else {
-      localStorage.setItem('lang', 'ua-UA')
-      this.curLocale = this.locales["ua-UA"];
     }
   },
   methods: {
@@ -232,24 +156,48 @@ export default {
         }
       }).then(resp => {
         axios({
-          method: 'POST',
-          url: `http://${ip}:${port}/api/basket/`,
-          data: {
-            product_id: this.product.product_id,
-            user: resp.data.id,
-            count: this.countProducts
+          method: 'GET',
+          url: `http://${ip}:${port}/api/basket/user/`+resp.data.id,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
           }
-        }).then(() => {
-          this.inCart = true;
-          // if (localStorage['cart'] !== undefined) {
-          //   if (JSON.parse(localStorage['cart']).length > 0) {
-          //     localStorage['cart'] = JSON.parse(localStorage['cart']).push(cart.data)
-          //   }
-          // } else {
-          //   let info = []
-          //   info.push(cart.data)
-          //   localStorage['cart'] = JSON.stringify(info)
-          // }
+        }).then(cart => {
+          let ids = cart.data.map(i => i.product_id)
+          console.log(cart.data)
+          console.log(ids)
+          if (ids.indexOf(this.product.product_id) !== -1) {
+            let duplItem = cart.data[ids.indexOf(this.product.product_id)]
+            console.log(duplItem)
+            duplItem.count += parseInt(this.countProducts)
+            axios({
+              method: 'PUT',
+              url: `http://${ip}:${port}/api/basket/`+duplItem.basket_id,
+              data: {
+                count: duplItem.count
+              },
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }
+            }).then(() => {
+              this.inCart = true;
+            })
+          } else {
+            console.log('else')
+            axios({
+              method: 'POST',
+              url: `http://${ip}:${port}/api/basket/`,
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              },
+              data: {
+                product_id: this.product.product_id,
+                user: resp.data.id,
+                count: this.countProducts
+              }
+            }).then(() => {
+              this.inCart = true;
+            })
+          }
         })
       })
     }

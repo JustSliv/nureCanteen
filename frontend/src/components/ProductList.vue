@@ -6,6 +6,7 @@
               v-bind:product="product"
               :alert-unauthorized="alertUnauthorized"
               :updater="updater"
+              :locale="locale"
           />
         </v-col>
       </v-row>
@@ -17,7 +18,7 @@
 
   export default {
     name: "ProductList",
-    props: ['info', 'alertUnauthorized', 'updater'],
+    props: ['info', 'alertUnauthorized', 'updater', 'locale'],
     components: {
         Product
     }

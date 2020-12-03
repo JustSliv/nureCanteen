@@ -7,7 +7,7 @@
         </v-icon>
       </v-btn>
       {{cartItem.count}} шт.
-      <v-btn icon>
+      <v-btn icon @click="addCartItem">
         <v-icon>
           add
         </v-icon>
@@ -57,11 +57,34 @@ export default {
   name: "CartItem",
   props: ['cartItem', 'allCart', 'locales', 'updater'],
   methods: {
+    addCartItem() {
+      this.cartItem.count++;
+      axios({
+        method: 'PUT',
+        url: `http://${ip}:${port}/api/basket/`+this.cartItem.basket_id,
+        data: {
+          count: this.cartItem.count
+        },
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      })
+      axios({
+        method: 'GET',
+        url: `http://${ip}:${port}/api/basket/` + this.cartItem.basket_id,
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      })
+    },
     delCartItem() {
       if (this.cartItem.count <= 1) {
         axios({
           method: 'DELETE',
           url: `http://${ip}:${port}/api/basket/`+this.cartItem.basket_id,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
         }).then(() => {
           axios({
             method: 'GET',
@@ -73,12 +96,13 @@ export default {
             axios({
               method: 'GET',
               url: `http://${ip}:${port}/api/basket/user/` + user.data.id,
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }
             }).then(cart => {
-              console.log(cart.data)
               this.updater({
                 items: cart.data
               })
-              localStorage['cart'] = JSON.stringify(cart.data)
             })
           })
         })
@@ -90,19 +114,10 @@ export default {
           url: `http://${ip}:${port}/api/basket/`+this.cartItem.basket_id,
           data: {
             count: this.cartItem.count
+          },
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
           }
-        }).then(resp => {
-          this.updater({
-            items: resp.data
-          })
-          localStorage['cart'] = JSON.stringify(
-              JSON.parse(localStorage['cart']).filter(i => {
-                if (i.basket_id === this.cartItem.basket_id) {
-                  i.count--;
-                  return i;
-                }
-              })
-          )
         })
       }
     }

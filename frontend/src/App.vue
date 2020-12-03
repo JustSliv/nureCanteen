@@ -559,9 +559,9 @@ export default {
       .then(resp => {
         this.info.products = resp.data
       })
-    // for (let i=0;i<this.info.filters.length;i++) {
-    //   this.info.filters[i].category = this.curLocale.drawer.filtersItems[i]
-    // }
+    for (let i=0;i<this.info.filters.length;i++) {
+      this.info.filters[i].category = this.curLocale.drawer.filtersItems[i]
+    }
   }
 };
 </script>

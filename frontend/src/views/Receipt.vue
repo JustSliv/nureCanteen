@@ -2,14 +2,59 @@
   <v-app>
     <v-card style="margin: 8% 30% 0 30%; padding: 1%">
       <v-card-title>
-        {{curLocale.titleReceipt}}
+        {{curLocale.titleReceipt}} {{receiptInfo[0].check_id}}
         <v-spacer></v-spacer>
-        <span style="font-size: 10pt;"></span>
       </v-card-title>
       <v-divider></v-divider>
       <div style="margin: 4% 0 4% 0">
         <v-img width="230" height="230" style="margin: 0 auto;display: block" :src="getQrCode"></v-img>
       </div>
+      <v-divider></v-divider>
+      <v-card-title style="justify-content: center; display: flex">
+        {{ curLocale.myOrder.title }}
+      </v-card-title>
+      <v-container>
+        <v-row v-for="(item, i) in receiptInfo" :key="i">
+          <v-col >
+            <v-text-field
+                :label="curLocale.myOrder.infoLabels[0]"
+                rounded
+                filled
+                v-model="item.name"
+                readonly
+            ></v-text-field>
+          </v-col>
+          <v-col >
+            <v-text-field
+                :label="curLocale.myOrder.infoLabels[1]"
+                rounded
+                filled
+                v-model="item.count"
+                readonly
+            ></v-text-field>
+          </v-col>
+          <v-col >
+            <v-text-field
+                :label="curLocale.myOrder.infoLabels[2]"
+                rounded
+                filled
+                v-model="getTotalPrice"
+                readonly
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+                :label="curLocale.myOrder.infoLabels[3]"
+                rounded
+                filled
+                v-model="receiptInfo[0].canteen"
+                readonly
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-container>
       <v-divider></v-divider>
       <v-card-text style="text-align: center">
         {{curLocale.subText}}
@@ -51,22 +96,50 @@
             titleReceipt: 'Receipt №',
             subText: 'To pick up food, show the qr code at the checkout',
             btnTitle: 'Back to catalog',
+            myOrder: {
+              title: 'Your order:',
+              infoLabels: [
+                  'Name:',
+                  'Count:',
+                  'Summa:',
+                  'Canteen:'
+              ]
+            },
             notFound: 'Receipt is not available'
           },
           'ru-RU': {
             titleReceipt: 'Чек №',
             subText: 'Чтоб забрать еду покажи код на кассе',
             btnTitle: 'Вернуться к продуктам',
+            myOrder: {
+              title: 'Мои заказы:',
+              infoLabels: [
+                'Названия:',
+                'Кол-во:',
+                'Сумма:',
+                'Столовую:'
+              ]
+            },
             notFound: 'Чек недоступен'
           },
           'ua-UA': {
             titleReceipt: 'Чек №',
             subText: 'Щоб забрати страву покажи цей код на касі',
             btnTitle: 'Повернутися до продуктів',
+            myOrder: {
+              title: 'Мої замовлення:',
+              infoLabels: [
+                'Названня:',
+                'Кількість:',
+                'Сума:',
+                'Їдальня:'
+              ]
+            },
             notFound: 'Чек недоступен'
           }
         },
-        receiptInfo: null
+        receiptInfo: null,
+        fields: ['name', 'count', 'price', 'canteen']
       }
     },
     beforeMount() {
@@ -96,13 +169,23 @@
       }).then(user => {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/check/`+user.data.id
+          url: `http://${ip}:${port}/api/check/`+user.data.id,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
         }).then(resp => {
-          console.log(resp.data)
+          this.receiptInfo = resp.data
         })
       })
     },
     computed: {
+      getTotalPrice() {
+        let total = 0;
+        for (let item of this.receiptInfo) {
+          total += (item.price*item.count)
+        }
+        return total
+      },
       getQrCode() {
           // let receiptInfo = JSON.parse(document.cookie.split(' ')[1].split('=')[1]);
           return 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+'https://localhost:8080/admin/receipt/';

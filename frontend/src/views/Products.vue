@@ -37,6 +37,7 @@
           v-model="info.products"
           :alert-unauthorized="alertUnauthorized"
           :updater="updater"
+          :locale="curLocale"
       />
       <v-dialog v-model="alertUnauthorized" width="480">
         <v-card>
@@ -77,98 +78,7 @@
           name: "tester",
           university: ""
         },
-        products: [
-            {
-                id: 0,
-                name: "Пирожок",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-                total_count: 20,
-                available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 1,
-                name: "Пирожок1",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-                total_count: 20,
-              available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 2,
-                name: "Пирожок2",
-                price: 54,
-                category: "Напиток",
-                description: "вкусный",
-              total_count: 20,
-              available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 3,
-                name: "Пирожок3",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-              total_count: 20,
-              available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 4,
-                name: "Пирожок4",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-              total_count: 20,
-              available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 5,
-                name: "Пирожок5",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-              total_count: 20,
-              available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 6,
-                name: "Пирожок6",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-              total_count: 20,
-              available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 7,
-                name: "Пирожок7",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-              total_count: 20,
-              available_count: 20,
-                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
-            },
-            {
-                id: 8,
-                name: "Пирожок8",
-                price: 54,
-                category: "Пряности",
-                description: "вкусный",
-              total_count: 20,
-              available_count: 20,
-                image: require("../assets/imgs/572f9a16875ed15491f1e81a.png")
-            }
-        ],
+        products: [],
         filters: [
           {
             id: 0,
@@ -211,7 +121,7 @@
               alertBtn: 'Cart'
             },
             info: [
-              'Category:', 'Available:', '', 'Description:'
+              'Category:', 'Available:', '', 'Description:', 'Weight:', 'Calories:'
             ],
             filtersItems: [
                 'First dish',
@@ -238,7 +148,7 @@
               alertBtn: 'Корзина'
             },
             info: [
-                'Категория:', 'Доступно:', 'шт.', 'Описание:'
+                'Категория:', 'Доступно:', 'шт.', 'Описание:', 'Вес:', 'Ккал:'
             ],
             filtersItems: [
               'Первое блюдо',
@@ -265,7 +175,7 @@
               alertBtn: 'Корзина'
             },
             info: [
-              'Категорія:', 'Доступно:', 'шт.', 'Опис:'
+              'Категорія:', 'Доступно:', 'шт.', 'Опис:', 'Вага:', 'Ккал:'
             ],
             filtersItems: [
               'Перша страва',
@@ -334,17 +244,16 @@
         this.curLocale = this.locales["ua-UA"];
       }
     },
-    mounted() {
+    async mounted() {
       axios.get(`http://${ip}:${port}/api/product/all`)
-        .then(resp => {
-          if (localStorage['category'] !== undefined) {
-            this.info.products = resp.data.filter(i => i.category === localStorage['category'])
-          }
-          else this.info.products = resp.data
-        })
-      // for (let i=0;i<this.info.filters.length;i++) {
-      //   this.info.filters[i].category = this.curLocale.productInfo.filtersItems[i]
-      // }
+          .then(resp => {
+            if (localStorage['category'] !== undefined) {
+              this.info.products = resp.data.filter(i => i.category === localStorage['category'])
+            } else this.info.products = resp.data
+          })
+      for (let i = 0; i < this.info.filters.length; i++) {
+        this.info.filters[i].category = this.curLocale.productInfo.filtersItems[i]
+      }
     }
   }
 </script>

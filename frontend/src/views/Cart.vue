@@ -11,12 +11,48 @@
           </v-badge>
         </v-col>
         <v-col>
-          <v-btn color="deep-purple" dark @click="dialogChooseCanteen = true">
-            {{curLocale.btnSuccess}}
-            <v-icon>
-              check_circle
-            </v-icon>
-          </v-btn>
+          <v-dialog persistent v-model="dialogChooseCanteen" width="450">
+            <template v-slot:activator="{on, attrs}">
+              <v-btn color="deep-purple" dark v-bind="attrs" v-on="on">
+                {{curLocale.btnSuccess}}
+                <v-icon>
+                  check_circle
+                </v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title style="justify-content: center; display: flex">
+                {{curLocale.userData.form.titleConfirmOrder}}
+              </v-card-title>
+              <v-divider></v-divider>
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <v-select
+                        v-model="info.userInfo.activeCanteen"
+                        :label="curLocale.userData.form.chooseCanteen"
+                        :items="curLocale.userData.form.canteens"
+                    ></v-select>
+                    <v-select
+                        v-model="info.userInfo.typePay"
+                        :label="curLocale.userData.form.payTitle"
+                        :items="curLocale.userData.form.typePay"
+                        v-if="info.userInfo.activeCanteen"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="red" text @click="dialogChooseCanteen = false">
+                  {{curLocale.userData.form.btns[0]}}
+                </v-btn>
+                <v-btn color="blue" text @click="acceptOrder">
+                  {{curLocale.userData.form.btns[1]}}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
     </v-container>
@@ -31,110 +67,6 @@
     <v-card-title style="margin-top: 0; padding-left: 25%">
       {{curLocale.totalPay[0]}} <span style="margin-left: 46.5%">{{totalPrice}} {{curLocale.totalPay[1]}}</span>
     </v-card-title>
-    <v-dialog persistent v-model="dialogChooseCanteen" width="450">
-      <v-card>
-        <v-card-title>
-          ss
-        </v-card-title>
-        <v-container>
-          <v-row>
-            <v-col>
-              <v-select
-                  v-model="info.userInfo.activeCanteen"
-                  :label="curLocale.userData.form.chooseCanteen"
-                  style="padding: 4%"
-                  v-if="chooseCanteen"
-                  :items="curLocale.userData.form.canteens"
-              ></v-select>
-              <v-select
-                  v-model="info.userInfo.typePay"
-                  :label="curLocale.userData.form.payTitle"
-                  :items="curLocale.userData.form.typePay"
-                  v-if="chooseCanteen"
-              ></v-select>
-            </v-col>
-          </v-row>
-        </v-container>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="red" text @click="dialogChooseCanteen = false">
-            {{curLocale.userData.form.btns[0]}}
-          </v-btn>
-          <v-btn color="blue" text @click="acceptOrder">
-            {{curLocale.userData.form.btns[1]}}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-<!--    <v-dialog v-model="dialogChooseCanteen" width="650" persistent>-->
-<!--        <v-card>-->
-<!--          <v-card-title>-->
-<!--            <span class="headline">-->
-<!--              {{curLocale.userData.title}}-->
-<!--            </span>-->
-<!--          </v-card-title>-->
-<!--          <v-divider></v-divider>-->
-<!--          <v-alert type="error" v-if="errBuy">-->
-<!--            {{curLocale.userData.alertErr}}-->
-<!--          </v-alert>-->
-<!--          <v-container>-->
-<!--            <v-row>-->
-<!--              <v-col>-->
-<!--                <v-text-field-->
-<!--                    v-model="info.userInfo.fName"-->
-<!--                    :rules="textRules"-->
-<!--                    :label="curLocale.userData.form.labels[0]"-->
-<!--                    required-->
-<!--                ></v-text-field>-->
-<!--              </v-col>-->
-<!--              <v-col>-->
-<!--                <v-text-field-->
-<!--                    v-model="info.userInfo.lName"-->
-<!--                    :rules="textRules"-->
-<!--                    :label="curLocale.userData.form.labels[1]"-->
-<!--                    required-->
-<!--                ></v-text-field>-->
-<!--              </v-col>-->
-<!--            </v-row>-->
-<!--            <v-row>-->
-<!--              <v-col>-->
-<!--                <v-text-field-->
-<!--                    v-model="info.userInfo.group"-->
-<!--                    :rules="textRules"-->
-<!--                    :label="curLocale.userData.form.labels[2]"-->
-<!--                    required-->
-<!--                ></v-text-field>-->
-<!--              </v-col>-->
-<!--              <v-col>-->
-<!--                <v-text-field-->
-<!--                    v-model="info.userInfo.email"-->
-<!--                    :rules="emailRules"-->
-<!--                    :label="curLocale.userData.form.labels[3]"-->
-<!--                    :hint="curLocale.userData.form.hintEmail"-->
-<!--                    persistent-hint-->
-<!--                ></v-text-field>-->
-<!--              </v-col>-->
-<!--            </v-row>-->
-<!--            <v-row style="text-align: center; display: block">-->
-<!--              <v-btn x-large icon @click="chooseCanteen = !chooseCanteen">-->
-<!--                <v-icon x-large>-->
-<!--                  keyboard_arrow_down-->
-<!--                </v-icon>-->
-<!--              </v-btn>-->
-
-<!--            </v-row>-->
-<!--          </v-container>-->
-<!--          <v-card-actions>-->
-<!--            <v-spacer></v-spacer>-->
-<!--            <v-btn color="red" text @click="dialogChooseCanteen = false">-->
-<!--              {{curLocale.userData.form.btns[0]}}-->
-<!--            </v-btn>-->
-<!--            <v-btn color="blue" text @click="getReceipt">-->
-<!--              {{curLocale.userData.form.btns[1]}}-->
-<!--            </v-btn>-->
-<!--          </v-card-actions>-->
-<!--        </v-card>-->
-<!--      </v-dialog>-->
   </v-app>
   <v-app v-else>
     <v-card style="margin: 20%;background-color: #FFF9C4" flat>
@@ -178,6 +110,7 @@
                   'Group*',
                   'Email'
                 ],
+                titleConfirmOrder: 'Choose canteen with payment',
                 canteens: ['First - the best', 'Second, but better'],
                 hintEmail: 'For stocks and other/',
                 chooseCanteen: 'Choose a canteen:',
@@ -218,6 +151,7 @@
                   'Группа*',
                   'Email'
                 ],
+                titleConfirmOrder: 'Выберите столовую и оплату',
                 canteens: ['Первая среди лучших', 'Вторая, но хорошая'],
                 hintEmail: 'Для рассылки акций',
                 chooseCanteen: 'Выберите столовую:',
@@ -258,6 +192,7 @@
                   'Група*',
                   'Email'
                 ],
+                titleConfirmOrder: 'Виберіть їдальню та сплату',
                 canteens: ['Перша серед кращих', 'Друга, но теж добре'],
                 hintEmail: 'Для розсилки акцій',
                 chooseCanteen: 'Виберіть їдальню:',
@@ -322,10 +257,13 @@
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(resp => {
-          axios.get(`http://${ip}:${port}/api/basket/user/` + resp.data.id)
-              .then(cart => {
-                this.cartItems = cart.data
-              })
+          axios.get(`http://${ip}:${port}/api/basket/user/` + resp.data.id, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage['sid']
+            }
+          }).then(cart => {
+            this.cartItems = cart.data
+          })
         })
       } else {
         this.cartItems = []
@@ -348,7 +286,7 @@
         let now = new Date();
         let summa = 0
         for (let item of this.cartItems) {
-          summa += item.price
+          summa += (item.price*item.count)
         }
         axios({
           method: 'GET',
@@ -365,44 +303,23 @@
               canteen: this.info.userInfo.activeCanteen,
               purchaseDate: now.toISOString().split('T')[0],
               sum: summa
+            },
+            headers: {
+              Authorization: 'Bearer ' + localStorage['sid']
             }
           }).then(resp => {
-            localStorage['receipt'] = JSON.stringify(resp.data)
+            axios({
+              method: 'DELETE',
+              url: `http://${ip}:${port}/api/basket/user/`+user.data.id+'/'+resp.data.check_id,
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }
+            })
             this.$router.push('/receipt');
           }).catch(() => {
 
           })
         })
-      },
-      getReceipt() {
-          let date = this.getNowDate()
-          let codeReceipt = "";
-          let data;
-          for(let i=0;i<6;i++){
-              codeReceipt += Math.floor(Math.random()*10).toString();
-          }
-          data = {
-            code: codeReceipt,
-            fname: this.info.userInfo.fname,
-            lName: this.info.userInfo.lName,
-            email: this.info.userInfo.email,
-            group: this.info.userInfo.group,
-            cart: this.cartItems,
-            purchaseDate: date[0]+"."+date[1]+"."+date[2]
-          };
-          this.dialogChooseCanteen = false;
-          localStorage.removeItem('cart')
-          axios.post(`http://${ip}:${port}/api/checks`, {
-
-          }).then(resp => {
-            console.log(resp)
-          })
-          localStorage['receipt'] = JSON.stringify(data)
-          this.$router.push('/receipt');
-        // else {
-        //   this.chooseCanteen = true
-        //   this.errBuy = true;
-        // }
       }
     },
     computed: {
@@ -410,7 +327,7 @@
         let total = 0;
         const items = this.cartItems;
         for (let i=0; i<items.length; i++){
-            total += items[i].price;
+            total += (items[i].price*items[i].count);
         }
         return total;
       },
