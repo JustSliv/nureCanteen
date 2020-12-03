@@ -68,9 +68,16 @@ public class BasketController {
       return new ResponseEntity<>(basketToChange, headers, HttpStatus.OK);
    }
    @DeleteMapping("/{id}")
-   public ResponseEntity<Product> deleteOne(@PathVariable Long id) {
+   public ResponseEntity<Basket> deleteOne(@PathVariable Long id) {
       basketRepo.deleteById(id);
 
+      return new ResponseEntity<>(HttpStatus.OK);
+   }
+
+   @DeleteMapping("/{id}")
+   public ResponseEntity<Basket> deleteByUserId(@PathVariable Long id){
+
+      basketRepo.deleteByUserUserId(id);
       return new ResponseEntity<>(HttpStatus.OK);
    }
 
