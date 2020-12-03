@@ -43,6 +43,7 @@ public class BasketController {
       if(basket == null){
          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
+      basket.setActive(true);
       basketRepo.save(basket);
 
       return new ResponseEntity<>(basket, headers, HttpStatus.CREATED);
@@ -74,11 +75,10 @@ public class BasketController {
       return new ResponseEntity<>(HttpStatus.OK);
    }
 
-   @DeleteMapping("/user/{id}")
-   public ResponseEntity<Basket> deleteByUserId(@PathVariable Long id){
+   @DeleteMapping("/user/{user_id}/{check_id}")
+   public ResponseEntity<Basket> deleteByUserId(@PathVariable Long user_id, @PathVariable Long check_id){
 
-      basketRepo.deleteByUserUserId(id);
-      basketRepo.changeActive(id);
+      basketRepo.changeActive(user_id, check_id);
       return new ResponseEntity<>(HttpStatus.OK);
    }
 

@@ -3,6 +3,7 @@ package org.canteen.Repositories;
 import org.canteen.Repositories.dto.CheckDTO;
 import org.canteen.models.Check;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -18,4 +19,5 @@ public interface CheckRepo  extends JpaRepository<Check, Long> {
       "  AND basket.id_user = :user_id" +
       "      GROUP BY checks.check_id, usr.email, checks.canteen, checks.date, product.name, product.price, basket.count", nativeQuery = true)
    List<CheckDTO> getProductSumInCheck (@Param("user_id") Long user_id);
+
 }
