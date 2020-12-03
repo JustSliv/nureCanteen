@@ -74,7 +74,7 @@ public class BasketController {
       return new ResponseEntity<>(HttpStatus.OK);
    }
 
-   @DeleteMapping("/{id}")
+   @DeleteMapping("/user/{id}")
    public ResponseEntity<Basket> deleteByUserId(@PathVariable Long id){
 
       basketRepo.deleteByUserUserId(id);
