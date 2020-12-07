@@ -245,7 +245,7 @@
         <v-list-item-group>
           <v-menu open-on-hover right offset-y>
             <template v-slot:activator="{on, attrs}">
-              <v-list-item @click="$route.fullPath !== '/products'?$router.push('/products'):''" v-on="on" v-bind="attrs">
+              <v-list-item @click="goToProducts" v-on="on" v-bind="attrs">
                 <v-list-item-icon>
                   <v-icon>
                     fastfood
@@ -286,20 +286,24 @@ export default {
         university: ""
       },
       filters: [
+        // {
+        //   id: 0,
+        //   category: 'Все продукты'
+        // },
         {
-          id: 0,
+          id: 1,
           category: 'Первое блюдо'
         },
         {
-          id: 1,
+          id: 2,
           category: 'Второе блюдо'
         },
         {
-          id: 2,
+          id: 3,
           category: 'Пряности'
         },
         {
-          id: 3,
+          id: 4,
           category: 'Напитки'
         }
       ],
@@ -522,6 +526,14 @@ export default {
     }
   },
   methods: {
+    goToProducts() {
+      if (this.$route.fullPath !== '/products') {
+        this.$router.push('/products')
+      } else if (localStorage['category'] !== undefined) {
+        localStorage.removeItem('category')
+        window.location.href = '/products'
+      }
+    },
     changeLangEN() {
       localStorage.setItem('lang', 'en-EN')
       this.curLocale = this.locales["en-EN"];

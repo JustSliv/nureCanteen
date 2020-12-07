@@ -309,6 +309,12 @@
             }
           }).then(resp => {
             axios({
+              method: 'PUT',
+              url: `http://${ip}:${port}/api/check/`+resp.data.check_id,
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }})
+            axios({
               method: 'DELETE',
               url: `http://${ip}:${port}/api/basket/user/`+user.data.id+'/'+resp.data.check_id,
               headers: {

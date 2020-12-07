@@ -15,7 +15,12 @@
       </v-card-title>
       <v-container>
         <v-row v-for="(item, i) in receiptInfo" :key="i">
-          <v-col >
+          <v-col cols="1">
+            <v-card-title style="justify-content: center; display: flex">
+              {{i+1}}
+            </v-card-title>
+          </v-col>
+          <v-col>
             <v-text-field
                 :label="curLocale.myOrder.infoLabels[0]"
                 rounded
@@ -23,6 +28,7 @@
                 v-model="item.name"
                 readonly
             ></v-text-field>
+            <v-divider></v-divider>
           </v-col>
           <v-col >
             <v-text-field
@@ -32,15 +38,17 @@
                 v-model="item.count"
                 readonly
             ></v-text-field>
+            <v-divider></v-divider>
           </v-col>
           <v-col >
             <v-text-field
                 :label="curLocale.myOrder.infoLabels[2]"
                 rounded
                 filled
-                v-model="getTotalPrice"
+                v-model="getTotalPrice[i]"
                 readonly
             ></v-text-field>
+            <v-divider></v-divider>
           </v-col>
         </v-row>
         <v-row>
@@ -180,9 +188,10 @@
     },
     computed: {
       getTotalPrice() {
-        let total = 0;
+        let total = [];
+        console.log(this.receiptInfo)
         for (let item of this.receiptInfo) {
-          total += (item.price*item.count)
+          total.push((item.price*item.count))
         }
         return total
       },

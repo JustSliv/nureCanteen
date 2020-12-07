@@ -72,7 +72,7 @@
                   </v-col>
                 </v-row>
               </v-container>
-              <v-btn width="100%" color="success" text>{{curLocale.comment.btnTitle}}</v-btn>
+              <v-btn @click="doAddReview" width="100%" color="success" text>{{curLocale.comment.btnTitle}}</v-btn>
             </form>
           </v-card>
         </v-dialog>
@@ -283,16 +283,19 @@ export default {
         axios.get(`http://${ip}:${port}/api/product/comments/`+curProduct[curProduct.length-1]).
         then(cmts => {
           this.info.comments = cmts.data
+          for (let i =0;i<this.info.comments.length;i++) {
+            axios.get(`http://${ip}:${port}/api/user/`+this.info.comments[i].user, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }
+            }).then(user => {
+              this.info.comments[i].user = user.data.username
+            })
+          }
         })
       })
   },
   methods: {
-    // обработка кнопки в корзину
-    buyProduct() {
-      this.$nextTick(() => {
-        this.dialog = true;
-      });
-    },
     // подтверждение нажатия на кнопку в корзину
     toCart() {
       this.dialog = false;
@@ -338,6 +341,40 @@ export default {
     },
     addReview() {
       this.newReview = true;
+    },
+    doAddReview() {
+      axios({
+        method: 'GET',
+        url: `http://${ip}:${port}/api/user`,
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      }).then(user => {
+        axios({
+          method: 'POST',
+          url: `http://${ip}:${port}/api/comment/`,
+          data: {
+            user: user.data.id,
+            product_id: this.$route.fullPath.split('/')[2],
+            msg: this.contentReview
+          },
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
+        }).then(resp => {
+          this.info.comments = resp.data
+          for (let i =0;i<this.info.comments.length;i++) {
+            axios.get(`http://${ip}:${port}/api/user/`+this.info.comments[i].user, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage['sid']
+              }
+            }).then(user => {
+              this.info.comments[i].user = user.data.username
+            })
+          }
+          this.newReview = true;
+        })
+      })
     }
   }
 }

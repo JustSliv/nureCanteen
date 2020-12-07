@@ -504,8 +504,29 @@
                                 </v-item-group>
                             </template>
                             <v-list-item>
-                                <v-list-item-subtitle>{{item.category}}</v-list-item-subtitle>
-                                <v-list-item-title>{{item.description}}</v-list-item-title>
+                              <v-container>
+                                <v-row>
+                                  <v-col>
+                                    <v-text-field
+                                        label="Категория:"
+                                        v-model="item.category"
+                                        filled
+                                        rounded
+                                        readonly
+                                    ></v-text-field>
+                                  </v-col>
+                                  <v-col>
+                                    <v-text-field
+                                        label="Описание:"
+                                        v-model="item.description"
+                                        filled
+                                        rounded
+                                        readonly
+                                    ></v-text-field>
+                                  </v-col>
+                                </v-row>
+                              </v-container>
+
                             </v-list-item>
                         </v-list-group>
                     </v-list-group>
@@ -877,17 +898,17 @@
                 }
               },
               tab2: {
-                name: 'Мои заказі',
+                name: 'Мої замовлення',
                 context: {
                   receipt: {
                     title: 'Чек',
                     currency: 'ГРН'
                   },
-                  notFound: 'Заказов не найдено'
+                  notFound: 'Замовлень не знайденно'
                 }
               },
               tab3: {
-                name: 'Настройки',
+                name: 'Налаштування',
                 context: {
                   labels: [
                     'Ім`я',
@@ -898,7 +919,7 @@
                     'Телефон'
                   ],
                   tipImage: 'Ваш аватар',
-                  btnTitle: 'Изменить',
+                  btnTitle: 'Змінити',
                   alert: [
                     'Данні були змінені',
                     'Закрити',
@@ -907,36 +928,36 @@
                 }
               },
               tab4: {
-                name: 'Мои шаблоны',
+                name: 'Мої шаблони',
                 context: {
                   forms: {
                     add: {
-                      title: 'Добавление шаблона',
+                      title: 'Додати шаблон',
                       labels: [
-                        'Название шаблона',
-                        'На основе покупок',
-                        'На основе всех продуктов',
-                        'Выбор продуктов'
+                        'Названня шаблона',
+                        'На основі купівель',
+                        'На основі усіх продуктів',
+                        'Вибор продуків'
                       ],
-                      btnTitle: 'Создать'
+                      btnTitle: 'Створити'
                     },
                     edit: {
-                      title: 'Редактирование шаблона',
+                      title: 'Редагування шаблона',
                       labels: [
-                        'Выберите шаблон',
-                        'Название шаблона',
-                        'На основе покупок',
-                        'На основе всех продуктов',
-                        'Выбор продуктов'
+                        'Виберіть шаблон',
+                        'Названня шаблона',
+                        'На основі купівель',
+                        'На основі усіх продуктів',
+                        'Вибор продуків'
                       ],
-                      btnTitle: 'Обновить'
+                      btnTitle: 'Оновити'
                     },
                     delete: {
-                      title: 'Удаление шаблона',
+                      title: 'Видалення шаблона',
                       labels: [
-                        'Выберите шаблон'
+                        'Виберіть шаблон'
                       ],
-                      btnTitle: 'Удалить'
+                      btnTitle: 'Видалити'
                     }
                   }
                 }
@@ -1013,6 +1034,7 @@
                 {
                   id: 1,
                   name: "Пирожок",
+                  category: "Духовный",
                   description: "вкусный",
                   price: 7
                 }
@@ -1026,12 +1048,14 @@
                 {
                   id: 0,
                   name: "Пирожок",
+                  category: "Духовный",
                   description: "вкусный",
                   price: 15
                 },
                 {
                   id: 2,
                   name: "Пирожок",
+                  category: "Духовный",
                   description: "вкусный",
                   price: 10
                 }
