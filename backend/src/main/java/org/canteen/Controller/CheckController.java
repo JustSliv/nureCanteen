@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -39,7 +41,11 @@ public class CheckController {
       if(check == null){
          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
+      LocalDateTime currTime = LocalDateTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
       checkRepo.save(check);
+      checkRepo.setDate(currTime.format(formatter));
+      System.out.println(currTime.format(formatter));
 
       return new ResponseEntity<>(check, headers, HttpStatus.CREATED);
    }

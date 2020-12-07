@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.canteen.security.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,7 +30,7 @@ public class Check {
    private String canteen;
 
    @Column(name = "date")
-   private String purchaseDate;
+   private Date purchaseDate;
 
    @JsonIgnore
    @OneToMany(mappedBy = "check_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -64,11 +66,11 @@ public class Check {
       this.canteen = canteen;
    }
 
-   public String getPurchaseDate() {
+   public Date getPurchaseDate() {
       return purchaseDate;
    }
 
-   public void setPurchaseDate(String purchaseDate) {
+   public void setPurchaseDate(Date purchaseDate) {
       this.purchaseDate = purchaseDate;
    }
 
