@@ -41,13 +41,23 @@ public class CheckController {
       if(check == null){
          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
-      LocalDateTime currTime = LocalDateTime.now();
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
       checkRepo.save(check);
-      checkRepo.setDate(currTime.format(formatter));
-      System.out.println(currTime.format(formatter));
 
       return new ResponseEntity<>(check, headers, HttpStatus.CREATED);
+   }
+
+   @RequestMapping(value = "/{check_id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+   public ResponseEntity<String> update(@PathVariable("check_id") Long check_id){
+      LocalDateTime currTime = LocalDateTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+      DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH:mm:ss");
+      checkRepo.setDate(currTime.format(formatter), check_id);
+
+      checkRepo.setTime(currTime.format(formatter1), check_id);
+      return ResponseEntity.ok("Все окей");
+
    }
 
    @DeleteMapping("/{id}")

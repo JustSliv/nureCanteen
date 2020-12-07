@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.canteen.security.model.User;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -30,7 +31,10 @@ public class Check {
    private String canteen;
 
    @Column(name = "date")
-   private Date purchaseDate;
+   private Date  purchaseDate;
+
+   @Column(name = "time", columnDefinition = "time")
+   private Time time;
 
    @JsonIgnore
    @OneToMany(mappedBy = "check_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -72,6 +76,14 @@ public class Check {
 
    public void setPurchaseDate(Date purchaseDate) {
       this.purchaseDate = purchaseDate;
+   }
+
+   public Time getTime() {
+      return time;
+   }
+
+   public void setTime(Time time) {
+      this.time = time;
    }
 
    public Set<Basket> getProducts() {

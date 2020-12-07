@@ -51,12 +51,15 @@ public class CommentController {
    }
 
    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-   public void addOne(@RequestBody Comment comment){
+   public ResponseEntity<Comment> addOne(@RequestBody Comment comment){
 
       LocalDateTime currTime = LocalDateTime.now();
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm:ss");
 
       commentRepo.addComment(currTime.format(formatter), comment.getMsg(), comment.getProduct_id().getProduct_id(), comment.getUser().getid());
+      
+      comment.setDate(currTime.format(formatter));
+      return ResponseEntity.ok(comment);
    }
 
    @DeleteMapping("/{id}")
