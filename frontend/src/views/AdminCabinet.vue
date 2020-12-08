@@ -71,182 +71,176 @@
           {{curLocale.tabs.tab4.name}}
         </v-tab>
         <v-tab-item>
-            <v-card v-if="products.length > 0">
-                <v-list>
-                    <v-list-group v-for="(item, i) in products" :key="i">
-                      <template v-slot:activator>
-                          <v-img :src="item.image" width="80" height="80" style="margin-right: 1%"></v-img>
-                          <v-list-item-title :data-id="item.id">
-                            {{item.name}}
-                            <v-btn icon @click="delProduct">
-                              <v-icon>
-                                close
-                              </v-icon>
-                            </v-btn>
-                            <v-btn icon @click="showEditForm">
-                              <v-icon>
-                                edit
-                              </v-icon>
-                            </v-btn>
-                          </v-list-item-title>
-                          <v-item-group>
-                            <v-list-item-title>{{item.price}} UAH</v-list-item-title>
-                          </v-item-group>
-                      </template>
-                      <v-item-group style="margin-left: 2%">
-                          <v-list-item-content>
-                              <v-card-text>
-                                  <v-list-item-subtitle>{{curLocale.tabs.tab1.context.infoProduct[0]}} {{item.category}}</v-list-item-subtitle>
-                                {{curLocale.tabs.tab1.context.infoProduct[1]}} {{item.description}} <br/>
-                                {{curLocale.tabs.tab1.context.infoProduct[2]}} {{item.available_count}}
-                              </v-card-text>
-                          </v-list-item-content>
-                      </v-item-group>
-                    </v-list-group>
-                </v-list>
-                <v-dialog v-model="editDialog" width="650">
-                  <v-card>
-                    <v-card-title :key="renderName">
-                      {{curLocale.tabs.tab1.context.editMainBtnTitle}} "{{preloadInfo.name}}"
-                      <v-spacer></v-spacer>
-                      <v-img width="50" height="140" :src="preloadInfo.image" v-model="preloadInfo.image" :key="renderImg"></v-img>
-                    </v-card-title>
-                    <v-divider></v-divider>
-                    <v-form>
-                      <v-container>
-                        <v-row>
-                          <v-col>
-                            <v-text-field
-                                v-model="preloadInfo.name"
-                                :label="curLocale.tabs.tab1.context.labels[0]"
-                                :rules="textRules"
-                                @input="reRenderName"
-                                required
-                            ></v-text-field>
-                          </v-col>
-                          <v-col>
-                            <v-select
-                                :items="getCategories"
-                                v-model="preloadInfo.category"
-                                :label="curLocale.tabs.tab1.context.labels[1]"
-                                required
-                            ></v-select>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col>
-                            <v-text-field
-                                v-model.number="preloadInfo.price"
-                                type="number"
-                                :label="curLocale.tabs.tab1.context.labels[2]"
-                                :rules="textRules"
-                                required
-                            ></v-text-field>
-                          </v-col>
-                          <v-col>
-                            <v-text-field
-                                v-model.number="preloadInfo.available"
-                                type="number"
-                                :label="curLocale.tabs.tab1.context.labels[3]"
-                                :rules="textRules"
-                                required
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-text-field
-                              :label="curLocale.tabs.tab1.context.labels[4]"
-                              v-model="preloadInfo.description"
-                              :rules="textRules"
-                              style="margin: 0 2% 0 2%"
-                              required
-                          ></v-text-field>
-                        </v-row>
-                        <v-row>
-                          <v-file-input
-                              accept="image/png, image/jpeg, image/jpg"
-                              v-model="preloadInfo.image"
-                              :label="curLocale.tabs.tab1.context.labels[5]"
-                              style="margin: 0 2% 0 2%"
-                              @change="uploadImg"
-                          ></v-file-input>
-                        </v-row>
-                      </v-container>
-                      <v-btn @click="submitEditForm" color="success" width="100%">
-                        {{curLocale.tabs.tab1.context.editBtn}}
-                      </v-btn>
-                    </v-form>
-                  </v-card>
-                </v-dialog>
-            </v-card>
-            <v-card flat v-else style="margin: 4%">
-              <v-icon style="text-align: center; display: block">
-                warning
+          <v-card v-if="products.length > 0">
+            <ProductInSaleList
+                :products="products"
+                :locale="curLocale"
+                :updater="updateInSaleComp"
+            />
+            <v-btn
+                bottom
+                right
+                fab
+                color="success"
+                x-large
+                absolute
+                elevation="10"
+                @click="addProductDialog = true"
+            >
+              <v-icon large>
+                add_circle
               </v-icon>
-              <v-card-title style="justify-content: center">
-                {{curLocale.tabs.tab1.context.notFound}}
+            </v-btn>
+          </v-card>
+          <v-card flat v-else style="margin: 4%">
+            <v-icon style="text-align: center; display: block">
+              warning
+            </v-icon>
+            <v-card-title style="justify-content: center">
+              {{curLocale.tabs.tab1.context.notFound}}
+            </v-card-title>
+          </v-card>
+          <v-dialog v-model="addProductDialog" width="650">
+            <v-card>
+              <v-card-title style="justify-content: center; display: flex">
+                Добавить продукт
               </v-card-title>
+              <v-divider></v-divider>
+              <v-container>
+                <v-row>
+                  <v-col cols="6">
+                    <v-text-field
+                        label="Название:"
+                        v-model="productForm.name"
+                        outlined
+                        :rules="textRules"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                        label="Категория:"
+                        :items="categories"
+                        outlined
+                        v-model="productForm.category"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                        label="Описание:"
+                        v-model="productForm.description"
+                        outlined
+                        :rules="textRules"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4">
+                    <v-text-field
+                        type="number"
+                        label="Цена:"
+                        :rules="numRules"
+                        v-model="productForm.price"
+                        outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-text-field
+                        type="number"
+                        :rules="numRules"
+                        label="Вес:"
+                        v-model="productForm.weight"
+                        outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-text-field
+                        type="number"
+                        :rules="numRules"
+                        label="Ккал:"
+                        v-model="productForm.calories"
+                        outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                        type="number"
+                        :rules="numRules"
+                        label="Доступно, шт:"
+                        v-model="productForm.available_count"
+                        outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-btn outlined color="success" block>
+                  СОЗДАТЬ
+                </v-btn>
+              </v-container>
             </v-card>
-            <v-snackbar v-if="finishEdit" v-model="finishEdit" color="success" top timeout="4000">
-              {{curLocale.tabs.tab1.context.alerts[0]}} {{products[preloadInfoId].name}} {{curLocale.tabs.tab1.context.alerts[1]}}
-              <template>
-                <v-btn text dark @click="finishEdit=false">
-                  {{curLocale.tabs.tab1.context.alerts[3]}}
-                </v-btn>
-              </template>
-            </v-snackbar>
-            <v-snackbar v-else-if="finishDel" v-model="finishDel" color="success" top timeout="4000">
-              {{curLocale.tabs.tab1.context.alerts[2]}}
-              <template>
-                <v-btn text dark @click="finishDel=false">
-                  {{curLocale.tabs.tab1.context.alerts[3]}}
-                </v-btn>
-              </template>
-            </v-snackbar>
+          </v-dialog>
         </v-tab-item>
         <v-tab-item>
           <v-card flat>
             <v-text-field v-model="searchUsers" @input="searchUser" :label="curLocale.tabs.tab2.context.searchLabel" style="margin: 1% 15%">
               <v-icon slot="append">search</v-icon>
             </v-text-field>
-            <v-menu v-model="showFilters" max-width="180">
-              <template v-slot:activator="{on}">
-                <v-card-title style="margin-left: 2%">
-                  {{curLocale.tabs.tab2.context.title}}
-                  <v-btn v-on="on" icon @click="showFilters = !showFilters">
-                    <v-icon>filter_list</v-icon>
-                  </v-btn>
-                </v-card-title>
-              </template>
-              <v-card>
-                <v-card-title>
-                  {{curLocale.tabs.tab2.context.filter}}
-                  <v-radio-group style="margin-left: 5%">
-                    <v-radio
-                        :label="curLocale.tabs.tab2.context.filterLabels[0]"
-                        @change="filterStudents"
-                    ></v-radio>
-                    <v-radio
-                        :label="curLocale.tabs.tab2.context.filterLabels[1]"
-                        @change="filterAdmins"
-                    ></v-radio>
-                  </v-radio-group>
-                </v-card-title>
-              </v-card>
-            </v-menu>
           </v-card>
-          <v-card flat id="grid" :style="'display: grid; grid-template-columns: repeat('+isMoreItems+', auto);grid-gap:' +isMoreItems+ 'px;margin: 0 0 2% 5%;'">
-            <v-card v-for="(user, i) in usersInfo" :key="i" width="220" v-model="usersInfo">
-              <v-img :src="user.avatar" width="220" height="220"></v-img>
-              <v-card-subtitle>{{user.fName}} {{user.lName}}, {{user.age}}</v-card-subtitle>
-              <v-card-text>
-                <b>{{curLocale.tabs.tab2.context.userInfo[0]}}</b> <u>{{user.email}}</u> <br/>
-                <b>{{curLocale.tabs.tab2.context.userInfo[1]}}</b> <u>{{user.group}}</u> <br/>
-                <b>{{curLocale.tabs.tab2.context.userInfo[2]}}</b> <u>{{user.phone}}</u> <br/>
-                <b>{{curLocale.tabs.tab2.context.userInfo[3]}}</b> <u>{{isAdmin[i]}}</u> <br/>
-              </v-card-text>
-            </v-card>
-          </v-card>
+          <v-container>
+            <v-row>
+              <v-col>
+                <v-menu v-model="showFilters" max-width="180" offset-y>
+                  <template v-slot:activator="{on, attrs}">
+                    <v-card-title>
+                      {{curLocale.tabs.tab2.context.title}}
+                      <v-btn v-on="on" v-bind="attrs" icon @click="showFilters = !showFilters">
+                        <v-icon>filter_list</v-icon>
+                      </v-btn>
+                    </v-card-title>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      {{curLocale.tabs.tab2.context.filter}}:
+                      <v-radio-group style="margin-left: 5%">
+                        <v-radio
+                            :label="curLocale.tabs.tab2.context.filterLabels[0]"
+                            @change="filterStudents"
+                        ></v-radio>
+                        <v-radio
+                            :label="curLocale.tabs.tab2.context.filterLabels[1]"
+                            @change="filterAdmins"
+                        ></v-radio>
+                      </v-radio-group>
+                    </v-card-title>
+                  </v-card>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="2" v-for="(user, i) in usersInfo" :key="i">
+                <v-card max-width="220">
+                  <v-img :src="user.avatar" width="220" height="220"></v-img>
+                  <v-card-subtitle>{{user.fName}} {{user.lName}}, {{user.age}}</v-card-subtitle>
+                  <v-card-text>
+                    <b>{{curLocale.tabs.tab2.context.userInfo[0]}}</b> <u>{{user.email}}</u> <br/>
+                    <b>{{curLocale.tabs.tab2.context.userInfo[1]}}</b> <u>{{user.group}}</u> <br/>
+                    <b>{{curLocale.tabs.tab2.context.userInfo[2]}}</b> <u>{{user.phone}}</u> <br/>
+                    <b>{{curLocale.tabs.tab2.context.userInfo[3]}}</b> <u>{{isAdmin[i]}}</u> <br/>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+<!--          <v-card flat id="grid" :style="'display: grid; grid-template-columns: repeat('+isMoreItems+', auto);grid-gap:' +isMoreItems+ 'px;margin: 0 0 2% 5%;'">-->
+<!--            <v-card v-for="(user, i) in usersInfo" :key="i" width="220" v-model="usersInfo">-->
+<!--              <v-img :src="user.avatar" width="220" height="220"></v-img>-->
+<!--              <v-card-subtitle>{{user.fName}} {{user.lName}}, {{user.age}}</v-card-subtitle>-->
+<!--              <v-card-text>-->
+<!--                <b>{{curLocale.tabs.tab2.context.userInfo[0]}}</b> <u>{{user.email}}</u> <br/>-->
+<!--                <b>{{curLocale.tabs.tab2.context.userInfo[1]}}</b> <u>{{user.group}}</u> <br/>-->
+<!--                <b>{{curLocale.tabs.tab2.context.userInfo[2]}}</b> <u>{{user.phone}}</u> <br/>-->
+<!--                <b>{{curLocale.tabs.tab2.context.userInfo[3]}}</b> <u>{{isAdmin[i]}}</u> <br/>-->
+<!--              </v-card-text>-->
+<!--            </v-card>-->
+<!--          </v-card>-->
         </v-tab-item>
         <v-tab-item>
           <v-card>
@@ -275,7 +269,7 @@
                                 ></v-text-field>
                               </v-col>
                               <v-col>
-                                  <v-select :label="curLocale.tabs.tab3.context.addProduct.labels[1]" v-model="category" solo :items="getCategories" required :rules="textRules"></v-select>
+                                  <v-select :label="curLocale.tabs.tab3.context.addProduct.labels[1]" v-model="category" solo :items="categories" required :rules="textRules"></v-select>
                               </v-col>
                             </v-row>
                             <v-row>
@@ -463,10 +457,23 @@
 </template>
 
 <script>
+import ProductInSaleList from "@/components/ProductInSaleList";
+const ip = 'localhost'
+const port = 25016;
+const axios = require('axios')
+
 export default {
   name: "AdminCabinet",
+  components: {ProductInSaleList},
   data() {
     return {
+      categories: [
+        'Первое блюдо',
+        'Второе блюдо',
+        'Пряности',
+        'Напитки',
+      ],
+      addProductDialog: false,
       curLocale: {},
       locales: {
         'en-EN': {
@@ -477,7 +484,10 @@ export default {
                 infoProduct: [
                     'Category:',
                     'Description:',
-                    'Available:'
+                    'Available:',
+                    'Calories:',
+                    'Weight, g:',
+                    'Total count:'
                 ],
                 editMainBtnTitle: 'Edit product',
                 labels: [
@@ -585,7 +595,10 @@ export default {
                 infoProduct: [
                   'Категория:',
                   'Описание:',
-                  'Доступно:'
+                  'Доступно:',
+                  'Ккал:',
+                  'Вес, г:',
+                  'Кол-во изначально:'
                 ],
                 editMainBtnTitle: 'Редактировать продукт',
                 labels: [
@@ -693,7 +706,10 @@ export default {
                 infoProduct: [
                   'Категорія:',
                   'Опис:',
-                  'Доступно:'
+                  'Доступно:',
+                  'Ккал:',
+                  'Вага, г.:',
+                  'Кількість спочатку:'
                 ],
                 editMainBtnTitle: 'Редагувати товар',
                 labels: [
@@ -800,17 +816,20 @@ export default {
       langThird: false,
       tabs: false,
       formOff: false,
-      editDialog: false,
-      finishEdit: false,
-      finishDel: false,
       clr: "",
       testData: null,
       showFilters: false,
-      preloadInfoId: 0,
-      preloadInfo: {},
-      renderName: 0,
-      renderImg: 0,
       reloader: true,
+      productForm: {
+        name: '',
+        category: '',
+        price: 1,
+        available_count: 1,
+        total_count: 1,
+        description: '',
+        weight: 1,
+        calories: 1
+      },
       productName: "",
       category: "",
       price: 0,
@@ -827,52 +846,8 @@ export default {
       finishAddProduct: false,
       finishAddAdmin: false,
       searchUsers: "",
-      usersInfo: [
-        {
-          id: 0,
-          fName: 'Tim',
-          lName: 'Livr',
-          age: 20,
-          group: '',
-          email: 'tes@mai.xom',
-          phone: '0214512314',
-          avatar: require('@/assets/imgs/572f9a16875ed15491f1e81a.png'),
-          isAdmin: true
-        },
-        {
-          id: 1,
-          fName: 'Lim',
-          lName: 'Tivr',
-          age: 22,
-          group: 'PZPI-18-4',
-          email: 'tes@mai.xom',
-          phone: '0214512314',
-          avatar: require('@/assets/imgs/572f9a16875ed15491f1e81a.png'),
-          isAdmin: false
-        }
-      ],
-      products: [
-        {
-          id: 0,
-          name: 'Пирожок',
-          category: 'Духовный',
-          description: 'вкусный',
-          price: '24',
-          count: 30,
-          available_count: 20,
-          image: require('@/assets/imgs/572f9a16875ed15491f1e81a.png')
-        },
-        {
-          id: 1,
-          name: 'Пирожок',
-          category: 'Духовный',
-          description: 'вкусный',
-          price: '24',
-          count: 40,
-          available_count: 25,
-          image: require('@/assets/imgs/572f9a16875ed15491f1e81a.png')
-        }
-      ],
+      usersInfo: [],
+      products: [],
       numRules: [
         v => v > 0 || this.curLocale.tabs.tab3.context.numRules
       ],
@@ -900,7 +875,22 @@ export default {
       this.curLocale = this.locales["ua-UA"];
     }
   },
+  mounted() {
+    axios({
+      method: 'GET',
+      url: `http://${ip}:${port}/api/product/all`,
+      headers: {
+        Authorization: 'Bearer ' + localStorage['sid']
+      }
+    }).then(resp => {
+      console.log(resp.data)
+      this.products = resp.data
+    })
+  },
   methods: {
+    updateInSaleComp(info) {
+      this.editDialog = info['edit']
+    },
     changeLangEN() {
       localStorage.setItem('lang', 'en-EN')
       this.curLocale = this.locales["en-EN"];
@@ -917,80 +907,10 @@ export default {
       // this.$router.go(this.$router.currentRoute.path);
     },
     filterStudents() {
-      /** {
-          id: 0,
-          fName: 'Tim',
-          lName: 'Livr',
-          age: 20,
-          group: '',
-          email: 'tes@mai.xom',
-          phone: '0214512314',
-          avatar: require('@/assets/imgs/572f9a16875ed15491f1e81a.png'),
-          isAdmin: true
-        }
-      **/
       this.usersInfo = this.usersInfo.filter(i => !i.isAdmin)
-    },
-    showEditForm(ev) {
-      this.preloadInfoId = this.getProductId(ev)
-      for (let i=0;i<this.products.length;i++) {
-        let item = this.products[i];
-        if (item.id === this.preloadInfoId) {
-          this.preloadInfo['id'] = item.id
-          this.preloadInfo['name'] = item.name
-          this.preloadInfo['price'] = item.price
-          this.preloadInfo['available'] = item.available_count
-          this.preloadInfo['category'] = item.category
-          this.preloadInfo['description'] = item.description
-          this.preloadInfo['image'] = item.image
-        }
-      }
-      this.editDialog = true;
-    },
-    submitEditForm() {
-      // sending POST with update
-      this.products[this.preloadInfoId].id = this.preloadInfo.id
-      this.products[this.preloadInfoId].name = this.preloadInfo.name
-      this.products[this.preloadInfoId].price = this.preloadInfo.price
-      this.products[this.preloadInfoId].available_count = this.preloadInfo.available
-      this.products[this.preloadInfoId].category = this.preloadInfo.category
-      this.products[this.preloadInfoId].description = this.preloadInfo.description
-      this.products[this.preloadInfoId].image = this.preloadInfo.image
-      this.reloader = false;
-      this.editDialog = false;
-      this.$nextTick(() => {
-        this.reloader = true;
-      })
-      this.finishEdit = true;
-    },
-    getProductId(ev){
-      let prod_id = ev.path[3].attributes['data-id']
-      return parseInt(prod_id.value)
     },
     filterAdmins() {
       this.usersInfo = this.usersInfo.filter(i => i.isAdmin === true)
-    },
-    reRenderName() {
-      this.renderName++;
-    },
-    delProduct(ev) {
-      // sending DELETE
-      this.preloadInfoId = this.getProductId(ev)
-      this.products = this.products.filter(i => i.id !== this.preloadInfoId)
-      this.finishDel = true;
-    },
-    uploadImg(ev) {
-      if (ev.name !== undefined) {
-        let reader = new FileReader();
-        console.log(this.preloadInfo.image)
-        reader.onload = (e) => {
-          console.log(e)
-          this.preloadInfo.image = e.target.result;
-        }
-        console.log(this.preloadInfo.image)
-        reader.readAsDataURL(ev)
-        this.renderImg++;
-      }
     },
     addProduct() {
       //sending POST
@@ -999,10 +919,6 @@ export default {
     searchUser() {
       this.usersInfo = []
       //sending GET
-    },
-    addFilter() {
-      //sending POST
-      this.finishAddFilter = true;
     },
     addAdmin() {
       //sending POST
@@ -1041,18 +957,7 @@ export default {
         return localStorage.getItem('color').split(',');
       }
     },
-    getCategories() {
-      // for (let i=0;i<this.products.length;i++) {
-        //     let item = this.products[i];
-        //     res.push(item.category);
-        // }
-        return [
-          'Первое блюдо',
-          'Второе блюдо',
-          'Пряности',
-          'Напитки',
-        ];
-    },
+
     getSells() {
       // sending GET
       let res = [];

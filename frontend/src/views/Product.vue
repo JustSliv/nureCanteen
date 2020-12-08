@@ -54,14 +54,6 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
-                        :label="curLocale.comment.labelText[0]"
-                        required
-                        outlined
-                        v-model="fullname"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
                         :label="curLocale.comment.labelText[1]"
                         v-model="contentReview"
                         :rules="textRules"
@@ -189,7 +181,6 @@ export default {
       countProducts: 0,
       newReview: false,
       contentReview: "",
-      fullname: '',
       curLocale: {},
       locales: {
         'en-EN': {
@@ -362,7 +353,8 @@ export default {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(resp => {
-          this.info.comments = resp.data
+          console.log(resp.data)
+          this.info.comments.push(resp.data)
           for (let i =0;i<this.info.comments.length;i++) {
             axios.get(`http://${ip}:${port}/api/user/`+this.info.comments[i].user, {
               headers: {
