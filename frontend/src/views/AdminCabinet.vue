@@ -1,6 +1,6 @@
 <template>
   <v-app style="z-index: 5">
-    <v-card>
+    <v-card flat>
       <v-toolbar style="justify-content: center; display: flex">
         <v-menu v-model="translate" offset-y>
           <template v-slot:activator="{on, attrs}">
@@ -34,7 +34,7 @@
                   </v-list-item-icon>
                 </v-list-item>
                 <v-list-item @click="changeLangUA">
-                  <v-list-item-content v-model="langThird">
+                  <v-list-item-content>
                     <v-list-item-title>
                       {{curLocale.translation.langs[2]}}
                     </v-list-item-title>
@@ -66,9 +66,6 @@
         </v-tab>
         <v-tab>
           {{curLocale.tabs.tab3.name}}
-        </v-tab>
-        <v-tab>
-          {{curLocale.tabs.tab4.name}}
         </v-tab>
         <v-tab-item>
           <v-card v-if="products.length > 0">
@@ -103,14 +100,14 @@
           <v-dialog v-model="addProductDialog" width="650">
             <v-card>
               <v-card-title style="justify-content: center; display: flex">
-                Добавить продукт
+                {{curLocale.tabs.tab1.context.addProduct.title}}
               </v-card-title>
               <v-divider></v-divider>
               <v-container>
                 <v-row>
                   <v-col cols="6">
                     <v-text-field
-                        label="Название:"
+                        :label="curLocale.tabs.tab1.context.addProduct.labels[0]"
                         v-model="productForm.name"
                         outlined
                         :rules="textRules"
@@ -118,7 +115,7 @@
                   </v-col>
                   <v-col cols="6">
                     <v-select
-                        label="Категория:"
+                        :label="curLocale.tabs.tab1.context.addProduct.labels[1]"
                         :items="categories"
                         outlined
                         v-model="productForm.category"
@@ -126,7 +123,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
-                        label="Описание:"
+                        :label="curLocale.tabs.tab1.context.addProduct.labels[2]"
                         v-model="productForm.description"
                         outlined
                         :rules="textRules"
@@ -137,7 +134,7 @@
                   <v-col cols="4">
                     <v-text-field
                         type="number"
-                        label="Цена:"
+                        :label="curLocale.tabs.tab1.context.addProduct.labels[3]"
                         :rules="numRules"
                         v-model="productForm.price"
                         outlined
@@ -147,7 +144,7 @@
                     <v-text-field
                         type="number"
                         :rules="numRules"
-                        label="Вес:"
+                        :label="curLocale.tabs.tab1.context.addProduct.labels[4]"
                         v-model="productForm.weight"
                         outlined
                     ></v-text-field>
@@ -156,7 +153,7 @@
                     <v-text-field
                         type="number"
                         :rules="numRules"
-                        label="Ккал:"
+                        :label="curLocale.tabs.tab1.context.addProduct.labels[5]"
                         v-model="productForm.calories"
                         outlined
                     ></v-text-field>
@@ -165,14 +162,14 @@
                     <v-text-field
                         type="number"
                         :rules="numRules"
-                        label="Доступно, шт:"
+                        :label="curLocale.tabs.tab1.context.addProduct.labels[6]"
                         v-model="productForm.available_count"
                         outlined
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-btn outlined color="success" block>
-                  СОЗДАТЬ
+                  {{curLocale.tabs.tab1.context.addProduct.btnTitle}}
                 </v-btn>
               </v-container>
             </v-card>
@@ -221,233 +218,233 @@
                   <v-card-subtitle>{{user.fName}} {{user.lName}}, {{user.age}}</v-card-subtitle>
                   <v-card-text>
                     <b>{{curLocale.tabs.tab2.context.userInfo[0]}}</b> <u>{{user.email}}</u> <br/>
-                    <b>{{curLocale.tabs.tab2.context.userInfo[1]}}</b> <u>{{user.group}}</u> <br/>
+                    <b>{{curLocale.tabs.tab2.context.userInfo[1]}}</b> <u>{{user.personGroup}}</u> <br/>
                     <b>{{curLocale.tabs.tab2.context.userInfo[2]}}</b> <u>{{user.phone}}</u> <br/>
                     <b>{{curLocale.tabs.tab2.context.userInfo[3]}}</b> <u>{{isAdmin[i]}}</u> <br/>
                   </v-card-text>
                 </v-card>
               </v-col>
             </v-row>
+            <v-btn
+                bottom
+                right
+                fab
+                color="success"
+                x-large
+                absolute
+                elevation="10"
+                @click="addAdminDialog = true"
+            >
+              <v-icon large>
+                add_circle
+              </v-icon>
+            </v-btn>
           </v-container>
-<!--          <v-card flat id="grid" :style="'display: grid; grid-template-columns: repeat('+isMoreItems+', auto);grid-gap:' +isMoreItems+ 'px;margin: 0 0 2% 5%;'">-->
-<!--            <v-card v-for="(user, i) in usersInfo" :key="i" width="220" v-model="usersInfo">-->
-<!--              <v-img :src="user.avatar" width="220" height="220"></v-img>-->
-<!--              <v-card-subtitle>{{user.fName}} {{user.lName}}, {{user.age}}</v-card-subtitle>-->
-<!--              <v-card-text>-->
-<!--                <b>{{curLocale.tabs.tab2.context.userInfo[0]}}</b> <u>{{user.email}}</u> <br/>-->
-<!--                <b>{{curLocale.tabs.tab2.context.userInfo[1]}}</b> <u>{{user.group}}</u> <br/>-->
-<!--                <b>{{curLocale.tabs.tab2.context.userInfo[2]}}</b> <u>{{user.phone}}</u> <br/>-->
-<!--                <b>{{curLocale.tabs.tab2.context.userInfo[3]}}</b> <u>{{isAdmin[i]}}</u> <br/>-->
-<!--              </v-card-text>-->
-<!--            </v-card>-->
-<!--          </v-card>-->
-        </v-tab-item>
-        <v-tab-item>
-          <v-card>
-            <v-card-title></v-card-title>
-            <v-divider></v-divider>
-            <v-container>
-              <v-row no-gutters>
-                <v-col>
-                  <v-card>
-                    <v-list>
-                      <v-list-group>
-                        <template v-slot:activator>
-                          <v-list-item-title style="justify-content: center">
-                            {{curLocale.tabs.tab3.context.addProduct.title}}
-                          </v-list-item-title>
-                        </template>
-                        <v-list-item-group>
-                          <v-form style="margin: 0 3% 0 3%">
-                            <v-row>
-                              <v-col>
-                                  <v-text-field
-                                    :label="curLocale.tabs.tab3.context.addProduct.labels[0]"
-                                    v-model="productName"
-                                    :rules="textRules"
-                                    required
-                                ></v-text-field>
-                              </v-col>
-                              <v-col>
-                                  <v-select :label="curLocale.tabs.tab3.context.addProduct.labels[1]" v-model="category" solo :items="categories" required :rules="textRules"></v-select>
-                              </v-col>
-                            </v-row>
-                            <v-row>
-                              <v-col>
-                                <v-text-field
-                                    type="number"
-                                    :label="curLocale.tabs.tab3.context.addProduct.labels[2]"
-                                    v-model.number="price"
-                                    :rules="numRules"
-                                    required
-                                ></v-text-field>
-                              </v-col>
-                              <v-col>
-                                <v-text-field
-                                    type="number"
-                                    :label="curLocale.tabs.tab3.context.addProduct.labels[3]"
-                                    v-model.number="total_count"
-                                    :rules="numRules"
-                                    required
-                                ></v-text-field>
-                              </v-col>
-                            </v-row>
-                            <v-text-field
-                                :label="curLocale.tabs.tab3.context.addProduct.labels[4]"
-                                v-model="descrip"
-                                :rules="textRules"
-                                required
-                            ></v-text-field>
-                            <v-file-input
-                                :placeholder="curLocale.tabs.tab3.context.addProduct.labels[5]"
-                                accept="image/png, image/jpg, image/jpeg"
-                                prepend-icon="mdi-camera"
-                            ></v-file-input>
-                            <v-btn
-                                style="margin-bottom: 2%"
-                                width="100%"
-                                color="success"
-                                @click="addProduct"
-                            >
-                              {{curLocale.tabs.tab3.context.addProduct.btnTitle}}
-                            </v-btn>
-                          </v-form>
-                        </v-list-item-group>
-                      </v-list-group>
-                    </v-list>
-                  </v-card>
-                </v-col>
-                <v-col>
-                    <v-card>
-                      <v-list>
-                        <v-list-group>
-                          <template v-slot:activator>
-                              <v-list-item-title style="justify-content: center">
-                                {{curLocale.tabs.tab3.context.addAdmin.title}}
-                              </v-list-item-title>
-                          </template>
-                          <v-list-item-group>
-                            <v-form style="margin: 0 3% 0 3%">
-                              <v-text-field
-                                  :label="curLocale.tabs.tab3.context.addAdmin.labels[0]"
-                                  v-model="fullname"
-                                  :rules="textRules"
-                                  required
-                              ></v-text-field>
-                              <v-row>
-                                <v-col>
-                                  <v-text-field
-                                      :label="curLocale.tabs.tab3.context.addAdmin.labels[1]"
-                                      v-model="phone"
-                                      :rules="phoneRules"
-                                      required
-                                  ></v-text-field>
-                                </v-col>
-                                <v-col>
-                                  <v-text-field
-                                      :label="curLocale.tabs.tab3.context.addAdmin.labels[2]"
-                                      v-model="email"
-                                      :rules="emailRules"
-                                      required
-                                  ></v-text-field>
-                                </v-col>
-                              </v-row>
-                              <v-text-field
-                                  :label="curLocale.tabs.tab3.context.addAdmin.labels[3]"
-                                  v-model="login"
-                                  :rules="textRules"
-                                  required
-                              ></v-text-field>
-                              <v-text-field
-                                  type="password"
-                                  :label="curLocale.tabs.tab3.context.addAdmin.labels[4]"
-                                  v-model="pwd"
-                                  :rules="textRules"
-                                  required
-                              ></v-text-field>
-                              <v-btn
-                                  style="margin-bottom: 2%"
-                                  width="100%"
-                                  color="success"
-                                  @click="addAdmin"
-                              >
-                                {{curLocale.tabs.tab3.context.addAdmin.btnTitle}}
-                              </v-btn>
-                            </v-form>
-                          </v-list-item-group>
-                        </v-list-group>
-                      </v-list>
+          <v-dialog v-model="addAdminDialog" max-width="650">
+            <v-card>
+              <v-card-title style="justify-content: center; display: flex">
+                {{curLocale.tabs.tab2.context.addUser.title}}
+              </v-card-title>
+              <v-stepper v-model="stepperUserForm">
+                <v-stepper-header>
+                  <v-stepper-step :complete="stepperUserForm > 1" step="1">
+                    {{curLocale.tabs.tab2.context.addUser.stepers[0]}}
+                  </v-stepper-step>
+                  <v-divider></v-divider>
+                  <v-stepper-step :complete="stepperUserForm > 2" step="2">
+                    {{curLocale.tabs.tab2.context.addUser.stepers[1]}}
+                  </v-stepper-step>
+                </v-stepper-header>
+                <v-stepper-items>
+                  <v-stepper-content step="1">
+                    <v-card flat>
+                      <v-radio-group v-model="chooseBtnUser">
+                        <v-container>
+                          <v-row>
+                            <v-col>
+                              <v-radio :label="curLocale.tabs.tab2.context.addUser.radioTips[0]" value="user"></v-radio>
+                            </v-col>
+                            <v-col>
+                              <v-radio :label="curLocale.tabs.tab2.context.addUser.radioTips[1]" value="admin"></v-radio>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-radio-group>
                     </v-card>
-                  </v-col>
-              </v-row>
-            </v-container>
-            <v-snackbar color="success" v-model="finishAddProduct" timeout="4000" bottom>
-              {{curLocale.tabs.tab3.context.alerts[0]}}
-              <template>
-                <v-btn text @click="finishAddProduct = false">
-                  {{curLocale.tabs.tab3.context.alerts[2]}}
-                </v-btn>
-              </template>
-            </v-snackbar>
-            <v-snackbar color="success" v-model="finishAddAdmin" timeout="4000" bottom>
-              {{curLocale.tabs.tab3.context.alerts[1]}}
-              <template>
-                <v-btn text @click="finishAddAdmin = false">
-                  {{curLocale.tabs.tab3.context.alerts[2]}}
-                </v-btn>
-              </template>
-            </v-snackbar>
-          </v-card>
+                    <v-btn
+                        color="indigo" dark
+                        @click="stepperUserForm = 2"
+                    >
+                      {{curLocale.tabs.tab2.context.addUser.stepperBtns[0]}}
+                    </v-btn>
+                  </v-stepper-content>
+                  <v-stepper-content step="2">
+                    <v-card flat>
+                      <div v-if="chooseBtnUser === 'user'">
+                        <v-container>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[0]"
+                                  v-model="userForm.fName"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[1]"
+                                  v-model="userForm.lName"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                              <v-text-field
+                                  outlined
+                                  label="E-mail"
+                                  v-model="userForm.email"
+                                  :rules="emailRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[3]"
+                                  v-model="userForm.personGroup"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[4]"
+                                  v-model="userForm.phone"
+                                  :rules="numRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[5]"
+                                  v-model="userForm.username"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[6]"
+                                  v-model="userForm.pwd"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </div>
+                      <div v-if="chooseBtnUser === 'admin'">
+                        <v-container>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[0]"
+                                  v-model="userForm.fName"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[1]"
+                                  v-model="userForm.lName"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[5]"
+                                  v-model="userForm.username"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                  outlined
+                                  :label="curLocale.tabs.tab2.context.addUser.labels[6]"
+                                  v-model="userForm.pwd"
+                                  :rules="textRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                              <v-text-field
+                                  outlined
+                                  label="E-mail"
+                                  v-model="userForm.email"
+                                  :rules="emailRules"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </div>
+                    </v-card>
+                    <v-btn
+                        color="indigo" dark
+                        @click="createUser"
+                    >
+                      {{curLocale.tabs.tab2.context.addUser.stepperBtns[1]}}
+                    </v-btn>
+                    <v-btn text @click="stepperUserForm = 1">
+                      {{curLocale.tabs.tab2.context.addUser.stepperBtns[2]}}
+                    </v-btn>
+                  </v-stepper-content>
+                </v-stepper-items>
+              </v-stepper>
+            </v-card>
+          </v-dialog>
+          <v-snackbar outlined top timeout="1800" v-model="addUserAlert[0]" :color="addUserAlert[2]">
+            <template v-slot:action="{attrs}">
+              <v-btn text @click="addUserAlert[0] = false" v-bind="attrs">
+                {{curLocale.tabs.tab2.context.addUser.stepperBtns[3]}}
+              </v-btn>
+            </template>
+            {{addUserAlert[1]}}
+          </v-snackbar>
         </v-tab-item>
         <v-tab-item>
           <v-card flat v-if="products.length > 0">
-              <div v-for="(item, i) in products" :key="i" style="margin: 2%">
-                <v-list>
-                  <div :style="'position: absolute;background-color: #' + statisticClr[i] + '' + ';opacity: 0.6;height: 5%;width: '+getSells[i]"></div>
-                  <v-list-group>
-                    <template v-slot:activator>
-                      <v-card-title>{{ item.name }}</v-card-title>
-                      <v-spacer></v-spacer>
-                      <v-item-group>
-                        {{getSells[i]}} {{curLocale.tabs.tab4.context.sellsTitle}}
-                      </v-item-group>
-                    </template>
-                    <v-card>
-                      <v-container>
-                        <v-row>
-                          <v-col>
-                            <v-card-subtitle>
-                              <b>{{curLocale.tabs.tab4.context.info[0]}} </b> {{item.description}}
-                            </v-card-subtitle>
-                          </v-col>
-                          <v-col>
-                            <v-card-subtitle>
-                              <b>{{curLocale.tabs.tab4.context.info[1]}}</b> {{getLastBuy}}
-                            </v-card-subtitle>
-                          </v-col>
-                          <v-col>
-                            <v-card-subtitle>
-                              <b>{{curLocale.tabs.tab4.context.info[2]}}</b> {{item.available_count}}
-                            </v-card-subtitle>
-                          </v-col>
-                          <v-col>
-                            <v-card-subtitle>
-                              <b>{{curLocale.tabs.tab4.context.info[3]}}</b> {{item.count}}
-                            </v-card-subtitle>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card>
-                  </v-list-group>
-                </v-list>
-              </div>
+            <v-card v-for="(item, i) in products" :key="i" :color="statisticClr[i]" style="margin: 3%">
+              <v-card-title class="white--text">
+                {{item.name}}
+                <v-menu offset-x transition="scale-transition">
+                  <template v-slot:activator="{on, attrs}">
+                    <v-btn icon v-bind="attrs" v-on="on" dark>
+                      <v-icon>
+                        keyboard_arrow_right
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-text>
+                      <b>{{curLocale.tabs.tab3.context.info[0]}}</b> {{item.price}} UAH.<br>
+                      <b>{{curLocale.tabs.tab3.context.info[1]}}</b> {{item.description}} <br>
+                      <b>{{curLocale.tabs.tab3.context.info[2]}}</b> {{item.total_count}} <br>
+                      <b>{{curLocale.tabs.tab3.context.info[3]}}</b> {{item.available_count}} <br>
+                      <b>{{curLocale.tabs.tab3.context.info[4]}}</b> {{item.calories}}
+                      <b>{{curLocale.tabs.tab3.context.info[5]}}</b> {{item.weight}}
+                    </v-card-text>
+                  </v-card>
+                </v-menu>
+              </v-card-title>
+            </v-card>
           </v-card>
           <v-card flat v-else style="margin: 4%">
             <v-icon style="text-align: center; display: block">
               warning
             </v-icon>
             <v-card-title style="justify-content: center">
-              {{curLocale.tabs.tab4.context.notFound}}
+              {{curLocale.tabs.tab3.context.notFound}}
             </v-card-title>
           </v-card>
         </v-tab-item>
@@ -474,6 +471,7 @@ export default {
         'Напитки',
       ],
       addProductDialog: false,
+      addAdminDialog: false,
       curLocale: {},
       locales: {
         'en-EN': {
@@ -504,7 +502,21 @@ export default {
                     'Product', 'was changed',
                     'Product was deleted',
                     'Close'
-                ]
+                ],
+                addProduct: {
+                  title: 'Add product',
+                  labels: [
+                    'Name*',
+                    'Category*',
+                    'Price*',
+                    'Weigth',
+                    'Calories',
+                    'Available*',
+                    'Description*',
+                    'Image'
+                  ],
+                  btnTitle: 'Add'
+                }
               }
             },
             tab2: {
@@ -522,58 +534,58 @@ export default {
                     'Group:',
                     'Phone:',
                     'Admin:'
-                ]
-              }
-            },
-            tab3: {
-              name: 'Super-Panel',
-              context: {
-                addProduct: {
-                  title: 'Add product',
-                  labels: [
-                      'Name of item*',
-                      'Choose a category*',
-                      'Price*',
-                      'Available amount*',
-                      'Description*',
-                      'Image of item'
-                  ],
-                  btnTitle: 'ADD'
-                },
-                addAdmin: {
-                  title: 'Add admin',
-                  labels: [
-                      'FullName*',
-                      'Phone*',
-                      'E-mail*',
-                      'Login*',
-                      'Password*'
-                  ],
-                  btnTitle: 'ADD'
-                },
-                alerts: [
-                    'Product was added',
-                    'Admin was added',
-                    'Close'
                 ],
                 numRules: 'Number cannot be less than 0',
                 textRules: [
-                    'This field is required',
-                    'Field cannot be empty'
+                  'This field is required',
+                  'Field cannot be empty'
                 ],
                 phoneRules: 'Input correct phone number',
-                emailRules: 'Input correct e-mail'
+                emailRules: 'Input correct e-mail',
+                addUser: {
+                  stepers: [
+                      'Choose role user',
+                      'Fill data'
+                  ],
+                  radioTips: [
+                      'Default user',
+                      'Admin'
+                  ],
+                  title: 'Add user',
+                  labels: [
+                    'First name*',
+                    'Second name*',
+                    'E-mail*',
+                    'Group',
+                    'Phone*',
+                    'Username*',
+                    'Password*'
+                  ],
+                  alerts: [
+                      'User is successfully created!',
+                      'Error creating.'
+                  ],
+                  stepperBtns: [
+                      'Next',
+                      'Continue',
+                      'Back',
+                      'Close'
+                  ],
+                  btnTitle: 'Add'
+                }
               }
             },
-            tab4: {
+            tab3: {
               name: 'Statistics',
               context: {
                 sellsTitle: 'sells',
                 info: [
+                    'Price:',
                     'Description:',
-                    'Last buy:',
-                    'Remained in stock:',
-                    'It was at the beginning:'
+                    'Total count:',
+                    'Available count now:',
+                    'Calories:',
+                    'Weight:'
                 ],
                 notFound: 'Items not found'
               }
@@ -615,7 +627,21 @@ export default {
                   'Продукт', 'был изменен',
                   'Продукт был удален',
                   'Закрыть'
-                ]
+                ],
+                addProduct: {
+                  title: 'Добавить продукт',
+                  labels: [
+                    'Название продукта*',
+                    'Категория*',
+                    'Цена*',
+                    'Вес',
+                    'Ккал',
+                    'Доступное кол-во*',
+                    'Описание*',
+                    'Картинка продукта'
+                  ],
+                  btnTitle: 'Добавить'
+                }
               }
             },
             tab2: {
@@ -633,39 +659,6 @@ export default {
                   'Группа:',
                   'Телефон:',
                   'Админ:'
-                ]
-              }
-            },
-            tab3: {
-              name: 'Супер-Панель',
-              context: {
-                addProduct: {
-                  title: 'Добавить продукт',
-                  labels: [
-                    'Название продукта*',
-                    'Категория*',
-                    'Цена*',
-                    'Доступное кол-во*',
-                    'Описание*',
-                    'Картинка продукта'
-                  ],
-                  btnTitle: 'Добавить'
-                },
-                addAdmin: {
-                  title: 'Добавить админа',
-                  labels: [
-                    'ФИО*',
-                    'Телефон*',
-                    'E-mail*',
-                    'Логин*',
-                    'Пароль*'
-                  ],
-                  btnTitle: 'Добавить'
-                },
-                alerts: [
-                  'Product was added',
-                  'Admin was added',
-                  'Close'
                 ],
                 numRules: 'Число не может быть меньше 0',
                 textRules: [
@@ -673,18 +666,51 @@ export default {
                   'Поле не может быть пустым'
                 ],
                 phoneRules: 'Введите коректный телефон',
-                emailRules: 'Введите коректный e-mail'
+                emailRules: 'Введите коректный e-mail',
+                addUser: {
+                  stepers: [
+                    'Выберите роль пользователя',
+                    'Заполните данные'
+                  ],
+                  radioTips: [
+                    'Обычный пользователь',
+                    'Админ'
+                  ],
+                  title: 'Добавить пользователя',
+                  labels: [
+                    'Имя*',
+                    'Фамилия*',
+                    'E-mail*',
+                    'Группа',
+                    'Телефон*',
+                    'Логин*',
+                    'Пароль*'
+                  ],
+                  alerts: [
+                    'Пользователь успешно создан',
+                    'Ошибка создания'
+                  ],
+                  stepperBtns: [
+                    'Дальше',
+                    'Продолжить',
+                    'Назад',
+                    'Закрыть'
+                  ],
+                  btnTitle: 'Добавить'
+                }
               }
             },
-            tab4: {
+            tab3: {
               name: 'Статистика',
               context: {
                 sellsTitle: 'продажи',
                 info: [
+                  'Цена:',
                   'Описание:',
-                  'Последняя покупка:',
-                  'Осталось в продаже:',
-                  'Было изначально'
+                  'Общее кол-во:',
+                  'Доступно сейчас:',
+                  'Ккал:',
+                  'Вес:'
                 ],
                 notFound: 'Товаров не найдено'
               }
@@ -720,6 +746,20 @@ export default {
                   'Опис',
                   'Зображення до товару'
                 ],
+                addProduct: {
+                  title: 'Додати продукт',
+                  labels: [
+                    'Названня продукта*',
+                    'Категорія*',
+                    'Ціна*',
+                    'Вага',
+                    'Ккал',
+                    'Доступна кількість*',
+                    'Опис*',
+                    'Зображення'
+                  ],
+                  btnTitle: 'Додати'
+                },
                 editBtn: 'Змінити',
                 notFound: 'Товар не знайдено',
                 alerts: [
@@ -739,63 +779,63 @@ export default {
                   'Студенти',
                   'Адміни'
                 ],
-                userInfo: [
-                  'E-mail:',
-                  'Групи:',
-                  'Телефон:',
-                  'Админ:'
-                ]
-              }
-            },
-            tab3: {
-              name: 'Супер-Панель',
-              context: {
-                addProduct: {
-                  title: 'Додати товар',
-                  labels: [
-                    'Названня товару*',
-                    'Вибір категорії*',
-                    'Ціна*',
-                    'Доступна кількість*',
-                    'Опис*',
-                    'Зобрження товару'
-                  ],
-                  btnTitle: 'Додати'
-                },
-                addAdmin: {
-                  title: 'Додати адміна',
-                  labels: [
-                    'ПІБ*',
-                    'Телефон*',
-                    'E-mail*',
-                    'Логін*',
-                    'Пароль*'
-                  ],
-                  btnTitle: 'Додати'
-                },
-                alerts: [
-                  'Товар було додано',
-                  'Адміна було додано',
-                  'Закрити'
-                ],
                 numRules: 'Число не може бути менш ніж 0',
                 textRules: [
                   'Це поле важливе',
                   'Поле не може бути пустим'
                 ],
                 phoneRules: 'Напишіть коректний телефон',
-                emailRules: 'Напишіть коректний e-mail'
+                emailRules: 'Напишіть коректний e-mail',
+                userInfo: [
+                  'E-mail:',
+                  'Групи:',
+                  'Телефон:',
+                  'Админ:'
+                ],
+                addUser: {
+                  stepers: [
+                    'Виберіть роль користувача',
+                    'Заповніть дані'
+                  ],
+                  radioTips: [
+                    'Звичайний користувач',
+                    'Адмін'
+                  ],
+                  title: 'Додати користувача',
+                  labels: [
+                    'Ім`я*',
+                    'Прізвище*',
+                    'E-mail*',
+                    'Група*',
+                    'Телефон*',
+                    'Логін*',
+                    'Пароль*'
+                  ],
+                  alerts: [
+                    'Користувач зуспішно створен',
+                    'Помилка створення'
+                  ],
+                  stepperBtns: [
+                    'Далі',
+                    'Продовжити',
+                    'Назад',
+                    'Закрити'
+                  ],
+                  btnTitle: 'Додати'
+                }
               }
             },
-            tab4: {
+            tab3: {
               name: 'Статистика',
               context: {
                 sellsTitle: 'продажи',
                 info: [
+                  'Ціна:',
                   'Опис:',
-                  'Остан`я купівля:',
-                  'Лишилося товару:',
-                  'Було з початку:'
+                  'Уся кількість:',
+                  'Доступне зараз:',
+                  'Ккал:',
+                  'Вага:'
                 ],
                 notFound: 'Товари не знайдено'
               }
@@ -811,15 +851,11 @@ export default {
         }
       },
       translate: false,
-      langOne: false,
-      langSecond: false,
-      langThird: false,
       tabs: false,
       formOff: false,
       clr: "",
       testData: null,
       showFilters: false,
-      reloader: true,
       productForm: {
         name: '',
         category: '',
@@ -830,36 +866,36 @@ export default {
         weight: 1,
         calories: 1
       },
-      productName: "",
-      category: "",
-      price: 0,
-      total_count: 0,
-      available_count: 0,
-      descrip: "",
-      filterName: "",
-      fullname: "",
-      phone: "",
-      email: "",
-      categoryName: "",
-      login: "",
-      pwd: "",
+      stepperUserForm: 1,
+      chooseBtnUser: '',
+      addUserAlert: [false, '', 'success'],
+      addProductAlert: [false, '', 'success'],
+      userForm: {
+        fName: '',
+        lName: '',
+        email: '',
+        personGroup: '',
+        phone: '',
+        username: '',
+        pwd: ''
+      },
       finishAddProduct: false,
       finishAddAdmin: false,
       searchUsers: "",
       usersInfo: [],
       products: [],
       numRules: [
-        v => v > 0 || this.curLocale.tabs.tab3.context.numRules
+        v => v > 0 || this.curLocale.tabs.tab2.context.numRules
       ],
       textRules: [
-        v => !!v || this.curLocale.tabs.tab3.context.textRules[0],
-        v => v.length !== 0 || this.curLocale.tabs.tab3.context.textRules[1]
+        v => !!v || this.curLocale.tabs.tab2.context.textRules[0],
+        v => v.length !== 0 || this.curLocale.tabs.tab2.context.textRules[1]
       ],
       phoneRules: [
-          v => v.match("^[0-9]+$") !== null || this.curLocale.tabs.tab3.context.phoneRules
+          v => v.match("^[0-9]+$") !== null || this.curLocale.tabs.tab2.context.phoneRules
       ],
       emailRules: [
-          v => v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")  || this.curLocale.tabs.tab3.context.emailRules
+          v => v.match("[a-zA-Z]+@[a-zA-Z]+[.][a-zA-Z]+")  || this.curLocale.tabs.tab2.context.emailRules
       ]
     }
   },
@@ -886,8 +922,52 @@ export default {
       console.log(resp.data)
       this.products = resp.data
     })
+    axios({
+      method: 'GET',
+      url: `http://${ip}:${port}/api/user/all`,
+      headers: {
+        Authorization: 'Bearer ' + localStorage['sid']
+      }
+    }).then(resp => {
+      this.usersInfo = resp.data
+    })
   },
   methods: {
+    createUser() {
+      axios({
+        method: 'POST',
+        url: `http://${ip}:${port}/api/register`,
+        data: this.userForm,
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      }).then(resp => {
+        axios({
+          method: 'GET',
+          url: `http://${ip}:${port}/api/user/`+resp.data.id,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
+        }).then(user => {
+          this.usersInfo.push(user.data)
+
+          for (let item of Object.keys(this.userForm)) {
+            this.userForm[item] = ''
+          }
+
+          this.addUserAlert[0] = true
+          this.addUserAlert[1] = this.curLocale.tabs.tab2.context.addUser.alerts[0]
+
+          this.addAdminDialog = false
+          this.stepperUserForm = 1
+          this.chooseBtnUser = ''
+        })
+      }).catch(() => {
+        this.addUserAlert[0] = true
+        this.addUserAlert[2] = 'red'
+        this.addUserAlert[1] = this.curLocale.tabs.tab2.context.addUser.alerts[1]
+      })
+    },
     updateInSaleComp(info) {
       this.editDialog = info['edit']
     },
@@ -936,26 +1016,21 @@ export default {
     isAdmin() {
       let res = [];
       for (let i=0; i<this.usersInfo.length; i++) {
-        if (this.usersInfo[i].isAdmin) res.push('Да')
+        if (this.usersInfo[i].authorities.map(i => i.name).indexOf('ROLE_ADMIN') !== -1) res.push('Да')
         else res.push('Нет')
       }
       return res;
     },
     statisticClr() {
-      if (localStorage['color'] === undefined) {
-        let res = [];
-        let nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        for (let i=0;i<this.products.length;i++) {
-          res.push("")
-          for (let j=0;j<6;j++) {
-            res[i] += nums[Math.floor(Math.random()*nums.length)].toString(16)
-          }
-        }
-        localStorage.setItem('color', res)
-        return res;
-      } else {
-        return localStorage.getItem('color').split(',');
+      let res = []
+      for (let i=0;i<this.products.length;i++) {
+        let item = this.products[i]
+        let totalSells = item.total_count-item.available_count
+        res.push(
+            item.total_count===totalSells || item.total_count-5===totalSells?'green':item.total_count-10===totalSells?'purple':'red'
+        )
       }
+      return res;
     },
 
     getSells() {
@@ -966,10 +1041,6 @@ export default {
         res.push(Math.ceil(((item.count-item.available_count)/item.count)*100)+'%')
       }
       return res;
-    },
-    getLastBuy() {
-      // sending GET
-      return "18.09.2020 16:20"
     }
   },
 }
