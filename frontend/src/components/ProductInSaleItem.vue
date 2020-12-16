@@ -238,7 +238,8 @@ export default {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(() => {
-        this.finishDel = true;
+        this.delDialog = false
+        this.finishDel = true
       })
     },
     submitEditForm() {
@@ -247,7 +248,8 @@ export default {
         url: `http://${ip}:${port}/api/product/`+this.product.product_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
-        }
+        },
+        data: this.product
       }).then(() => {
         axios({
           method: 'GET',
@@ -257,7 +259,8 @@ export default {
           }
         }).then(resp => {
           this.product = resp.data
-          this.finishEdit = true;
+          this.editDialog = false
+          this.finishEdit = true
         })
       })
     }

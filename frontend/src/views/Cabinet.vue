@@ -1026,41 +1026,41 @@
             ]
           },
           orders: [
-            {
-              receipt_id: "675843",
-              total_price: 7,
-              date: "10.09.2020",
-              items: [
-                {
-                  id: 1,
-                  name: "Пирожок",
-                  category: "Духовный",
-                  description: "вкусный",
-                  price: 7
-                }
-              ]
-            },
-            {
-              receipt_id: "123456",
-              date: "12.09.2020",
-              total_price: 25,
-              items: [
-                {
-                  id: 0,
-                  name: "Пирожок",
-                  category: "Духовный",
-                  description: "вкусный",
-                  price: 15
-                },
-                {
-                  id: 2,
-                  name: "Пирожок",
-                  category: "Духовный",
-                  description: "вкусный",
-                  price: 10
-                }
-              ]
-            }
+            // {
+            //   receipt_id: "675843",
+            //   total_price: 7,
+            //   date: "10.09.2020",
+            //   items: [
+            //     {
+            //       id: 1,
+            //       name: "Пирожок",
+            //       category: "Духовный",
+            //       description: "вкусный",
+            //       price: 7
+            //     }
+            //   ]
+            // },
+            // {
+            //   receipt_id: "123456",
+            //   date: "12.09.2020",
+            //   total_price: 25,
+            //   items: [
+            //     {
+            //       id: 0,
+            //       name: "Пирожок",
+            //       category: "Духовный",
+            //       description: "вкусный",
+            //       price: 15
+            //     },
+            //     {
+            //       id: 2,
+            //       name: "Пирожок",
+            //       category: "Духовный",
+            //       description: "вкусный",
+            //       price: 10
+            //     }
+            //   ]
+            // }
           ],
           products: [
             {
@@ -1341,6 +1341,51 @@
           ]
         }
       }).catch(err => console.error(err))
+
+      axios.get(`http://${ip}:${port}/api/user`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        }
+      }).then(user => {
+        axios({
+          method: 'GET',
+          url: `http://${ip}:${port}/api/check/all`,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
+        }).then(resp => {
+          let products = []
+          for (let i=0;i<resp.data.length;i++) {
+            let item = resp.data[i]
+            if (item.user_id === user.data.id) {
+              item.purchaseDate = item.purchaseDate.split('T')[0]
+              this.info.orders.push(item)
+              axios({
+                method: 'GET',
+                url: `http://${ip}:${port}/api/basket/all`,
+                headers: {
+                  Authorization: 'Bearer ' + localStorage['sid']
+                }
+              })
+                  .then(cart => {
+                for (let item1 of cart.data) {
+                  if (item1.check_id === item.check_id) {
+                    axios({
+                      method: 'GET',
+                      url: `http://${ip}:${port}/api/product/`+item1.id_product,
+                      headers: {
+                        Authorization: 'Bearer ' + localStorage['sid']
+                      }
+                    }).then(product => (products.push(product)))
+                  }
+                }
+              })
+              this.info.orders[i]['items'] = products
+            }
+          }
+          console.info('orders', this.info.orders)
+        })
+      })
     }
   }
 </script>

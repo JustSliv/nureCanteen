@@ -67,6 +67,9 @@
         <v-tab>
           {{curLocale.tabs.tab3.name}}
         </v-tab>
+        <v-tab>
+          Заказы
+        </v-tab>
         <v-tab-item>
           <v-card v-if="products.length > 0">
             <ProductInSaleList
@@ -448,6 +451,11 @@
             </v-card-title>
           </v-card>
         </v-tab-item>
+        <v-tab-item>
+          <v-card v-if="orders.length > 0">
+
+          </v-card>
+        </v-tab-item>
       </v-tabs>
     </v-card>
   </v-app>
@@ -472,6 +480,7 @@ export default {
       ],
       addProductDialog: false,
       addAdminDialog: false,
+      orders: [],
       curLocale: {},
       locales: {
         'en-EN': {
@@ -922,6 +931,7 @@ export default {
       console.log(resp.data)
       this.products = resp.data
     })
+
     axios({
       method: 'GET',
       url: `http://${ip}:${port}/api/user/all`,
@@ -931,6 +941,8 @@ export default {
     }).then(resp => {
       this.usersInfo = resp.data
     })
+
+
   },
   methods: {
     createUser() {
