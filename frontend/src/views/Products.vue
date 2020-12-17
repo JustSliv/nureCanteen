@@ -42,15 +42,15 @@
       <v-dialog v-model="alertUnauthorized" width="480">
         <v-card>
           <v-card-title style="justify-content: center; display: flex">
-            Войдите в систему чтобы оформить заказ!
+            {{curLocale.unauthorized.labels[0]}}
           </v-card-title>
           <v-divider></v-divider>
           <v-card-actions style="justify-content: center; display: flex">
             <v-btn color="deep-purple" text outlined to="/register" @click="doRegisterForProducts">
-              Регистрация
+              {{curLocale.unauthorized.labels[1]}}
             </v-btn>
             <v-btn color="success" text outlined to="/auth" @click="doLoginForProducts">
-              Войти
+              {{curLocale.unauthorized.labels[2]}}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -129,6 +129,13 @@
                 'Spices',
                 'Drinks'
             ]
+          },
+          unauthorized: {
+            labels: [
+                'Log-in to the system for buy goods!',
+                'Sign-Up',
+                'Log-In'
+            ]
           }
         },
         'ru-RU': {
@@ -156,6 +163,13 @@
               'Пряности',
               'Напитки'
             ]
+          },
+          unauthorized: {
+            labels: [
+              'Войдите в систему чтобы купить продукты!',
+              'Регистрация',
+              'Войти'
+            ]
           }
         },
         'ua-UA': {
@@ -182,6 +196,13 @@
               'Друга страва',
               'Прянощі',
               'Напої'
+            ]
+          },
+          unauthorized: {
+            labels: [
+              'Війдіть до системи, щоб купувати продукти!',
+              'Реєстрація',
+              'Війти'
             ]
           }
         }

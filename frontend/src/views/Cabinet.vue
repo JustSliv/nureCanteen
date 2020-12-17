@@ -17,7 +17,7 @@
         <v-tab>
           {{curLocale.tabs.tab3.name}}
         </v-tab>
-        <v-tab-item>
+        <v-tab-item transition="fade-transition">
           <v-card max-height="450">
             <v-card-title style="justify-content: center; display: flex">
               <v-hover v-slot:default="{hover}">
@@ -125,7 +125,7 @@
                           <v-list-item-title>{{info.last_buy.total_price}} {{curLocale.tabs.tab1.context.lastBuyItem.currency}}</v-list-item-title>
                         </v-item-group>
                       </template>
-                      <v-list-group  no-action sub-group v-for="(item, i) in info.last_buy.items" :key="i">
+                      <v-list-group no-action sub-group v-for="(item, i) in info.last_buy.items" :key="i">
                         <template v-slot:activator>
                           <v-list-item-title>{{item.name}}</v-list-item-title>
                           <v-item-group>
@@ -290,7 +290,7 @@
             </v-container>
           </v-card>
         </v-tab-item>
-        <v-tab-item>
+        <v-tab-item transition="fade-transition">
           <v-card max-height="450">
             <div style="justify-content: center;display: flex;padding: 5%">
               <v-hover v-slot:default="{hover}">
@@ -486,60 +486,50 @@
             </v-dialog>
           </v-card>
         </v-tab-item>
-        <v-tab-item>
-            <v-card flat max-height="450" style="overflow-x: hidden; overflow-y: auto">
-                <v-list v-if="info.orders.length > 0">
-                    <v-list-group v-for="(order, i) in info.orders" :key="i">
-                        <template v-slot:activator>
-                            <v-list-item-title>{{curLocale.tabs.tab2.context.receipt.title}} №{{order.receipt_id}}</v-list-item-title>
-                            <v-item-group>
-                                <v-list-item-title>{{order.total_price}} {{curLocale.tabs.tab2.context.receipt.currency}}</v-list-item-title>
-                            </v-item-group>
+        <v-tab-item transition="fade-transition">
+          <v-card flat max-height="400" min-height="500" style="overflow-x: hidden; overflow-y: auto">
+            <div v-if="info.orders.length > 0" >
+              <v-container>
+                <v-row>
+                  <v-col v-for="(order, i) in info.orders" :key="i" cols="4">
+                    <v-card flat>
+                      <v-menu offset-x>
+                        <template v-slot:activator="{on, attrs}">
+                          <v-img :src="order.product_id.image" width="120" height="120"></v-img>
+                          <v-card-subtitle>
+                            {{curLocale.tabs.tab2.context.receipt.title}} №{{order.check_id.check_id}}
+                            <v-btn icon large v-on="on" v-bind="attrs">
+                              <v-icon>
+                                keyboard_arrow_right
+                              </v-icon>
+                            </v-btn>
+                          </v-card-subtitle>
                         </template>
-                        <v-list-group sub-group no-action v-for="(item, j) in order.items" :key="j">
-                            <template v-slot:activator>
-                                <v-list-item-title>{{item.name}}</v-list-item-title>
-                                <v-item-group>
-                                    <v-list-item-title>{{item.price}} {{curLocale.tabs.tab2.context.receipt.currency}}</v-list-item-title>
-                                </v-item-group>
-                            </template>
-                            <v-list-item>
-                              <v-container>
-                                <v-row>
-                                  <v-col>
-                                    <v-text-field
-                                        label="Категория:"
-                                        v-model="item.category"
-                                        filled
-                                        rounded
-                                        readonly
-                                    ></v-text-field>
-                                  </v-col>
-                                  <v-col>
-                                    <v-text-field
-                                        label="Описание:"
-                                        v-model="item.description"
-                                        filled
-                                        rounded
-                                        readonly
-                                    ></v-text-field>
-                                  </v-col>
-                                </v-row>
-                              </v-container>
-
-                            </v-list-item>
-                        </v-list-group>
-                    </v-list-group>
-                </v-list>
-                <div v-else style="margin: 10%">
-                    <v-icon style="text-align: center;display: block">warning</v-icon>
-                    <v-card-title style="justify-content: center">
-                      {{curLocale.tabs.tab2.context.notFound}}
-                    </v-card-title>
-                </div>
-            </v-card>
+                        <v-card>
+                          <v-card-subtitle>
+                            {{curLocale.tabs.tab2.context.receipt.labels[0]}} {{order.check_id.canteen}} <br/>
+                            {{curLocale.tabs.tab2.context.receipt.labels[1]}} {{order.product_id.name}} <br/>
+                            {{curLocale.tabs.tab2.context.receipt.labels[2]}} {{order.check_id.purchaseDate.split('T')[0]}} <br/>
+                            {{curLocale.tabs.tab2.context.receipt.labels[3]}} {{order.product_id.description}} <br/>
+                            {{curLocale.tabs.tab2.context.receipt.labels[4]}} {{order.product_id.category}} <br/>
+                            {{curLocale.tabs.tab2.context.receipt.labels[5]}} {{order.product_id.price}} {{curLocale.tabs.tab2.context.receipt.currency}} <br/>
+                          </v-card-subtitle>
+                        </v-card>
+                      </v-menu>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </div>
+            <div v-else style="margin: 10%">
+              <v-icon style="text-align: center;display: block">warning</v-icon>
+              <v-card-title style="justify-content: center">
+                {{curLocale.tabs.tab2.context.notFound}}
+              </v-card-title>
+            </div>
+          </v-card>
         </v-tab-item>
-        <v-tab-item>
+        <v-tab-item transition="fade-transition">
           <v-card>
             <v-form>
               <v-container>
@@ -659,6 +649,7 @@
 </template>
 
 <script>
+
   const axios = require('axios');
   const ip = 'localhost'
   const port = 25016;
@@ -701,6 +692,14 @@
                 context: {
                   receipt: {
                     title: 'Receipt',
+                    labels: [
+                        'Canteen:',
+                        'Item:',
+                        'Date of purchase:',
+                        'Description:',
+                        'Category:',
+                        'Price:'
+                    ],
                     currency: 'UAH'
                   },
                   notFound: 'Orders not found'
@@ -806,6 +805,14 @@
                 context: {
                   receipt: {
                     title: 'Чек',
+                    labels: [
+                      'Столовая:',
+                      'Продукт:',
+                      'Дата покупки:',
+                      'Описание:',
+                      'Категория:',
+                      'Цена:'
+                    ],
                     currency: 'ГРН'
                   },
                   notFound: 'Заказы не найдены'
@@ -902,6 +909,14 @@
                 context: {
                   receipt: {
                     title: 'Чек',
+                    labels: [
+                      'Їдальня:',
+                      'Продукт:',
+                      'Дата купівлі:',
+                      'Опис:',
+                      'Категория:',
+                      'Ціна:'
+                    ],
                     currency: 'ГРН'
                   },
                   notFound: 'Замовлень не знайденно'
@@ -1026,41 +1041,26 @@
             ]
           },
           orders: [
-            // {
-            //   receipt_id: "675843",
-            //   total_price: 7,
-            //   date: "10.09.2020",
-            //   items: [
-            //     {
-            //       id: 1,
-            //       name: "Пирожок",
-            //       category: "Духовный",
-            //       description: "вкусный",
-            //       price: 7
-            //     }
-            //   ]
-            // },
-            // {
-            //   receipt_id: "123456",
-            //   date: "12.09.2020",
-            //   total_price: 25,
-            //   items: [
-            //     {
-            //       id: 0,
-            //       name: "Пирожок",
-            //       category: "Духовный",
-            //       description: "вкусный",
-            //       price: 15
-            //     },
-            //     {
-            //       id: 2,
-            //       name: "Пирожок",
-            //       category: "Духовный",
-            //       description: "вкусный",
-            //       price: 10
-            //     }
-            //   ]
-            // }
+            {
+              check_id: {
+                canteen: 'First ',
+                check_id: 0,
+                purchaseDate: '2020-12-06T22:00:00.000+0000',
+                time: '15:51:20',
+                sum: 23
+              },
+              count: 1,
+              product_id: {
+                id: 0,
+                name: "Пирожок",
+                price: 54,
+                category: "Пряности",
+                description: "вкусный",
+                total_count: 20,
+                available_count: 20,
+                image: require("@/assets/imgs/572f9a16875ed15491f1e81a.png")
+              }
+            }
           ],
           products: [
             {
@@ -1346,44 +1346,66 @@
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
-      }).then(user => {
+      }).then(user_id => {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/check/all`,
+          url: `http://${ip}:${port}/api/basket/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(resp => {
-          let products = []
-          for (let i=0;i<resp.data.length;i++) {
-            let item = resp.data[i]
-            if (item.user_id === user.data.id) {
-              item.purchaseDate = item.purchaseDate.split('T')[0]
-              this.info.orders.push(item)
+          this.info.orders = resp.data.filter(i => i.user === user_id.data.id)
+
+          for (let item of resp.data) {
+            let date = item.check_id.purchaseDate.split('T')[0]+ '  ' + item.check_id.time
+            if (new Date().toISOString() >= new Date(date).toISOString()) {
+              this.info.last_buy = item
+            }
+          }
+
+          let nanObject = false
+          this.info.last_buy['total_price'] = this.info.last_buy.check_id.sum
+          this.info.last_buy['date'] = this.info.last_buy.check_id.purchaseDate.split('T')[0]+ 'T' + this.info.last_buy.check_id.time
+          this.info.last_buy['items'] = [
+            isNaN(Number(this.info.last_buy.product_id)) ?
+                this.info.last_buy.product_id:
+                nanObject = true
+          ]
+          if (nanObject) {
+            axios({
+              method: 'GET',
+              url: `http://${ip}:${port}/api/product/`+this.info.last_buy.product_id
+            }).then(resp => {
+              this.info.last_buy.items[0] = resp.data
+            })
+          }
+          console.log(this.info.last_buy)
+
+          this.info.orders.sort((a, b) => {
+            if (a.check_id.check_id < b.check_id.check_id) {
+              return -1;
+            }
+            if (a.check_id.check_id > b.check_id.check_id) {
+              return 1;
+            }
+            return 0;
+          })
+
+          for (let i=0;i<this.info.orders.length;i++) {
+            if (isNaN(Number(this.info.orders[i].product_id))) {
+              this.info.orders[i].product_id['nema'] = ''
+            } else {
               axios({
                 method: 'GET',
-                url: `http://${ip}:${port}/api/basket/all`,
+                url: `http://${ip}:${port}/api/product/`+this.info.orders[i].product_id,
                 headers: {
                   Authorization: 'Bearer ' + localStorage['sid']
                 }
+              }).then(resp => {
+                this.info.orders[i].product_id = resp.data
               })
-                  .then(cart => {
-                for (let item1 of cart.data) {
-                  if (item1.check_id === item.check_id) {
-                    axios({
-                      method: 'GET',
-                      url: `http://${ip}:${port}/api/product/`+item1.id_product,
-                      headers: {
-                        Authorization: 'Bearer ' + localStorage['sid']
-                      }
-                    }).then(product => (products.push(product)))
-                  }
-                }
-              })
-              this.info.orders[i]['items'] = products
             }
           }
-          console.info('orders', this.info.orders)
         })
       })
     }
