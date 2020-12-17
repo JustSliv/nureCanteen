@@ -20,6 +20,7 @@ public class Check {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long check_id;
 
+   @JsonIgnore
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 //   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="username")
    @JsonIdentityReference(alwaysAsId = true)

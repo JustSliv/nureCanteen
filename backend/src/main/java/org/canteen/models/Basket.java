@@ -1,6 +1,7 @@
 package org.canteen.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.canteen.security.model.User;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Basket {
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 //   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="username")
    @JsonIdentityReference(alwaysAsId = true)
+   @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
    @JoinColumn(name = "check_id")
    private Check check_id;
 
