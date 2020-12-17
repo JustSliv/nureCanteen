@@ -18,9 +18,9 @@ public interface BasketRepo extends JpaRepository<Basket, Long> {
    @Transactional
    List<BasketDtoRepo> getUserBasket(@Param("user_id") Long user_id);
 
-//   @Query(value = "DELETE FROM basket WHERE basket.id_user = :user_id", nativeQuery = true)
-//   @Transactional
-//   Basket deleteByUserUserId(Long user_id);
+   @Query(value = "SELECT * FROM basket ", nativeQuery = true)
+   @Transactional
+   List<Basket> selectAll();
 
    @Modifying
    @Query(value = "UPDATE basket SET active = false, check_id = :check_id WHERE id_user = :user_id AND check_id IS NULL", nativeQuery = true)

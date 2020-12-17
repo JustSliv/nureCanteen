@@ -57,7 +57,7 @@ public class CommentController {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm:ss");
 
       commentRepo.addComment(currTime.format(formatter), comment.getMsg(), comment.getProduct_id().getProduct_id(), comment.getUser().getid());
-      
+
       comment.setDate(currTime.format(formatter));
       return ResponseEntity.ok(comment);
    }

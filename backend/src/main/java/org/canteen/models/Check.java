@@ -6,7 +6,6 @@ import org.canteen.security.model.User;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;

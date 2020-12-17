@@ -1,7 +1,5 @@
 package org.canteen.Repositories.dto;
 
-import java.util.Set;
-
 public interface CheckDTO {
 
       public Long getCheck_id();

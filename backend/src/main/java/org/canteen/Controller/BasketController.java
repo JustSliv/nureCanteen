@@ -1,10 +1,8 @@
 package org.canteen.Controller;
 
-import org.canteen.Repositories.dto.BasketDtoRepo;
 import org.canteen.Repositories.BasketRepo;
+import org.canteen.Repositories.dto.BasketDtoRepo;
 import org.canteen.models.Basket;
-import org.canteen.models.Comment;
-import org.canteen.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,7 +50,7 @@ public class BasketController {
    @GetMapping("/all")
    public ResponseEntity<List<Basket>> getAll(){
 
-      return ResponseEntity.ok(basketRepo.findAll());
+      return ResponseEntity.ok(basketRepo.selectAll());
    }
 
    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -33,6 +33,9 @@ public class Basket {
    @JoinColumn(name = "check_id")
    private Check check_id;
 
+   @Column(name = "product_name")
+   private String productName;
+
    @Column(name = "count")
    private int count;
 
@@ -88,6 +91,14 @@ public class Basket {
 
    public void setActive(boolean active) {
       this.active = active;
+   }
+
+   public String getProductName() {
+      return productName;
+   }
+
+   public void setProductName(String productName) {
+      this.productName = productName;
    }
 
    @Override

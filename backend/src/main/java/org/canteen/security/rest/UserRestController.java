@@ -30,6 +30,11 @@ public class UserRestController {
       this.userService = userService;
    }
 
+   @GetMapping("/user/{user_id}")
+   public ResponseEntity<User> getuserbyId(@PathVariable("user_id") Long user_id){
+      return ResponseEntity.ok(userRepository.findById(user_id).get());
+   }
+
    @GetMapping("/user")
    public ResponseEntity<User> getActualUser() {
       return ResponseEntity.ok(userService.getUserWithAuthorities().get());
