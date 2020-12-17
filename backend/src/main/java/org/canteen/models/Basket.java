@@ -18,8 +18,6 @@ public class Basket {
 
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
    @JoinColumn(name = "id_product")
-//   @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="product_id")
-//   @JsonIdentityReference(alwaysAsId = true)
    private Product product_id;
 
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)

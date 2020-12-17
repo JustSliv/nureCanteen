@@ -19,7 +19,8 @@ public class BasketController {
    @Autowired
    private BasketRepo basketRepo;
 
-
+   public static Long user_id = 0l;
+   public static Long check_id = 0l;
 
    @GetMapping("/{id}")
    @ResponseBody
@@ -76,7 +77,9 @@ public class BasketController {
    @DeleteMapping("/user/{user_id}/{check_id}")
    public ResponseEntity<Basket> deleteByUserId(@PathVariable Long user_id, @PathVariable Long check_id){
 
-      basketRepo.changeActive(user_id, check_id);
+//      basketRepo.changeActive(user_id, check_id);
+      this.user_id = user_id;
+      this.check_id = check_id;
       return new ResponseEntity<>(HttpStatus.OK);
    }
 
