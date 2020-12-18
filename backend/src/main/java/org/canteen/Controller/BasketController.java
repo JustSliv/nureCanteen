@@ -3,6 +3,7 @@ package org.canteen.Controller;
 import org.canteen.Repositories.BasketRepo;
 import org.canteen.Repositories.dto.BasketDtoRepo;
 import org.canteen.models.Basket;
+import org.canteen.models.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,22 @@ public class BasketController {
          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
       basket.setActive(true);
+      basketRepo.save(basket);
+
+      return new ResponseEntity<>(basket, headers, HttpStatus.CREATED);
+   }
+
+   @RequestMapping(value = "/mobile/{check_id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+   public ResponseEntity<Basket> saveProductForMobile(@RequestBody Basket basket, @PathVariable("check_id") Long check_id){
+      HttpHeaders headers = new HttpHeaders();
+      Check check = new Check();
+      if(basket == null){
+         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+      basket.setActive(true);
+      check.setCheck_id(check_id);
+      basket.setCheck_id(check);
+      basketRepo.changeActiveMobile(check_id);
       basketRepo.save(basket);
 
       return new ResponseEntity<>(basket, headers, HttpStatus.CREATED);

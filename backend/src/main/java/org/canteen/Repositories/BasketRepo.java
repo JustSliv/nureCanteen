@@ -26,4 +26,10 @@ public interface BasketRepo extends JpaRepository<Basket, Long> {
    @Query(value = "UPDATE basket SET active = false, check_id = :check_id WHERE id_user = :user_id AND check_id IS NULL", nativeQuery = true)
    @Transactional
    void changeActive(Long user_id, Long check_id);
+
+   @Modifying
+   @Query(value = "UPDATE basket SET active = false  WHERE check_id = :check_id AND check_id IS NULL", nativeQuery = true)
+   @Transactional
+   void changeActiveMobile(Long check_id);
+
 }
