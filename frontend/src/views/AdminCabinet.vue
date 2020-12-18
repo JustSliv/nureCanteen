@@ -68,7 +68,7 @@
           {{curLocale.tabs.tab3.name}}
         </v-tab>
         <v-tab>
-          Заказы
+          {{curLocale.tabs.tab4.name}}
         </v-tab>
         <v-tab-item>
           <v-card v-if="products.length > 0">
@@ -452,8 +452,53 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <v-card v-if="orders.length > 0">
-
+          <v-card v-if="orders.length > 0" style="padding: 0 15% 0 15%">
+            <v-container>
+              <v-row>
+                <v-col cols="4">
+                  <v-select
+                      :label="curLocale.tabs.tab4.context.titleFilter"
+                      outlined
+                      v-model="chosenFilterOrders"
+                      @input="doFilterOrders"
+                      :items="curLocale.tabs.tab4.context.filters"
+                      append-icon="filter_list"
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-container>
+            <v-divider></v-divider>
+            <v-container>
+              <v-row>
+                <v-col v-for="(order, i) in orders" :key="i">
+                  <v-card flat>
+                    <v-menu offset-x open-on-hover nudge-width="150">
+                      <template v-slot:activator="{on, attrs}">
+                        <v-img :src="order.product_id.image" width="120" height="120"></v-img>
+                        <v-card-subtitle>
+                          {{curLocale.tabs.tab4.context.receipt.title}} №{{order.check_id.check_id}}
+                          <v-btn icon large v-on="on" v-bind="attrs">
+                            <v-icon>
+                              keyboard_arrow_right
+                            </v-icon>
+                          </v-btn>
+                        </v-card-subtitle>
+                      </template>
+                      <v-card>
+                        <v-card-subtitle>
+                          {{curLocale.tabs.tab4.context.receipt.labels[0]}} {{order.check_id.canteen}} <br/>
+                          {{curLocale.tabs.tab4.context.receipt.labels[1]}} {{order.product_id.name}} <br/>
+                          {{curLocale.tabs.tab4.context.receipt.labels[2]}} {{order.check_id.purchaseDate.split('T')[0]+' '+order.check_id.time}} <br/>
+                          {{curLocale.tabs.tab4.context.receipt.labels[3]}} {{order.product_id.description}} <br/>
+                          {{curLocale.tabs.tab4.context.receipt.labels[4]}} {{order.product_id.category}} <br/>
+                          {{curLocale.tabs.tab4.context.receipt.labels[5]}} {{order.product_id.price}} {{curLocale.tabs.tab4.context.receipt.currency}} <br/>
+                        </v-card-subtitle>
+                      </v-card>
+                    </v-menu>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-card>
         </v-tab-item>
       </v-tabs>
@@ -598,6 +643,29 @@ export default {
                 ],
                 notFound: 'Items not found'
               }
+            },
+            tab4: {
+              name: 'Orders',
+              context: {
+                titleFilter: 'Sort',
+                filters: [
+                    'All',
+                    'By latest date'
+                ],
+                receipt: {
+                  title: 'Receipt',
+                  labels: [
+                    'Canteen:',
+                    'Item:',
+                    'Date of purchase:',
+                    'Description:',
+                    'Category:',
+                    'Price:'
+                  ],
+                  currency: 'UAH'
+                },
+                notFound: 'Orders not found'
+              }
             }
           },
           translation: {
@@ -722,6 +790,29 @@ export default {
                   'Вес:'
                 ],
                 notFound: 'Товаров не найдено'
+              }
+            },
+            tab4: {
+              name: 'Заказы',
+              context: {
+                titleFilter: 'Сортировка',
+                filters: [
+                  'Все',
+                  'По дате покупки'
+                ],
+                receipt: {
+                  title: 'Чек',
+                  labels: [
+                    'Столовая:',
+                    'Товар:',
+                    'Дата покупки:',
+                    'Описание:',
+                    'Категория:',
+                    'Цена:'
+                  ],
+                  currency: 'ГРН'
+                },
+                notFound: 'Заказов нет'
               }
             }
           },
@@ -848,6 +939,29 @@ export default {
                 ],
                 notFound: 'Товари не знайдено'
               }
+            },
+            tab4: {
+              name: 'Замовлення',
+              context: {
+                receipt: {
+                  titleFilter: 'Сортировка',
+                  filters: [
+                    'Усі',
+                    'За датою купівлі'
+                  ],
+                  title: 'Чек',
+                  labels: [
+                    'Їдальня:',
+                    'Товар:',
+                    'Дата купівлі:',
+                    'Опис:',
+                    'Категорія:',
+                    'Ціна:'
+                  ],
+                  currency: 'ГРН'
+                },
+                notFound: 'Замовлення немає'
+              }
             }
           },
           translation: {
@@ -865,6 +979,7 @@ export default {
       clr: "",
       testData: null,
       showFilters: false,
+      chosenFilterOrders: '',
       productForm: {
         name: '',
         category: '',
@@ -928,7 +1043,6 @@ export default {
         Authorization: 'Bearer ' + localStorage['sid']
       }
     }).then(resp => {
-      console.log(resp.data)
       this.products = resp.data
     })
 
@@ -942,9 +1056,67 @@ export default {
       this.usersInfo = resp.data
     })
 
-
+    axios({
+      method: 'GET',
+      url: `http://${ip}:${port}/api/basket/all`,
+      headers: {
+        Authorization: 'Bearer ' + localStorage['sid']
+      }
+    }).then(resp => {
+      this.orders = resp.data
+      for (let item of this.orders) {
+        if (!isNaN(Number(item.product_id))) {
+          axios({
+            method: 'GET',
+            url: `http://${ip}:${port}/api/product/`+item.product_id,
+            headers: {
+              Authorization: 'Bearer ' + localStorage['sid']
+            }
+          }).then(resp1 => {
+            item.product_id = resp1.data
+          })
+        }
+      }
+    })
   },
   methods: {
+    doFilterOrders() {
+      if (this.chosenFilterOrders === this.curLocale.tabs.tab4.context.filters[0]) {
+        axios({
+          method: 'GET',
+          url: `http://${ip}:${port}/api/basket/all`,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
+        }).then(resp => {
+          this.orders = resp.data
+          for (let item of this.orders) {
+            if (!isNaN(Number(item.product_id))) {
+              axios({
+                method: 'GET',
+                url: `http://${ip}:${port}/api/product/`+item.product_id,
+                headers: {
+                  Authorization: 'Bearer ' + localStorage['sid']
+                }
+              }).then(resp1 => {
+                item.product_id = resp1.data
+              })
+            }
+          }
+        })
+      } else if (this.chosenFilterOrders === this.curLocale.tabs.tab4.context.filters[1]) {
+        this.orders = this.orders.sort((a, b) => {
+          const dateA = a.check_id.purchaseDate.split('T')[0] + 'T' + a.check_id.time
+          const dateB = b.check_id.purchaseDate.split('T')[0] + 'T' + b.check_id.time
+          if (dateA < dateB) {
+            return -1;
+          } else if (dateA > dateB) {
+            return 1;
+          }
+          return 0;
+        })
+      }
+    },
     createUser() {
       axios({
         method: 'POST',

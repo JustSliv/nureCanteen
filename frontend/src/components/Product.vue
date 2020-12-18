@@ -163,8 +163,6 @@ export default {
           }
         }).then(cart => {
           let ids = cart.data.map(i => i.product_id)
-          console.log(cart.data)
-          console.log(ids)
           if (ids.indexOf(this.product.product_id) !== -1) {
             let duplItem = cart.data[ids.indexOf(this.product.product_id)]
             console.log(duplItem)
@@ -182,7 +180,6 @@ export default {
               this.inCart = true;
             })
           } else {
-            console.log('else')
             axios({
               method: 'POST',
               url: `http://${ip}:${port}/api/basket/`,
