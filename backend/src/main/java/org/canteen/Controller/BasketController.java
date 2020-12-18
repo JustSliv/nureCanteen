@@ -1,6 +1,7 @@
 package org.canteen.Controller;
 
 import org.canteen.Repositories.BasketRepo;
+import org.canteen.Repositories.CheckRepo;
 import org.canteen.Repositories.dto.BasketDtoRepo;
 import org.canteen.models.Basket;
 import org.canteen.models.Check;
@@ -11,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -19,6 +22,9 @@ public class BasketController {
 
    @Autowired
    private BasketRepo basketRepo;
+
+   @Autowired
+   private CheckRepo checkRepo;
 
    public static Long user_id = 0l;
    public static Long check_id = 0l;
@@ -61,6 +67,13 @@ public class BasketController {
       basket.setCheck_id(check);
       basketRepo.changeActiveMobile(check_id);
       basketRepo.save(basket);
+      LocalDateTime currTime = LocalDateTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+      DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH:mm:ss");
+      checkRepo.setDate(currTime.format(formatter), check_id);
+
+      checkRepo.setTime(currTime.format(formatter1), check_id);
 
       return new ResponseEntity<>(basket, headers, HttpStatus.CREATED);
    }
