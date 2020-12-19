@@ -6,26 +6,31 @@
       </v-card-title>
       <v-divider></v-divider>
       <v-form>
-        <v-container style="width: 70%" v-model="valid">
+        <v-container>
           <v-row>
-            <v-text-field
-                :label="curLocale.labels[0]"
-                :rules="loginRules"
-                required
-            ></v-text-field>
+            <v-col cols="12">
+              <v-text-field
+                  :label="curLocale.labels[0]"
+                  :rules="loginRules"
+                  append-icon="person"
+                  required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                  :rules="pwdRules"
+                  :label="curLocale.labels[1]"
+                  :type="showPwd === true ? 'password' : 'text'"
+                  :append-icon="showPwd !== true ? 'visibility' : 'visibility_off'"
+                  @click:append="() => (showPwd = !showPwd)"
+                  required
+              ></v-text-field>
+            </v-col>
           </v-row>
-          <v-row>
-            <v-text-field
-                :rules="pwdRules"
-                :label="curLocale.labels[1]"
-                type="password"
-                required
-            ></v-text-field>
-          </v-row>
+          <v-btn block color="success" @click="doAuth">
+            {{curLocale.btnTitle}}
+          </v-btn>
         </v-container>
-        <v-btn width="100%" color="success" absolute @click="auth">
-          {{curLocale.btnTitle}}
-        </v-btn>
       </v-form>
     </v-card>
   </v-app>
@@ -87,10 +92,10 @@ export default {
           ]
         }
       },
-      valid: false,
+      showPwd: true,
       loginRules: [
-          v => !!v || this.curLocale.loginRules[0],
-          v => v.length <= 0 || this.curLocale.loginRules[1]
+        v => !!v || this.curLocale.loginRules[0],
+        v => v.length <= 0 || this.curLocale.loginRules[1]
       ],
       pwdRules: [
         v => !!v || this.curLocale.pwdRules[0],
@@ -99,9 +104,21 @@ export default {
     }
   },
   methods: {
-    auth() {
+    doAuth() {
       // sending POST
       window.location.href = '/admin/cabinet'
+    }
+  },
+  beforeMount() {
+    if (localStorage['lang'] === 'ru-RU') {
+      this.curLocale = this.locales["ru-RU"];
+    } else if (localStorage['lang'] === 'en-EN') {
+      this.curLocale = this.locales["en-EN"];
+    } else if (localStorage['lang'] === 'ua-UA') {
+      this.curLocale = this.locales["ua-UA"];
+    } else {
+      localStorage.setItem('lang', 'ua-UA')
+      this.curLocale = this.locales["ua-UA"];
     }
   }
 }
