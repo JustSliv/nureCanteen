@@ -15,25 +15,39 @@ services:
       - POSTGRES_PASSWORD=canteen
       - POSTGRES_DB=canteen
 
-    frontend:
-      container_name: frontend
-      image: nurecanteen_production_frontend
-      build:
-        context: .
-        dockerfile: ./compose/production/frontend/Dockerfile
-      volumes:
-        - ./frontend:/app
-        - /app/node_modules
+  frontend:
+    container_name: frontend
+    image: nurecanteen_production_frontend
+    build:
+      context: .
+      dockerfile: ./compose/production/frontend/Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
 
-    backend: &backend
-      container_name: backend
-      image: nurecanteen_production_backend
-      build:
-        context: .
-        dockerfile: ./compose/production/backend/Dockerfile
-      volumes:
-        - ./backend:/app
-      env_file:
-        - ./.envs/.production/.backend
-      depends_on:
-        - postgres
+  backend:
+    container_name: backend
+    image: nurecanteen_production_backend
+    build:
+      context: .
+      dockerfile: ./compose/production/backend/Dockerfile
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./.envs/.production/.backend
+    depends_on:
+      - postgres
+
+  traefik:
+    build:
+      context: .
+      dockerfile: ./compose/production/traefik/Dockerfile
+    image: nurecanteen_production_traefik
+    depends_on:
+      - frontend
+      - backend
+    volumes:
+      - production_traefik:/etc/traefik/acme
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
