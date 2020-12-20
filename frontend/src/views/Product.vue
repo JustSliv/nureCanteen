@@ -268,14 +268,14 @@ export default {
   mounted() {
     let curProduct = this.$route.path.split('/')
     console.log(curProduct)
-    axios.get(`http://${ip}.${port}/api/product/`+curProduct[curProduct.length-1]).
+    axios.get(`https://${ip}.${port}/api/product/`+curProduct[curProduct.length-1]).
       then(resp => {
         this.info.product = resp.data
-        axios.get(`http://${ip}.${port}/api/product/comments/`+curProduct[curProduct.length-1]).
+        axios.get(`https://${ip}.${port}/api/product/comments/`+curProduct[curProduct.length-1]).
         then(cmts => {
           this.info.comments = cmts.data
           for (let i =0;i<this.info.comments.length;i++) {
-            axios.get(`http://${ip}.${port}/api/user/`+this.info.comments[i].user, {
+            axios.get(`https://${ip}.${port}/api/user/`+this.info.comments[i].user, {
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }
@@ -292,14 +292,14 @@ export default {
       this.dialog = false;
       if (localStorage['sid'] !== undefined || localStorage['sid'] !== null && this.countProducts > 0) {
         let id = parseInt(this.$route.path.split('/')[2])
-        axios.get(`http://${ip}.${port}/api/user`, {
+        axios.get(`https://${ip}.${port}/api/user`, {
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(resp => {
           axios({
             method: 'POST',
-            url: `http://${ip}.${port}/api/basket`,
+            url: `https://${ip}.${port}/api/basket`,
             data: {
               product_id: id,
               user: resp.data.id,
@@ -336,14 +336,14 @@ export default {
     doAddReview() {
       axios({
         method: 'GET',
-        url: `http://${ip}.${port}/api/user`,
+        url: `https://${ip}.${port}/api/user`,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(user => {
         axios({
           method: 'POST',
-          url: `http://${ip}.${port}/api/comment/`,
+          url: `https://${ip}.${port}/api/comment/`,
           data: {
             user: user.data.id,
             product_id: this.$route.fullPath.split('/')[2],
@@ -356,7 +356,7 @@ export default {
           console.log(resp.data)
           this.info.comments.push(resp.data)
           for (let i =0;i<this.info.comments.length;i++) {
-            axios.get(`http://${ip}.${port}/api/user/`+this.info.comments[i].user, {
+            axios.get(`https://${ip}.${port}/api/user/`+this.info.comments[i].user, {
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }

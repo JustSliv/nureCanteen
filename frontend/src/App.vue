@@ -567,7 +567,7 @@ export default {
     }
   },
   mounted() {
-    axios.get(`http://${ip}.${port}/api/product/all`)
+    axios.get(`https://${ip}.${port}/api/product/all`)
       .then(resp => {
         this.info.products = resp.data
       })

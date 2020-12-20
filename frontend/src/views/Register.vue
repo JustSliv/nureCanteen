@@ -277,7 +277,7 @@
     methods: {
       doRegist() {
         if ((this.login && this.password) !== "") {
-          axios.post(`http://${ip}.${port}/api/register`, {
+          axios.post(`https://${ip}.${port}/api/register`, {
             username: this.login,
             password: this.password,
             fName: this.fname,
@@ -292,7 +292,7 @@
             this.alertSuccess = true
             axios({
               method: "POST",
-              url: `http://${ip}.${port}/api/authenticate`,
+              url: `https://${ip}.${port}/api/authenticate`,
               data: {
                 username: this.login,
                 password: this.password

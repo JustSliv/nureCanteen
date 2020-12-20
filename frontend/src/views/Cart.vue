@@ -252,12 +252,12 @@
     },
     mounted() {
       if (localStorage['sid'] !== undefined) {
-        axios.get(`http://${ip}.${port}/api/user`,{
+        axios.get(`https://${ip}.${port}/api/user`,{
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(resp => {
-          axios.get(`http://${ip}.${port}/api/basket/user/` + resp.data.id, {
+          axios.get(`https://${ip}.${port}/api/basket/user/` + resp.data.id, {
             headers: {
               Authorization: 'Bearer ' + localStorage['sid']
             }
@@ -290,14 +290,14 @@
         }
         axios({
           method: 'GET',
-          url: `http://${ip}.${port}/api/user`,
+          url: `https://${ip}.${port}/api/user`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(user => {
           axios({
             method: 'POST',
-            url: `http://${ip}.${port}/api/check/`,
+            url: `https://${ip}.${port}/api/check/`,
             data: {
               user_id: user.data.id,
               canteen: this.info.userInfo.activeCanteen,
@@ -310,13 +310,13 @@
           }).then(resp => {
             axios({
               method: 'PUT',
-              url: `http://${ip}.${port}/api/check/`+resp.data.check_id,
+              url: `https://${ip}.${port}/api/check/`+resp.data.check_id,
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }})
             axios({
               method: 'DELETE',
-              url: `http://${ip}.${port}/api/basket/user/`+user.data.id+'/'+resp.data.check_id,
+              url: `https://${ip}.${port}/api/basket/user/`+user.data.id+'/'+resp.data.check_id,
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }
