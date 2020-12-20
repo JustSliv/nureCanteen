@@ -220,6 +220,4 @@ public class User {
       this.passwordConfirm = passwordConfirm;
       this.authorities = authorities;
    }
-
-
 }

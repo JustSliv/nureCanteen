@@ -27,14 +27,6 @@ public class LogoutFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_logout, container, false);
 
         startActivity(new Intent(getActivity(), MainActivity.class));
-        
-        final TextView textView = root.findViewById(R.id.text_logout);
-        logoutViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
     }
 }

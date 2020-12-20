@@ -35,6 +35,7 @@ public class UserRestController {
 
    @GetMapping("/user")
    public ResponseEntity<User> getActualUser() {
+
       return ResponseEntity.ok(userService.getUserWithAuthorities().get());
    }
 
