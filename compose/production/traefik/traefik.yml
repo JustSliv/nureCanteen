@@ -1,0 +1,71 @@
+log:
+  level: INFO
+
+entryPoints:
+  web:
+    # http
+    address: ":80"
+  web-secure:
+    # https
+    address: ":443"
+
+certificatesResolvers:
+  letsencrypt:
+    # https://docs.traefik.io/master/https/acme/#lets-encrypt
+    acme:
+      email: "admin@csgotrade.org"
+      storage: /etc/traefik/acme/acme.json
+      # https://docs.traefik.io/master/https/acme/#httpchallenge
+      httpChallenge:
+        entryPoint: web
+
+http:
+  routers:
+    backend-router:
+      rule: "Host(`api.csgotrade.org`)"
+      entryPoints:
+        - web-secure
+      service: fastapi_server
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
+
+    frontend-router:
+      rule: "Host(`csgotrade.org`)"
+      entryPoints:
+        - web
+      middlewares:
+        - redirect
+      service: frontend
+
+    frontend-secure-router:
+      rule: "Host(`csgotrade.org`)"
+      entryPoints:
+        - web-secure
+      service: frontend
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
+
+  middlewares:
+    redirect:
+      # https://docs.traefik.io/master/middlewares/redirectscheme/
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  services:
+    frontend:
+      loadBalancer:
+        servers:
+          - url: http://frontend:8080
+    fastapi_server:
+      loadBalancer:
+        servers:
+          - url: http://fastapi_server:8000
+
+providers:
+  # https://docs.traefik.io/master/providers/file/
+  file:
+    filename: /etc/traefik/traefik.yml
+    watch: true

@@ -1,0 +1,40 @@
+version: '3.8'
+
+volumes:
+  production_traefik: {}
+  postgres_data: {}
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:12-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=canteen
+      - POSTGRES_PASSWORD=canteen
+      - POSTGRES_DB=canteen
+
+    frontend:
+      container_name: frontend
+      image: nurecanteen_production_frontend
+      build:
+        context: .
+        dockerfile: ./compose/production/frontend/Dockerfile
+      volumes:
+        - ./frontend:/app
+        - /app/node_modules
+
+    backend: &backend
+      container_name: backend
+      image: nurecanteen_production_backend
+      build:
+        context: .
+        dockerfile: ./compose/production/backend/Dockerfile
+      volumes:
+        - ./backend:/app
+      env_file:
+        - ./.envs/.local/.backend
+      depends_on:
+        - postgres
+        - redis
