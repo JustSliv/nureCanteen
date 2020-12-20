@@ -1,6 +1,7 @@
 package org.canteen.security.rest;
 
 import org.canteen.security.model.Authority;
+import org.canteen.Repositories.BasketRepo;
 import org.canteen.security.model.User;
 import org.canteen.security.repository.UserRepository;
 import org.canteen.security.service.UserService;
