@@ -115,8 +115,8 @@
 </template>
 
 <script>
-const ip = 'localhost'
-const port = 25016;
+const ip = 'nurecanteen'
+const port = 'pp.ua';
 const axios = require('axios')
 
 export default {
@@ -150,14 +150,14 @@ export default {
     // подтверждение нажатия на кнопку в корзину
     toCart() {
       this.dialog = false;
-      axios.get(`http://${ip}:${port}/api/user`, {
+      axios.get(`http://${ip}.${port}/api/user`, {
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(resp => {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/basket/user/`+resp.data.id,
+          url: `http://${ip}.${port}/api/basket/user/`+resp.data.id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -169,7 +169,7 @@ export default {
             duplItem.count += parseInt(this.countProducts)
             axios({
               method: 'PUT',
-              url: `http://${ip}:${port}/api/basket/`+duplItem.basket_id,
+              url: `http://${ip}.${port}/api/basket/`+duplItem.basket_id,
               data: {
                 count: duplItem.count
               },
@@ -182,7 +182,7 @@ export default {
           } else {
             axios({
               method: 'POST',
-              url: `http://${ip}:${port}/api/basket/`,
+              url: `http://${ip}.${port}/api/basket/`,
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               },

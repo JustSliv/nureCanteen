@@ -651,8 +651,8 @@
 <script>
 
   const axios = require('axios');
-  const ip = 'localhost'
-  const port = 25016;
+  const ip = 'nurecanteen'
+  const port = 'pp.ua';
   export default {
     name: "Cabinet",
     data() {
@@ -1141,7 +1141,7 @@
       editMyData() {
         if (this.checkChange() && !this.editAlertSuccess) {
           // sending POST
-          axios.put(`http://${ip}:${port}/api/user`,{
+          axios.put(`http://${ip}.${port}/api/user`,{
             fName: this.info.user_info.fName,
             lName: this.info.user_info.lName,
             email: this.info.user_info.email,
@@ -1153,7 +1153,7 @@
               Authorization: 'Bearer ' + localStorage['sid']
             }
           }).then(() => {
-            axios.get(`http://${ip}:${port}/api/user`, {
+            axios.get(`http://${ip}.${port}/api/user`, {
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }
@@ -1263,7 +1263,7 @@
       }
     },
     mounted() {
-      axios.get(`http://${ip}:${port}/api/user`, {
+      axios.get(`http://${ip}.${port}/api/user`, {
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
@@ -1342,14 +1342,14 @@
         }
       }).catch(err => console.error(err))
 
-      axios.get(`http://${ip}:${port}/api/user`, {
+      axios.get(`http://${ip}.${port}/api/user`, {
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(user_id => {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/basket/all`,
+          url: `http://${ip}.${port}/api/basket/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -1374,7 +1374,7 @@
           if (nanObject) {
             axios({
               method: 'GET',
-              url: `http://${ip}:${port}/api/product/`+this.info.last_buy.product_id
+              url: `http://${ip}.${port}/api/product/`+this.info.last_buy.product_id
             }).then(resp => {
               this.info.last_buy.items[0] = resp.data
             })
@@ -1397,7 +1397,7 @@
             } else {
               axios({
                 method: 'GET',
-                url: `http://${ip}:${port}/api/product/`+this.info.orders[i].product_id,
+                url: `http://${ip}.${port}/api/product/`+this.info.orders[i].product_id,
                 headers: {
                   Authorization: 'Bearer ' + localStorage['sid']
                 }

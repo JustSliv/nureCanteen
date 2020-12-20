@@ -508,8 +508,8 @@
 
 <script>
 import ProductInSaleList from "@/components/ProductInSaleList";
-const ip = 'localhost'
-const port = 25016;
+const ip = 'nurecanteen'
+const port = 'pp.ua';
 const axios = require('axios')
 
 export default {
@@ -1038,7 +1038,7 @@ export default {
   mounted() {
     axios({
       method: 'GET',
-      url: `http://${ip}:${port}/api/product/all`,
+      url: `http://${ip}.${port}/api/product/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1048,7 +1048,7 @@ export default {
 
     axios({
       method: 'GET',
-      url: `http://${ip}:${port}/api/user/all`,
+      url: `http://${ip}.${port}/api/user/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1058,7 +1058,7 @@ export default {
 
     axios({
       method: 'GET',
-      url: `http://${ip}:${port}/api/basket/all`,
+      url: `http://${ip}.${port}/api/basket/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1068,7 +1068,7 @@ export default {
         if (!isNaN(Number(item.product_id))) {
           axios({
             method: 'GET',
-            url: `http://${ip}:${port}/api/product/`+item.product_id,
+            url: `http://${ip}.${port}/api/product/`+item.product_id,
             headers: {
               Authorization: 'Bearer ' + localStorage['sid']
             }
@@ -1084,7 +1084,7 @@ export default {
       if (this.chosenFilterOrders === this.curLocale.tabs.tab4.context.filters[0]) {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/basket/all`,
+          url: `http://${ip}.${port}/api/basket/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -1094,7 +1094,7 @@ export default {
             if (!isNaN(Number(item.product_id))) {
               axios({
                 method: 'GET',
-                url: `http://${ip}:${port}/api/product/`+item.product_id,
+                url: `http://${ip}.${port}/api/product/`+item.product_id,
                 headers: {
                   Authorization: 'Bearer ' + localStorage['sid']
                 }
@@ -1120,7 +1120,7 @@ export default {
     createUser() {
       axios({
         method: 'POST',
-        url: `http://${ip}:${port}/api/register`,
+        url: `http://${ip}.${port}/api/register`,
         data: this.userForm,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
@@ -1128,7 +1128,7 @@ export default {
       }).then(resp => {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/user/`+resp.data.id,
+          url: `http://${ip}.${port}/api/user/`+resp.data.id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }

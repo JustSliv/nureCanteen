@@ -95,8 +95,8 @@
 
 <script>
   const axios = require('axios')
-  const ip = 'localhost'
-  const port = 25016;
+  const ip = 'nurecanteen'
+  const port = 'pp.ua';
   export default {
     name: "Auth",
     data() {
@@ -198,7 +198,7 @@
           if (this.login && this.pwd !== '') {
             axios({
               method: "POST",
-              url: `http://${ip}:${port}/api/authenticate`,
+              url: `http://${ip}.${port}/api/authenticate`,
               data: {
                 username: this.login,
                 password: this.pwd

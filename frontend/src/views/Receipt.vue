@@ -90,8 +90,8 @@
 </template>
 
 <script>
-  const ip = 'localhost'
-  const port = 25016;
+  const ip = 'nurecanteen'
+  const port = 'pp.ua';
   const axios = require('axios')
 
   export default {
@@ -170,14 +170,14 @@
     mounted() {
       axios({
         method: 'GET',
-        url: `http://${ip}:${port}/api/user`,
+        url: `http://${ip}.${port}/api/user`,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(user => {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/check/`+user.data.id,
+          url: `http://${ip}.${port}/api/check/`+user.data.id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }

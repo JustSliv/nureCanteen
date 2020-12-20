@@ -127,8 +127,8 @@
 
 <script>
   const axios = require('axios')
-  const ip = 'localhost'
-  const port = 25016;
+  const ip = 'nurecanteen'
+  const port = 'pp.ua';
   export default {
     name: "Register",
     data() {
@@ -277,7 +277,7 @@
     methods: {
       doRegist() {
         if ((this.login && this.password) !== "") {
-          axios.post(`http://${ip}:${port}/api/register`, {
+          axios.post(`http://${ip}.${port}/api/register`, {
             username: this.login,
             password: this.password,
             fName: this.fname,
@@ -292,7 +292,7 @@
             this.alertSuccess = true
             axios({
               method: "POST",
-              url: `http://${ip}:${port}/api/authenticate`,
+              url: `http://${ip}.${port}/api/authenticate`,
               data: {
                 username: this.login,
                 password: this.password

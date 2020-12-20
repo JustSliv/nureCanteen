@@ -62,8 +62,8 @@
 <script>
   import ProductList from "../components/ProductList";
 
-  const ip = 'localhost'
-  const port = 25016;
+  const ip = 'nurecanteen'
+  const port = 'pp.ua';
   const axios = require('axios')
 
   export default {
@@ -225,7 +225,7 @@
         for (let i=0;i<this.info.filters.length;i++) {
           let item = this.info.filters[i]
           if (item.id === filter_id) {
-            axios.get(`http://${ip}:${port}/api/product/all`, {
+            axios.get(`http://${ip}.${port}/api/product/all`, {
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }
@@ -266,7 +266,7 @@
       }
     },
     async mounted() {
-      axios.get(`http://${ip}:${port}/api/product/all`)
+      axios.get(`http://${ip}.${port}/api/product/all`)
           .then(resp => {
             if (localStorage['category'] !== undefined) {
               this.info.products = resp.data.filter(i => i.category === localStorage['category'])

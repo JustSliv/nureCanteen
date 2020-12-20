@@ -191,8 +191,8 @@
 </template>
 
 <script>
-const ip = 'localhost'
-const port = 25016;
+const ip = 'nurecanteen'
+const port = 'pp.ua';
 const axios = require('axios')
 
 export default {
@@ -233,7 +233,7 @@ export default {
     delProduct() {
       axios({
         method: 'DELETE',
-        url: `http://${ip}:${port}/api/product/`+this.product.product_id,
+        url: `http://${ip}.${port}/api/product/`+this.product.product_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
@@ -245,7 +245,7 @@ export default {
     submitEditForm() {
       axios({
         method: 'PUT',
-        url: `http://${ip}:${port}/api/product/`+this.product.product_id,
+        url: `http://${ip}.${port}/api/product/`+this.product.product_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         },
@@ -253,7 +253,7 @@ export default {
       }).then(() => {
         axios({
           method: 'GET',
-          url: `http://${ip}:${port}/api/product/`+this.product.product_id,
+          url: `http://${ip}.${port}/api/product/`+this.product.product_id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }

@@ -49,8 +49,8 @@
 </template>
 
 <script>
-const ip = 'localhost'
-const port = 25016;
+const ip = 'nurecanteen'
+const port = 'pp.ua';
 const axios = require('axios')
 
 export default {
@@ -61,7 +61,7 @@ export default {
       this.cartItem.count++;
       axios({
         method: 'PUT',
-        url: `http://${ip}:${port}/api/basket/`+this.cartItem.basket_id,
+        url: `http://${ip}.${port}/api/basket/`+this.cartItem.basket_id,
         data: {
           count: this.cartItem.count
         },
@@ -71,7 +71,7 @@ export default {
       })
       axios({
         method: 'GET',
-        url: `http://${ip}:${port}/api/basket/` + this.cartItem.basket_id,
+        url: `http://${ip}.${port}/api/basket/` + this.cartItem.basket_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
@@ -81,21 +81,21 @@ export default {
       if (this.cartItem.count <= 1) {
         axios({
           method: 'DELETE',
-          url: `http://${ip}:${port}/api/basket/`+this.cartItem.basket_id,
+          url: `http://${ip}.${port}/api/basket/`+this.cartItem.basket_id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(() => {
           axios({
             method: 'GET',
-            url: `http://${ip}:${port}/api/user`,
+            url: `http://${ip}.${port}/api/user`,
             headers: {
               Authorization: 'Bearer ' + localStorage['sid']
             }
           }).then(user => {
             axios({
               method: 'GET',
-              url: `http://${ip}:${port}/api/basket/user/` + user.data.id,
+              url: `http://${ip}.${port}/api/basket/user/` + user.data.id,
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }
@@ -111,7 +111,7 @@ export default {
         this.cartItem.count--
         axios({
           method: 'PUT',
-          url: `http://${ip}:${port}/api/basket/`+this.cartItem.basket_id,
+          url: `http://${ip}.${port}/api/basket/`+this.cartItem.basket_id,
           data: {
             count: this.cartItem.count
           },

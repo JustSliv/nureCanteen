@@ -269,8 +269,8 @@
 
 <script>
 import CategorySubList from "@/components/CategorySubList";
-const ip = 'localhost'
-const port = 25016;
+const ip = 'nurecanteen'
+const port = 'pp.ua';
 const axios = require('axios')
 
 export default {
@@ -567,7 +567,7 @@ export default {
     }
   },
   mounted() {
-    axios.get(`http://${ip}:${port}/api/product/all`)
+    axios.get(`http://${ip}.${port}/api/product/all`)
       .then(resp => {
         this.info.products = resp.data
       })
