@@ -31,5 +31,13 @@ public interface BasketRepo extends JpaRepository<Basket, Long> {
    @Query(value = "UPDATE basket SET active = false  WHERE check_id = :check_id AND check_id IS NULL", nativeQuery = true)
    @Transactional
    void changeActiveMobile(Long check_id);
+   
+   @Query(value = "SELECT COUNT(*) FROM authority", nativeQuery = true)
+   int getAuthCount();
+
+   @Modifying
+   @Transactional
+   @Query(value = "INSERT INTO authority (name) VALUES (ROLE_USER)", nativeQuery = true)
+   void setAuth();
 
 }
