@@ -24,9 +24,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,20 +40,21 @@ public class CartActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_cart);
 
-      recyclerViewCart = (RecyclerView) findViewById(R.id.cart);
+      recyclerViewCart = findViewById(R.id.cart);
       recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
       recyclerViewCart.setHasFixedSize(true);
 
       displayCartItems();
 
-      pay = (Button) findViewById(R.id.pay);
+      pay = findViewById(R.id.pay);
       emptyCart = findViewById(R.id.cancel);
 
       pay.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
-            if(Basket.products.size() > 0){
+            if (Basket.products.size() > 0) {
                createCheck();
+               Basket.totalAmount = 0;
                startActivity(new Intent(CartActivity.this, MenuActivity.class));
             } else {
                Toast.makeText(CartActivity.this, "Корзина пуста!", Toast.LENGTH_LONG).show();
@@ -67,7 +66,7 @@ public class CartActivity extends AppCompatActivity {
       emptyCart.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
-            if(Basket.products.size() > 0){
+            if (Basket.products.size() > 0) {
                showEmptyCarWindow();
             } else {
                Toast.makeText(CartActivity.this, "Корзина пуста!", Toast.LENGTH_LONG).show();
@@ -76,7 +75,7 @@ public class CartActivity extends AppCompatActivity {
       });
    }
 
-   private void createCheck(){
+   private void createCheck() {
       JSONObject js = new JSONObject();
       try {
          js.put("canteen", "Столова №1");
@@ -120,16 +119,16 @@ public class CartActivity extends AppCompatActivity {
       queue.add(jsonObjReq);
    }
 
-   private void getProduct(String checkID){
+   private void getProduct(String checkID) {
       ArrayList<String> product = new ArrayList<>();
       int size = 0;
 
-      for( int j = 1; Basket.iterator < Basket.products.size(); Basket.iterator++, j++){
+      for (int j = 1; Basket.iterator < Basket.products.size(); Basket.iterator++, j++) {
          product.add(size, Basket.products.get(Basket.iterator));
          size++;
 
-         if(j % 3 == 0){
-            createBasket(checkID, product);
+         if (j % 3 == 0) {
+            createBasket(product);
             product = new ArrayList<>();
             size = 0;
          }
@@ -139,32 +138,12 @@ public class CartActivity extends AppCompatActivity {
       Basket.iterator = 0;
    }
 
-   private void createBasket(String checkID, ArrayList<String> products){
+   private void createBasket(ArrayList<String> products) {
       JSONObject js = new JSONObject();
+
       try {
-         StringBuilder stringBuilder = new StringBuilder();
-//         stringBuilder.append("{\"id\": ").append(User.id).append("}");
-//         System.out.println(stringBuilder.toString());
-
-//         Long id = Long.getLong(User.id);
-//         Long check = Long.getLong(checkID);
-         System.out.println(User.id);
          js.put("user", User.id);
-         System.out.println(Basket.checkId);
          js.put("check_id", Basket.checkId);
-//         js.put("user", id);
-
-//         stringBuilder = new StringBuilder();
-//         stringBuilder.append("{\"id\": ").append(checkID).append("}");
-//         System.out.println(stringBuilder.toString());
-
-
-
-//         js.put("check_id", );
-//         js.put("check_id", Integer.getInteger(checkID));
-
-//         js.put("user", "{\"id\": " + User.id + "}");
-//         js.put("check_id",  "{\"id\": 1}");
          js.put("productName", products.get(0));
          js.put("price", products.get(1));
          js.put("count", products.get(2));
@@ -220,6 +199,7 @@ public class CartActivity extends AppCompatActivity {
          @Override
          public void onClick(DialogInterface dialogInterface, int which) {
             Basket.products = new ArrayList<>();
+            Basket.totalAmount = 0;
             startActivity(new Intent(CartActivity.this, MenuActivity.class));
             finish();
          }
@@ -228,9 +208,9 @@ public class CartActivity extends AppCompatActivity {
    }
 
    private void displayCartItems() {
-         if(Basket.products.size() > 0){
-            CartAdapter cartAdapter = new CartAdapter(this, Basket.products);
-            recyclerViewCart.setAdapter(cartAdapter);
-         }
+      if (Basket.products.size() > 0) {
+         CartAdapter cartAdapter = new CartAdapter(this, Basket.products);
+         recyclerViewCart.setAdapter(cartAdapter);
+      }
    }
 }

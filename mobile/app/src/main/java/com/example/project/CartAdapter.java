@@ -11,11 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 
-public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder>{
+public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
    Context context;
    FragmentActivity activity;
    int iterator = 0;
@@ -47,7 +45,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
       return products.size() / 3;
    }
 
-   static class  CartViewHolder extends RecyclerView.ViewHolder {
+   static class CartViewHolder extends RecyclerView.ViewHolder {
 
       TextView txtProductName, txtProductPrice, txtProductQuantity;
 

@@ -1,17 +1,18 @@
 package com.example.project;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,7 +34,8 @@ public class CheckActivity extends AppCompatActivity {
    private RecyclerView recyclerViewCart;
    Spinner spinner;
    ArrayList<String> checks;
-   TextView checkID, canteen, cardSum, data;
+   TextView checkID, canteen, cardSum, data, checkText;
+   RelativeLayout relativeLayout;
 
 
    @Override
@@ -52,11 +54,15 @@ public class CheckActivity extends AppCompatActivity {
       cardSum = findViewById(R.id.cardSum);
       data = findViewById(R.id.data);
 
+      checkText = findViewById(R.id.checkText);
+      relativeLayout = findViewById(R.id.checkRelativeLayout);
+
+
       getCheckID();
 
    }
 
-   private void setSpinner(int checkID){
+   private void setSpinner(int checkID) {
       checks.add(String.valueOf(checkID));
       ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, checks);
       adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -78,6 +84,7 @@ public class CheckActivity extends AppCompatActivity {
       };
       spinner.setOnItemSelectedListener(itemSelectedListener);
    }
+
    private void getCheckID() {
       String urlGetCheckID = "http://192.168.0.114:25016/api/check/getCheckID/" + User.id;
 
@@ -90,12 +97,20 @@ public class CheckActivity extends AppCompatActivity {
                   JSONArray jsonarray = new JSONArray(response.toString());
 
                   checks = new ArrayList<>();
-                   for (int i = 0; i < jsonarray.length(); i++) {
-//                      getCheck(jsonarray.getInt(i));
+                  for (int i = 0; i < jsonarray.length(); i++) {
                      setSpinner(jsonarray.getInt(i));
-                   }
+                  }
 
-//                  getCheck(jsonarray.getInt(jsonarray.length() - 1));
+                  if (checks.size() > 0) {
+                     relativeLayout.setVisibility(View.VISIBLE);
+                     checkText.setVisibility(View.VISIBLE);
+                     spinner.setVisibility(View.VISIBLE);
+                  } else {
+                     relativeLayout.setVisibility(View.INVISIBLE);
+                     checkText.setVisibility(View.INVISIBLE);
+                     spinner.setVisibility(View.INVISIBLE);
+                  }
+
                } catch (JSONException e) {
                   e.printStackTrace();
                }
@@ -239,7 +254,6 @@ public class CheckActivity extends AppCompatActivity {
 //                  Check.basket.add("Общая сумма: " + cardSum);
 
 
-
                   displayCartItems(checkID, canteen, date, time, cardSum);
                } catch (JSONException e) {
                   e.printStackTrace();
@@ -271,7 +285,7 @@ public class CheckActivity extends AppCompatActivity {
 
    @SuppressLint("SetTextI18n")
    private void displayCartItems(int checkIDTxt, String canteenTxt, String dateTxt, String timeTxt, String cardSumTxt) {
-      checkID.setText("Чек № "+ checkIDTxt);
+      checkID.setText("Чек № " + checkIDTxt);
       canteen.setText(canteenTxt);
       data.setText("Дата и время оплаты: " + dateTxt + " " + timeTxt);
       cardSum.setText("Общая сумма: " + cardSumTxt);

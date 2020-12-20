@@ -95,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
             getToken(username, password);
             User.username = username;
             User.password = password;
-//            startActivity(new Intent(MainActivity.this, MenuActivity.class));
-//            finish();
+
          }
       });
 
@@ -204,11 +203,9 @@ public class MainActivity extends AppCompatActivity {
                try {
                   String accessToken = response.getString("id_token");
                   getData(accessToken);
-//                  Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_LONG).show();
                   User.token = accessToken;
                   startActivity(new Intent(MainActivity.this, MenuActivity.class));
                   finish();
-                  //Toast.makeText(MainActivity.this, accessToken, Toast.LENGTH_LONG).show();
                } catch (JSONException e) {
                   e.printStackTrace();
                   Toast.makeText(MainActivity.this, "Fail" + e.toString(), Toast.LENGTH_LONG).show();

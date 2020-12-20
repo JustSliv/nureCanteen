@@ -32,20 +32,6 @@ public class MainCartAdapter extends RecyclerView.Adapter<MainCartAdapter.CartVi
       holder.productCount.setText(Check.basket.get(position + iterator));
       iterator++;
       holder.productPrice.setText(Check.basket.get(position + iterator));
-//      iterator++;
-//      holder.checkID.setText(Check.basket.get(position + iterator));
-//      iterator++;
-//      holder.canteen.setText(Check.basket.get(position + iterator));
-//
-//      iterator++;
-//      StringBuilder stringBuilder = new StringBuilder();
-//      stringBuilder.append("Дата и время оплаты: ").append(Check.basket.get(position + iterator)).append(" ");
-//      iterator++;
-//      stringBuilder.append(Check.basket.get(position + iterator)); // Data + time
-//
-//      holder.data.setText(stringBuilder.toString());
-//      iterator++;
-//      holder.cardSum.setText(Check.basket.get(position + iterator));
    }
 
    @Override

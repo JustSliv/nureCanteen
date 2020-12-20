@@ -1,8 +1,5 @@
 package com.example.project;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,9 +10,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Salads extends AppCompatActivity {
    public FloatingActionButton plus, minus, plus1, minus1, plus2, minus2;
@@ -173,46 +171,6 @@ public class Salads extends AppCompatActivity {
       });
    }
 
-//    private void showCheckoutWindow(){
-//        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-//        dialog.setTitle("Checkout");
-//        dialog.setMessage("Желаете перейти в");
-//
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        View checkout_window = inflater.inflate(R.layout.checkout_window, null);
-//        dialog.setView(checkout_window);
-//
-//        dialog.setNeutralButton("Отменить", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int which) {
-//                dialogInterface.dismiss();
-//            }
-//        });
-//
-////        dialog.setNegativeButton("Меню", new DialogInterface.OnClickListener() {
-////            @Override
-////            public void onClick(DialogInterface dialogInterface, int which) {
-////                FragmentManager fm = getSupportFragmentManager();
-////                HomeFragment homeFragment = new HomeFragment();
-////                fm.beginTransaction().replace(R.id.relativeLayoutSalads, homeFragment).commit();
-////                finish();
-////            }
-////        });
-//
-//       dialog.setPositiveButton("Корзина", new DialogInterface.OnClickListener() {
-//           @Override
-//           public void onClick(DialogInterface dialogInterface, int which) {
-//               SlideshowFragment slideshowFragment = new SlideshowFragment();
-//               FragmentManager fm = getSupportFragmentManager();
-//               FragmentTransaction ft = fm.beginTransaction();
-//               ft.replace(R.id.relativeLayoutSalads, slideshowFragment);
-//               ft.commit();
-//               finish();
-//           }
-//       });
-//        dialog.show();
-//    }
-
    private void showCheckoutWindow() {
       AlertDialog.Builder dialog = new AlertDialog.Builder(this);
       dialog.setTitle("Checkout");
@@ -233,40 +191,16 @@ public class Salads extends AppCompatActivity {
          @Override
          public void onClick(DialogInterface dialogInterface, int which) {
             checkProduct();
-            Basket.totalAmount = sumCount;
+            Basket.totalAmount = Basket.totalAmount + sumCount;
             startActivity(new Intent(Salads.this, MenuActivity.class));
             finish();
          }
       });
 
-
-//        dialog.setNegativeButton("Меню", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int which) {
-//                FragmentManager fm = getSupportFragmentManager();
-//                HomeFragment homeFragment = new HomeFragment();
-//                fm.beginTransaction().replace(R.id.relativeLayoutSalads, homeFragment).commit();
-//                finish();
-//            }
-//        });
-
-//       dialog.setPositiveButton("Корзина", new DialogInterface.OnClickListener() {
-//           @Override
-//           public void onClick(DialogInterface dialogInterface, int which) {
-//               SlideshowFragment slideshowFragment = new SlideshowFragment();
-//               FragmentManager fm = getSupportFragmentManager();
-//               FragmentTransaction ft = fm.beginTransaction();
-//               ft.replace(R.id.relativeLayoutSalads, slideshowFragment);
-//               ft.commit();
-//               finish();
-//           }
-//       });
       dialog.show();
    }
 
    public void checkProduct() {
-//      Basket.products = new ArrayList<>();
-
       if (count > 0) {
          Basket.products.add((String) textView4.getText());
          Basket.products.add((String) textView3.getText());
