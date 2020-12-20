@@ -22,7 +22,7 @@ certificatesResolvers:
 http:
   routers:
     backend-router:
-      rule: "Host(`nurecanteen.pp.ua`)"
+      rule: "Host(`api.nurecanteen.pp.ua`)"
       entryPoints:
         - web-secure
       service: backend
