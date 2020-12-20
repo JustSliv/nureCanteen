@@ -37,7 +37,7 @@ public interface BasketRepo extends JpaRepository<Basket, Long> {
 
    @Modifying
    @Transactional
-   @Query(value = "INSERT INTO authority (name) VALUES (ROLE_USER)", nativeQuery = true)
+   @Query(value = "INSERT INTO authority (name) VALUES ('ROLE_USER')", nativeQuery = true)
    void setAuth();
 
 }
