@@ -1,9 +1,13 @@
 FROM maven:3.6.3-jdk-11-slim
 
 COPY /compose/production/backend/entrypoint.sh /app/entrypoint.sh
-RUN apt-get update && apt-get install dos2unix && dos2unix /compose/production/backend/entrypoint.sh && chmod +x /compose/production/backend/entrypoint.sh
+
+# Backend
+COPY ./compose/production/backend/entrypoint.sh /start_backend
+RUN sed -i 's/\r$//g' /start_backend
+RUN chmod +x /start_backend
 
 #Start application
 WORKDIR /app
-ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["bash"]
+
+ADD /backend /app
