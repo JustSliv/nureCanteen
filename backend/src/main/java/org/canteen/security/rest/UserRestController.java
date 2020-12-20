@@ -22,7 +22,10 @@ public class UserRestController {
    private PasswordEncoder passwordEncoder;
    @Autowired
    private UserRepository userRepository;
-
+   
+   @Autowired
+   private BasketRepo basketRepo;
+   
    private final UserService userService;
 
 
@@ -43,6 +46,10 @@ public class UserRestController {
    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
    public ResponseEntity<User> saveUser(@RequestBody @Valid User user){
       HttpHeaders headers = new HttpHeaders();
+      
+      if(basketRepo.getAuthCount() == 0){
+         basketRepo.setAuth();
+      }
 
       if(user == null){
          System.out.println(user.getPassword());
