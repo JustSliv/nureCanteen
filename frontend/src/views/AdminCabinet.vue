@@ -86,6 +86,7 @@
                 x-large
                 absolute
                 elevation="10"
+                v-if="products.length >= 0"
                 @click="addProductDialog = true"
             >
               <v-icon large>

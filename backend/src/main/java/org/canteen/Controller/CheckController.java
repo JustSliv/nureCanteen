@@ -1,5 +1,6 @@
 package org.canteen.Controller;
 
+import org.canteen.Repositories.BasketRepo;
 import org.canteen.Repositories.CheckRepo;
 import org.canteen.Repositories.dto.CheckDTO;
 import org.canteen.models.Check;
@@ -14,12 +15,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static org.canteen.Controller.BasketController.check_id;
+import static org.canteen.Controller.BasketController.user_id;
+
 @RestController
 @RequestMapping("/api/check")
 public class CheckController {
 
    @Autowired
    private CheckRepo checkRepo;
+
+   @Autowired
+   private BasketRepo basketRepo;
 
    @GetMapping("/all")
    public ResponseEntity<List<Check>> allProducts(){
@@ -56,15 +63,16 @@ public class CheckController {
       checkRepo.setDate(currTime.format(formatter), check_id);
 
       checkRepo.setTime(currTime.format(formatter1), check_id);
+      basketRepo.changeActive(user_id, check_id);
       return ResponseEntity.ok("Все окей");
 
    }
 
    @DeleteMapping("/{id}")
-   public ResponseEntity<Check> deleteOne(@PathVariable Long id) {
-      checkRepo.deleteById(id);
+      public ResponseEntity<Check> deleteOne(@PathVariable Long id) {
+         checkRepo.deleteById(id);
 
-      return new ResponseEntity<>(HttpStatus.OK);
+         return new ResponseEntity<>(HttpStatus.OK);
    }
 
 }

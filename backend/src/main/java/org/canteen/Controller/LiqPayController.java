@@ -54,7 +54,7 @@ public class LiqPayController {
       if(sign != signature){
          return ResponseEntity.ok("Сигнатура неверна");
       }
-      basketRepo.changeActive(user_id, check_id);
+
       return ResponseEntity.ok("Сигнатура верна");
    }
 }

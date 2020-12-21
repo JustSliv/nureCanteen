@@ -14,6 +14,7 @@ public class Comment {
    @Id
    @Column(name = "comment_id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @SequenceGenerator(name = "COMMENT_SEQ", sequenceName = "COMMENT_SEQ", allocationSize = 1)
    private Long comment_id;
 
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)

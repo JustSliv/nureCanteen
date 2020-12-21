@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -23,10 +24,10 @@ public class UserRestController {
    private PasswordEncoder passwordEncoder;
    @Autowired
    private UserRepository userRepository;
-   
+
    @Autowired
    private BasketRepo basketRepo;
-   
+
    private final UserService userService;
 
 
@@ -39,6 +40,11 @@ public class UserRestController {
       return ResponseEntity.ok(userRepository.findById(user_id).get());
    }
 
+   @GetMapping("/user/all")
+   public ResponseEntity<List<User>> getUsers() {
+      return ResponseEntity.ok(userRepository.findAll());
+   }
+
    @GetMapping("/user")
    public ResponseEntity<User> getActualUser() {
       return ResponseEntity.ok(userService.getUserWithAuthorities().get());
@@ -47,7 +53,7 @@ public class UserRestController {
    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
    public ResponseEntity<User> saveUser(@RequestBody @Valid User user){
       HttpHeaders headers = new HttpHeaders();
-      
+
       if(basketRepo.getAuthCount() == 0){
          basketRepo.setAuth();
       }
@@ -100,6 +106,45 @@ public class UserRestController {
       }
 
       this.userService.save(userToChange);
+
+      return new ResponseEntity<>(user, headers, HttpStatus.OK);
+   }
+
+   @RequestMapping(value = "/user/{user_id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+   public ResponseEntity<User> updateUserById(@RequestBody User user, @PathVariable("user_id") Long user_id){
+      HttpHeaders headers = new HttpHeaders();
+
+      User authUser = userRepository.findById(user_id).get();
+
+
+      if(user.getPhone() != null) {
+         authUser.setPhone(user.getPhone());
+      }
+      if(user.getlName() != null) {
+         authUser.setlName(user.getlName());
+      }
+      if(user.getfName() != null) {
+         authUser.setfName(user.getfName());
+      }
+      if(user.getEmail() != null) {
+         authUser.setEmail(user.getEmail());
+      }
+      if(user.getAge() != null) {
+         authUser.setAge(user.getAge());
+      }
+      if(user.getPersonGroup() != null) {
+         authUser.setPersonGroup(user.getPersonGroup());
+      }
+      if(user.getAvatar() != null){
+         authUser.setPersonGroup(user.getAvatar());
+      }
+
+      if(user == null){
+         System.out.println(user.getlName());
+         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+
+      this.userService.save(authUser);
 
       return new ResponseEntity<>(user, headers, HttpStatus.OK);
    }

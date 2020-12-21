@@ -14,6 +14,7 @@ public class Basket {
    @Id
    @Column(name = "basket_id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @SequenceGenerator(name = "BASKET_SEQ", sequenceName = "BASKET_SEQ", allocationSize = 1)
    private Long basket_id;
 
    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)

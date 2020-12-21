@@ -18,6 +18,7 @@ public class Check {
    @Id
    @Column(name = "check_id", unique = true)
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @SequenceGenerator(name = "CHECK_SEQ", sequenceName = "CHECK_SEQ", allocationSize = 1)
    private Long check_id;
 
    @JsonIgnore
