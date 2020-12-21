@@ -233,7 +233,7 @@ export default {
     delProduct() {
       axios({
         method: 'DELETE',
-        url: `https://${ip}.${port}/api/product/`+this.product.product_id,
+        url: `https://api.${ip}.${port}/api/product/`+this.product.product_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
@@ -242,7 +242,7 @@ export default {
         this.finishDel = true
         axios({
           method: 'GET',
-          url: `https://${ip}.${port}/api/product/all`,
+          url: `https://api.${ip}.${port}/api/product/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -256,7 +256,7 @@ export default {
     submitEditForm() {
       axios({
         method: 'PUT',
-        url: `https://${ip}.${port}/api/product/`+this.product.product_id,
+        url: `https://api.${ip}.${port}/api/product/`+this.product.product_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         },
@@ -264,7 +264,7 @@ export default {
       }).then(() => {
         axios({
           method: 'GET',
-          url: `https://${ip}.${port}/api/product/`+this.product.product_id,
+          url: `https://api.${ip}.${port}/api/product/`+this.product.product_id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }

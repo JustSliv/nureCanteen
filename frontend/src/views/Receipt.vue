@@ -170,14 +170,14 @@
     mounted() {
       axios({
         method: 'GET',
-        url: `https://${ip}.${port}/api/user`,
+        url: `https://api.${ip}.${port}/api/user`,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(user => {
         axios({
           method: 'GET',
-          url: `https://${ip}.${port}/api/check/`+user.data.id,
+          url: `https://api.${ip}.${port}/api/check/`+user.data.id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }

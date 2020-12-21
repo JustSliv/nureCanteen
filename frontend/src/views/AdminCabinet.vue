@@ -1080,7 +1080,7 @@ export default {
   mounted() {
     axios({
       method: 'GET',
-      url: `https://${ip}.${port}/api/product/all`,
+      url: `https://api.${ip}.${port}/api/product/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1090,7 +1090,7 @@ export default {
 
     axios({
       method: 'GET',
-      url: `https://${ip}.${port}/api/user/all`,
+      url: `https://api.${ip}.${port}/api/user/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1100,7 +1100,7 @@ export default {
 
     axios({
       method: 'GET',
-      url: `https://${ip}.${port}/api/basket/all`,
+      url: `https://api.${ip}.${port}/api/basket/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1110,7 +1110,7 @@ export default {
         if (!isNaN(Number(item.product_id)) && item.active === false) {
           axios({
             method: 'GET',
-            url: `https://${ip}.${port}/api/product/`+item.product_id,
+            url: `https://api.${ip}.${port}/api/product/`+item.product_id,
             headers: {
               Authorization: 'Bearer ' + localStorage['sid']
             }
@@ -1127,7 +1127,7 @@ export default {
       this.productForm.total_count = this.productForm.available_count
       axios({
         method: 'POST',
-        url: `https://${ip}.${port}/api/product/`,
+        url: `https://api.${ip}.${port}/api/product/`,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         },
@@ -1137,7 +1137,7 @@ export default {
         this.alertProductFormInfo[1] = 'Продукт успешно добавлен'
         axios({
           method: 'GET',
-          url: `https://${ip}.${port}/api/product/all`,
+          url: `https://api.${ip}.${port}/api/product/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -1155,7 +1155,7 @@ export default {
       if (this.chosenFilterOrders === this.curLocale.tabs.tab4.context.filters[0]) {
         axios({
           method: 'GET',
-          url: `https://${ip}.${port}/api/basket/all`,
+          url: `https://api.${ip}.${port}/api/basket/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -1165,7 +1165,7 @@ export default {
             if (!isNaN(Number(item.product_id))) {
               axios({
                 method: 'GET',
-                url: `https://${ip}.${port}/api/product/`+item.product_id,
+                url: `https://api.${ip}.${port}/api/product/`+item.product_id,
                 headers: {
                   Authorization: 'Bearer ' + localStorage['sid']
                 }
@@ -1191,7 +1191,7 @@ export default {
     createUser() {
       axios({
         method: 'POST',
-        url: `https://${ip}.${port}/api/register`,
+        url: `https://api.${ip}.${port}/api/register`,
         data: this.userForm,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
@@ -1199,7 +1199,7 @@ export default {
       }).then(resp => {
         axios({
           method: 'GET',
-          url: `https://${ip}.${port}/api/user/`+resp.data.id,
+          url: `https://api.${ip}.${port}/api/user/`+resp.data.id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }

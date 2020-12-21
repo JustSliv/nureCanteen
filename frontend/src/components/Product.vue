@@ -150,14 +150,14 @@ export default {
     // подтверждение нажатия на кнопку в корзину
     toCart() {
       this.dialog = false;
-      axios.get(`https://${ip}.${port}/api/user`, {
+      axios.get(`https://api.${ip}.${port}/api/user`, {
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(resp => {
         axios({
           method: 'GET',
-          url: `https://${ip}.${port}/api/basket/user/`+resp.data.id,
+          url: `https://api.${ip}.${port}/api/basket/user/`+resp.data.id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -169,7 +169,7 @@ export default {
             duplItem.count += parseInt(this.countProducts)
             axios({
               method: 'PUT',
-              url: `https://${ip}.${port}/api/basket/`+duplItem.basket_id,
+              url: `https://api.${ip}.${port}/api/basket/`+duplItem.basket_id,
               data: {
                 count: duplItem.count
               },
@@ -182,7 +182,7 @@ export default {
           } else {
             axios({
               method: 'POST',
-              url: `https://${ip}.${port}/api/basket/`,
+              url: `https://api.${ip}.${port}/api/basket/`,
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               },
