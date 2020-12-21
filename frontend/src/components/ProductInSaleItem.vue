@@ -197,7 +197,7 @@ const axios = require('axios')
 
 export default {
   name: "ProductInSaleItem",
-  props: ['product', 'updater', 'locale'],
+  props: ['product', 'updater', 'locale', 'updateProducts'],
   data() {
     return {
       editDialog: false,
@@ -233,19 +233,30 @@ export default {
     delProduct() {
       axios({
         method: 'DELETE',
-        url: `https://api.${ip}.${port}/api/product/`+this.product.product_id,
+        url: `https://${ip}.${port}/api/product/`+this.product.product_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(() => {
         this.delDialog = false
         this.finishDel = true
+        axios({
+          method: 'GET',
+          url: `https://${ip}.${port}/api/product/all`,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
+        }).then(resp => {
+          this.updateProducts({
+            items: resp.data
+          })
+        })
       })
     },
     submitEditForm() {
       axios({
         method: 'PUT',
-        url: `https://api.${ip}.${port}/api/product/`+this.product.product_id,
+        url: `https://${ip}.${port}/api/product/`+this.product.product_id,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         },
@@ -253,7 +264,7 @@ export default {
       }).then(() => {
         axios({
           method: 'GET',
-          url: `https://api.${ip}.${port}/api/product/`+this.product.product_id,
+          url: `https://${ip}.${port}/api/product/`+this.product.product_id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }

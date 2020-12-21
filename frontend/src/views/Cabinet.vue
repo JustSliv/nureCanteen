@@ -8,9 +8,9 @@
         <v-tab>
           {{curLocale.tabs.tab1.name}}
         </v-tab>
-        <v-tab>
-          {{ curLocale.tabs.tab4.name }}
-        </v-tab>
+<!--        <v-tab>-->
+<!--          {{ curLocale.tabs.tab4.name }}-->
+<!--        </v-tab>-->
         <v-tab>
           {{curLocale.tabs.tab2.name}}
         </v-tab>
@@ -80,10 +80,18 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col>
+                    <v-col cols="6">
                       <v-text-field
                           :label="curLocale.tabs.tab1.context.userInfo.email"
                           v-model="info.user_info.email"
+                          readonly
+                          rounded
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                          :label="curLocale.tabs.tab1.context.userInfo.phone"
+                          v-model="info.user_info.phone"
                           readonly
                           rounded
                       ></v-text-field>
@@ -290,202 +298,202 @@
             </v-container>
           </v-card>
         </v-tab-item>
-        <v-tab-item transition="fade-transition">
-          <v-card max-height="450">
-            <div style="justify-content: center;display: flex;padding: 5%">
-              <v-hover v-slot:default="{hover}">
-                <v-btn color="primary" outlined @click="addForm = true">
-                  <span v-if="hover">
-                    {{ curLocale.tabs.tab4.context.btns[0] }}
-                  </span>
-                  <v-icon>
-                    add
-                  </v-icon>
-                </v-btn>
-              </v-hover>
-              <v-hover v-slot:default="{hover}">
-                <v-btn color="primary" outlined @click="editForm = true">
-                  <span v-if="hover">
-                    {{ curLocale.tabs.tab4.context.btns[1] }}
-                  </span>
-                  <v-icon>
-                    edit
-                  </v-icon>
-                </v-btn>
-              </v-hover>
-              <v-hover v-slot:default="{hover}">
-                <v-btn color="primary" outlined @click="deleteForm = true">
-                  <span v-if="hover">
-                    {{ curLocale.tabs.tab4.context.btns[2] }}
-                  </span>
-                  <v-icon>
-                    delete
-                  </v-icon>
-                </v-btn>
-              </v-hover>
-            </div>
-            <v-divider></v-divider>
-            <v-list v-if="info.user_info.templates.length > 0">
-              <v-list-group v-for="(item, i) in info.user_info.templates" :key="i">
-                <template v-slot:activator>
-                  <v-list-item-title>
-                    {{item.name}}
-                  </v-list-item-title>
-                </template>
-                <v-list-group sub-group no-action v-for="(item1, j) in item.products" :key="j">
-                  <template v-slot:activator>
-                    <v-list-item-title>
-                      {{item1.name}} | {{item1.price}}
-                    </v-list-item-title>
-                  </template>
-                  <v-list-item>
-                    <v-list-item-title>
-                      Описание: {{item1.description}} <br>
-                      Категория: {{item1.category}}
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list-group>
-              </v-list-group>
-            </v-list>
-            <div v-else style="margin: 10%">
-              <v-icon style="text-align: center;display: block">warning</v-icon>
-              <v-card-title style="justify-content: center">
-                Шаблоны отсутствуют
-              </v-card-title>
-            </div>
-            <v-dialog width="450" persistent v-model="addForm">
-              <v-card>
-                <v-card-title>
-                  {{ curLocale.tabs.tab4.context.forms.add.title }}
-                  <v-spacer></v-spacer>
-                  <v-btn icon @click="addForm = false">
-                    <v-icon>
-                      close
-                    </v-icon>
-                  </v-btn>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                          :label="curLocale.tabs.tab4.context.forms.add.labels[0]"
-                          v-model="templateForm.add.name"
-                          solo
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-radio-group>
-                        <v-radio
-                            :label="curLocale.tabs.tab4.context.forms.add.labels[1]"
-                            @input="getBoughtProducts"
-                        ></v-radio>
-                        <v-radio
-                            :label="curLocale.tabs.tab4.context.forms.add.labels[2]"
-                            @input="getDefaultsProducts"
-                        ></v-radio>
-                      </v-radio-group>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-select
-                          :label="curLocale.tabs.tab4.context.forms.add.labels[3]"
-                          multiple
-                          :items="getProducts"
-                          v-model="templateForm.add.products"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <v-btn color="primary" block outlined @click="doAddTemplate">
-                  {{curLocale.tabs.tab4.context.forms.add.btnTitle}}
-                </v-btn>
-              </v-card>
-            </v-dialog>
-            <v-dialog width="450" persistent v-model="editForm">
-              <v-card>
-                <v-card-title>
-                  {{curLocale.tabs.tab4.context.forms.edit.title}}
-                  <v-spacer></v-spacer>
-                  <v-btn icon @click="editForm = false">
-                    <v-icon>
-                      close
-                    </v-icon>
-                  </v-btn>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-select
-                          :label="curLocale.tabs.tab4.context.forms.edit.labels[0]"
-                          v-model="templateForm.chosenTemplate"
-                          :items="getMappedTemplates"
-                          @input="chooseTemplate"
-                      ></v-select>
-                      <v-text-field
-                          :label="curLocale.tabs.tab4.context.forms.edit.labels[1]"
-                          v-model="templateForm.edit.name"
-                          :placeholder="templateForm.edit.name"
-                          solo
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-radio-group>
-                        <v-radio
-                            :label="curLocale.tabs.tab4.context.forms.edit.labels[2]"
-                            @input="getBoughtProducts"
-                        ></v-radio>
-                        <v-radio
-                            :label="curLocale.tabs.tab4.context.forms.edit.labels[3]"
-                            @input="getDefaultsProducts"
-                        ></v-radio>
-                      </v-radio-group>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-select
-                          :label="curLocale.tabs.tab4.context.forms.edit.labels[4]"
-                          multiple
-                          :items="templateForm.edit.products"
-                          v-model="templateForm.edit.products"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <v-btn color="primary" block outlined @click="doEditTemplate">
-                  {{curLocale.tabs.tab4.context.forms.edit.btnTitle}}
-                </v-btn>
-              </v-card>
-            </v-dialog>
-            <v-dialog persistent v-model="deleteForm" width="450">
-              <v-card>
-                <v-card-title>
-                  {{curLocale.tabs.tab4.context.forms.delete.title}}
-                  <v-spacer></v-spacer>
-                  <v-btn icon @click="deleteForm = false">
-                    <v-icon>
-                      close
-                    </v-icon>
-                  </v-btn>
-                </v-card-title>
-                <v-container>
-                  <v-row>
-                    <v-col>
-                      <v-select
-                          :label="curLocale.tabs.tab4.context.forms.delete.labels[0]"
-                          v-model="templateForm.chosenTemplate"
-                          :items="getMappedTemplates"
-                          @input="chooseTemplate"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <v-btn color="primary" block outlined @click="doDeleteTemplate">
-                  {{curLocale.tabs.tab4.context.forms.delete.btnTitle}}
-                </v-btn>
-              </v-card>
-            </v-dialog>
-          </v-card>
-        </v-tab-item>
+<!--        <v-tab-item transition="fade-transition">-->
+<!--          <v-card max-height="450">-->
+<!--            <div style="justify-content: center;display: flex;padding: 5%">-->
+<!--              <v-hover v-slot:default="{hover}">-->
+<!--                <v-btn color="primary" outlined @click="addForm = true">-->
+<!--                  <span v-if="hover">-->
+<!--                    {{ curLocale.tabs.tab4.context.btns[0] }}-->
+<!--                  </span>-->
+<!--                  <v-icon>-->
+<!--                    add-->
+<!--                  </v-icon>-->
+<!--                </v-btn>-->
+<!--              </v-hover>-->
+<!--              <v-hover v-slot:default="{hover}">-->
+<!--                <v-btn color="primary" outlined @click="editForm = true">-->
+<!--                  <span v-if="hover">-->
+<!--                    {{ curLocale.tabs.tab4.context.btns[1] }}-->
+<!--                  </span>-->
+<!--                  <v-icon>-->
+<!--                    edit-->
+<!--                  </v-icon>-->
+<!--                </v-btn>-->
+<!--              </v-hover>-->
+<!--              <v-hover v-slot:default="{hover}">-->
+<!--                <v-btn color="primary" outlined @click="deleteForm = true">-->
+<!--                  <span v-if="hover">-->
+<!--                    {{ curLocale.tabs.tab4.context.btns[2] }}-->
+<!--                  </span>-->
+<!--                  <v-icon>-->
+<!--                    delete-->
+<!--                  </v-icon>-->
+<!--                </v-btn>-->
+<!--              </v-hover>-->
+<!--            </div>-->
+<!--            <v-divider></v-divider>-->
+<!--            <v-list v-if="info.user_info.templates.length > 0">-->
+<!--              <v-list-group v-for="(item, i) in info.user_info.templates" :key="i">-->
+<!--                <template v-slot:activator>-->
+<!--                  <v-list-item-title>-->
+<!--                    {{item.name}}-->
+<!--                  </v-list-item-title>-->
+<!--                </template>-->
+<!--                <v-list-group sub-group no-action v-for="(item1, j) in item.products" :key="j">-->
+<!--                  <template v-slot:activator>-->
+<!--                    <v-list-item-title>-->
+<!--                      {{item1.name}} | {{item1.price}}-->
+<!--                    </v-list-item-title>-->
+<!--                  </template>-->
+<!--                  <v-list-item>-->
+<!--                    <v-list-item-title>-->
+<!--                      Описание: {{item1.description}} <br>-->
+<!--                      Категория: {{item1.category}}-->
+<!--                    </v-list-item-title>-->
+<!--                  </v-list-item>-->
+<!--                </v-list-group>-->
+<!--              </v-list-group>-->
+<!--            </v-list>-->
+<!--            <div v-else style="margin: 10%">-->
+<!--              <v-icon style="text-align: center;display: block">warning</v-icon>-->
+<!--              <v-card-title style="justify-content: center">-->
+<!--                Шаблоны отсутствуют-->
+<!--              </v-card-title>-->
+<!--            </div>-->
+<!--            <v-dialog width="450" persistent v-model="addForm">-->
+<!--              <v-card>-->
+<!--                <v-card-title>-->
+<!--                  {{ curLocale.tabs.tab4.context.forms.add.title }}-->
+<!--                  <v-spacer></v-spacer>-->
+<!--                  <v-btn icon @click="addForm = false">-->
+<!--                    <v-icon>-->
+<!--                      close-->
+<!--                    </v-icon>-->
+<!--                  </v-btn>-->
+<!--                </v-card-title>-->
+<!--                <v-divider></v-divider>-->
+<!--                <v-container>-->
+<!--                  <v-row>-->
+<!--                    <v-col cols="12">-->
+<!--                      <v-text-field-->
+<!--                          :label="curLocale.tabs.tab4.context.forms.add.labels[0]"-->
+<!--                          v-model="templateForm.add.name"-->
+<!--                          solo-->
+<!--                      ></v-text-field>-->
+<!--                    </v-col>-->
+<!--                    <v-col cols="12">-->
+<!--                      <v-radio-group>-->
+<!--                        <v-radio-->
+<!--                            :label="curLocale.tabs.tab4.context.forms.add.labels[1]"-->
+<!--                            @input="getBoughtProducts"-->
+<!--                        ></v-radio>-->
+<!--                        <v-radio-->
+<!--                            :label="curLocale.tabs.tab4.context.forms.add.labels[2]"-->
+<!--                            @input="getDefaultsProducts"-->
+<!--                        ></v-radio>-->
+<!--                      </v-radio-group>-->
+<!--                    </v-col>-->
+<!--                    <v-col cols="12">-->
+<!--                      <v-select-->
+<!--                          :label="curLocale.tabs.tab4.context.forms.add.labels[3]"-->
+<!--                          multiple-->
+<!--                          :items="getProducts"-->
+<!--                          v-model="templateForm.add.products"-->
+<!--                      ></v-select>-->
+<!--                    </v-col>-->
+<!--                  </v-row>-->
+<!--                </v-container>-->
+<!--                <v-btn color="primary" block outlined @click="doAddTemplate">-->
+<!--                  {{curLocale.tabs.tab4.context.forms.add.btnTitle}}-->
+<!--                </v-btn>-->
+<!--              </v-card>-->
+<!--            </v-dialog>-->
+<!--            <v-dialog width="450" persistent v-model="editForm">-->
+<!--              <v-card>-->
+<!--                <v-card-title>-->
+<!--                  {{curLocale.tabs.tab4.context.forms.edit.title}}-->
+<!--                  <v-spacer></v-spacer>-->
+<!--                  <v-btn icon @click="editForm = false">-->
+<!--                    <v-icon>-->
+<!--                      close-->
+<!--                    </v-icon>-->
+<!--                  </v-btn>-->
+<!--                </v-card-title>-->
+<!--                <v-divider></v-divider>-->
+<!--                <v-container>-->
+<!--                  <v-row>-->
+<!--                    <v-col cols="12">-->
+<!--                      <v-select-->
+<!--                          :label="curLocale.tabs.tab4.context.forms.edit.labels[0]"-->
+<!--                          v-model="templateForm.chosenTemplate"-->
+<!--                          :items="getMappedTemplates"-->
+<!--                          @input="chooseTemplate"-->
+<!--                      ></v-select>-->
+<!--                      <v-text-field-->
+<!--                          :label="curLocale.tabs.tab4.context.forms.edit.labels[1]"-->
+<!--                          v-model="templateForm.edit.name"-->
+<!--                          :placeholder="templateForm.edit.name"-->
+<!--                          solo-->
+<!--                      ></v-text-field>-->
+<!--                    </v-col>-->
+<!--                    <v-col cols="12">-->
+<!--                      <v-radio-group>-->
+<!--                        <v-radio-->
+<!--                            :label="curLocale.tabs.tab4.context.forms.edit.labels[2]"-->
+<!--                            @input="getBoughtProducts"-->
+<!--                        ></v-radio>-->
+<!--                        <v-radio-->
+<!--                            :label="curLocale.tabs.tab4.context.forms.edit.labels[3]"-->
+<!--                            @input="getDefaultsProducts"-->
+<!--                        ></v-radio>-->
+<!--                      </v-radio-group>-->
+<!--                    </v-col>-->
+<!--                    <v-col cols="12">-->
+<!--                      <v-select-->
+<!--                          :label="curLocale.tabs.tab4.context.forms.edit.labels[4]"-->
+<!--                          multiple-->
+<!--                          :items="templateForm.edit.products"-->
+<!--                          v-model="templateForm.edit.products"-->
+<!--                      ></v-select>-->
+<!--                    </v-col>-->
+<!--                  </v-row>-->
+<!--                </v-container>-->
+<!--                <v-btn color="primary" block outlined @click="doEditTemplate">-->
+<!--                  {{curLocale.tabs.tab4.context.forms.edit.btnTitle}}-->
+<!--                </v-btn>-->
+<!--              </v-card>-->
+<!--            </v-dialog>-->
+<!--            <v-dialog persistent v-model="deleteForm" width="450">-->
+<!--              <v-card>-->
+<!--                <v-card-title>-->
+<!--                  {{curLocale.tabs.tab4.context.forms.delete.title}}-->
+<!--                  <v-spacer></v-spacer>-->
+<!--                  <v-btn icon @click="deleteForm = false">-->
+<!--                    <v-icon>-->
+<!--                      close-->
+<!--                    </v-icon>-->
+<!--                  </v-btn>-->
+<!--                </v-card-title>-->
+<!--                <v-container>-->
+<!--                  <v-row>-->
+<!--                    <v-col>-->
+<!--                      <v-select-->
+<!--                          :label="curLocale.tabs.tab4.context.forms.delete.labels[0]"-->
+<!--                          v-model="templateForm.chosenTemplate"-->
+<!--                          :items="getMappedTemplates"-->
+<!--                          @input="chooseTemplate"-->
+<!--                      ></v-select>-->
+<!--                    </v-col>-->
+<!--                  </v-row>-->
+<!--                </v-container>-->
+<!--                <v-btn color="primary" block outlined @click="doDeleteTemplate">-->
+<!--                  {{curLocale.tabs.tab4.context.forms.delete.btnTitle}}-->
+<!--                </v-btn>-->
+<!--              </v-card>-->
+<!--            </v-dialog>-->
+<!--          </v-card>-->
+<!--        </v-tab-item>-->
         <v-tab-item transition="fade-transition">
           <v-card flat max-height="400" min-height="500" style="overflow-x: hidden; overflow-y: auto">
             <div v-if="info.orders.length > 0" >
@@ -1141,7 +1149,7 @@
       editMyData() {
         if (this.checkChange() && !this.editAlertSuccess) {
           // sending POST
-          axios.put(`https://api.${ip}.${port}/api/user`,{
+          axios.put(`https://${ip}.${port}/api/user`,{
             fName: this.info.user_info.fName,
             lName: this.info.user_info.lName,
             email: this.info.user_info.email,
@@ -1153,7 +1161,7 @@
               Authorization: 'Bearer ' + localStorage['sid']
             }
           }).then(() => {
-            axios.get(`https://api.${ip}.${port}/api/user`, {
+            axios.get(`https://${ip}.${port}/api/user`, {
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }
@@ -1263,7 +1271,7 @@
       }
     },
     mounted() {
-      axios.get(`https://api.${ip}.${port}/api/user`, {
+      axios.get(`https://${ip}.${port}/api/user`, {
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
@@ -1342,14 +1350,14 @@
         }
       }).catch(err => console.error(err))
 
-      axios.get(`https://api.${ip}.${port}/api/user`, {
+      axios.get(`https://${ip}.${port}/api/user`, {
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
         }
       }).then(user_id => {
         axios({
           method: 'GET',
-          url: `https://api.${ip}.${port}/api/basket/all`,
+          url: `https://${ip}.${port}/api/basket/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -1374,7 +1382,7 @@
           if (nanObject) {
             axios({
               method: 'GET',
-              url: `https://api.${ip}.${port}/api/product/`+this.info.last_buy.product_id
+              url: `https://${ip}.${port}/api/product/`+this.info.last_buy.product_id
             }).then(resp => {
               this.info.last_buy.items[0] = resp.data
             })
@@ -1397,7 +1405,7 @@
             } else {
               axios({
                 method: 'GET',
-                url: `https://api.${ip}.${port}/api/product/`+this.info.orders[i].product_id,
+                url: `https://${ip}.${port}/api/product/`+this.info.orders[i].product_id,
                 headers: {
                   Authorization: 'Bearer ' + localStorage['sid']
                 }

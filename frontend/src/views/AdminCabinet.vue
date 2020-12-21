@@ -76,6 +76,7 @@
                 :products="products"
                 :locale="curLocale"
                 :updater="updateInSaleComp"
+                :update-products="updateAllProduct"
             />
             <v-btn
                 bottom
@@ -171,10 +172,20 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
-                <v-btn outlined color="success" block>
+                <v-btn outlined color="success" block @click="doAddProduct">
                   {{curLocale.tabs.tab1.context.addProduct.btnTitle}}
                 </v-btn>
               </v-container>
+              <v-snackbar outlined top :color="alertProductFormInfo[0]" timeout="1800" v-model="alertProductForm">
+                <template v-slot:action="{attrs}">
+                  <v-btn icon v-bind="attrs">
+                    <v-icon>
+                      close
+                    </v-icon>
+                  </v-btn>
+                </template>
+                {{alertProductFormInfo[1]}}
+              </v-snackbar>
             </v-card>
           </v-dialog>
         </v-tab-item>
@@ -276,7 +287,7 @@
                     </v-card>
                     <v-btn
                         color="indigo" dark
-                        @click="stepperUserForm = 2"
+                        @click="chooseBtnUser !== ''?stepperUserForm = 2:null"
                     >
                       {{curLocale.tabs.tab2.context.addUser.stepperBtns[0]}}
                     </v-btn>
@@ -321,6 +332,7 @@
                             <v-col cols="6">
                               <v-text-field
                                   outlined
+                                  type="number"
                                   :label="curLocale.tabs.tab2.context.addUser.labels[4]"
                                   v-model="userForm.phone"
                                   :rules="numRules"
@@ -337,8 +349,9 @@
                             <v-col cols="6">
                               <v-text-field
                                   outlined
+                                  type="password"
                                   :label="curLocale.tabs.tab2.context.addUser.labels[6]"
-                                  v-model="userForm.pwd"
+                                  v-model="userForm.password"
                                   :rules="textRules"
                               ></v-text-field>
                             </v-col>
@@ -375,8 +388,9 @@
                             <v-col cols="6">
                               <v-text-field
                                   outlined
+                                  type="password"
                                   :label="curLocale.tabs.tab2.context.addUser.labels[6]"
-                                  v-model="userForm.pwd"
+                                  v-model="userForm.password"
                                   :rules="textRules"
                               ></v-text-field>
                             </v-col>
@@ -406,13 +420,13 @@
               </v-stepper>
             </v-card>
           </v-dialog>
-          <v-snackbar outlined top timeout="1800" v-model="addUserAlert[0]" :color="addUserAlert[2]">
+          <v-snackbar outlined top timeout="1800" v-model="addUserAlertInfo[0]" :color="addUserAlertInfo[2]">
             <template v-slot:action="{attrs}">
-              <v-btn text @click="addUserAlert[0] = false" v-bind="attrs">
+              <v-btn text @click="addUserAlertInfo[0] = false" v-bind="attrs">
                 {{curLocale.tabs.tab2.context.addUser.stepperBtns[3]}}
               </v-btn>
             </template>
-            {{addUserAlert[1]}}
+            {{ addUserAlertInfo[1] }}
           </v-snackbar>
         </v-tab-item>
         <v-tab-item>
@@ -486,7 +500,7 @@
                       </template>
                       <v-card>
                         <v-card-subtitle>
-                          {{curLocale.tabs.tab4.context.receipt.labels[0]}} {{order.check_id.canteen}} <br/>
+<!--                          {{curLocale.tabs.tab4.context.receipt.labels[0]}} {{order.check_id.canteen}} <br/>-->
                           {{curLocale.tabs.tab4.context.receipt.labels[1]}} {{order.product_id.name}} <br/>
                           {{curLocale.tabs.tab4.context.receipt.labels[2]}} {{order.check_id.purchaseDate.split('T')[0]+' '+order.check_id.time}} <br/>
                           {{curLocale.tabs.tab4.context.receipt.labels[3]}} {{order.product_id.description}} <br/>
@@ -523,6 +537,8 @@ export default {
         'Пряности',
         'Напитки',
       ],
+      alertProductForm: false,
+      alertProductFormInfo: ['success', ''],
       addProductDialog: false,
       addAdminDialog: false,
       orders: [],
@@ -562,11 +578,11 @@ export default {
                   labels: [
                     'Name*',
                     'Category*',
-                    'Price*',
-                    'Weigth',
+                    'Description*',
+                    'Price',
+                    'Weight',
                     'Calories',
                     'Available*',
-                    'Description*',
                     'Image'
                   ],
                   btnTitle: 'Add'
@@ -710,11 +726,11 @@ export default {
                   labels: [
                     'Название продукта*',
                     'Категория*',
-                    'Цена*',
+                    'Описание*',
+                    'Цена',
                     'Вес',
                     'Ккал',
-                    'Доступное кол-во*',
-                    'Описание*',
+                    'Доступное кол-во',
                     'Картинка продукта'
                   ],
                   btnTitle: 'Добавить'
@@ -851,11 +867,11 @@ export default {
                   labels: [
                     'Названня продукта*',
                     'Категорія*',
-                    'Ціна*',
+                    'Опис*',
+                    'Ціна',
                     'Вага',
                     'Ккал',
-                    'Доступна кількість*',
-                    'Опис*',
+                    'Доступна кількість',
                     'Зображення'
                   ],
                   btnTitle: 'Додати'
@@ -943,12 +959,12 @@ export default {
             tab4: {
               name: 'Замовлення',
               context: {
+                titleFilter: 'Сортировка',
+                filters: [
+                  'Усі',
+                  'За датою купівлі'
+                ],
                 receipt: {
-                  titleFilter: 'Сортировка',
-                  filters: [
-                    'Усі',
-                    'За датою купівлі'
-                  ],
                   title: 'Чек',
                   labels: [
                     'Їдальня:',
@@ -988,20 +1004,24 @@ export default {
         total_count: 1,
         description: '',
         weight: 1,
-        calories: 1
+        calories: 1,
+        image: ''
       },
       stepperUserForm: 1,
       chooseBtnUser: '',
-      addUserAlert: [false, '', 'success'],
+      addUserAlert: false,
+      addUserAlertInfo: [false, '', 'success'],
       addProductAlert: [false, '', 'success'],
       userForm: {
         fName: '',
         lName: '',
         email: '',
         personGroup: '',
+        age: 0,
+        avatar: 'empty',
         phone: '',
         username: '',
-        pwd: ''
+        password: ''
       },
       finishAddProduct: false,
       finishAddAdmin: false,
@@ -1038,7 +1058,7 @@ export default {
   mounted() {
     axios({
       method: 'GET',
-      url: `https://api.${ip}.${port}/api/product/all`,
+      url: `https://${ip}.${port}/api/product/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1048,7 +1068,7 @@ export default {
 
     axios({
       method: 'GET',
-      url: `https://api.${ip}.${port}/api/user/all`,
+      url: `https://${ip}.${port}/api/user/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
@@ -1058,17 +1078,17 @@ export default {
 
     axios({
       method: 'GET',
-      url: `https://api.${ip}.${port}/api/basket/all`,
+      url: `https://${ip}.${port}/api/basket/all`,
       headers: {
         Authorization: 'Bearer ' + localStorage['sid']
       }
     }).then(resp => {
       this.orders = resp.data
       for (let item of this.orders) {
-        if (!isNaN(Number(item.product_id))) {
+        if (!isNaN(Number(item.product_id)) && item.active === false) {
           axios({
             method: 'GET',
-            url: `https://api.${ip}.${port}/api/product/`+item.product_id,
+            url: `https://${ip}.${port}/api/product/`+item.product_id,
             headers: {
               Authorization: 'Bearer ' + localStorage['sid']
             }
@@ -1077,14 +1097,43 @@ export default {
           })
         }
       }
+      console.log(this.orders)
     })
   },
   methods: {
+    doAddProduct() {
+      this.productForm.total_count = this.productForm.available_count
+      axios({
+        method: 'POST',
+        url: `https://${ip}.${port}/api/product/`,
+        headers: {
+          Authorization: 'Bearer ' + localStorage['sid']
+        },
+        data: this.productForm
+      }).then(() => {
+        this.alertProductForm = true
+        this.alertProductFormInfo[1] = 'Продукт успешно добавлен'
+        axios({
+          method: 'GET',
+          url: `https://${ip}.${port}/api/product/all`,
+          headers: {
+            Authorization: 'Bearer ' + localStorage['sid']
+          }
+        }).then(resp => {
+          this.products = resp.data
+          this.addProductDialog = false
+        })
+      }).catch(() => {
+        this.alertProductForm = true
+        this.alertProductFormInfo[0] = 'red'
+        this.alertProductFormInfo[1] = 'Ошибка при добавление'
+      })
+    },
     doFilterOrders() {
       if (this.chosenFilterOrders === this.curLocale.tabs.tab4.context.filters[0]) {
         axios({
           method: 'GET',
-          url: `https://api.${ip}.${port}/api/basket/all`,
+          url: `https://${ip}.${port}/api/basket/all`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -1094,7 +1143,7 @@ export default {
             if (!isNaN(Number(item.product_id))) {
               axios({
                 method: 'GET',
-                url: `https://api.${ip}.${port}/api/product/`+item.product_id,
+                url: `https://${ip}.${port}/api/product/`+item.product_id,
                 headers: {
                   Authorization: 'Bearer ' + localStorage['sid']
                 }
@@ -1120,7 +1169,7 @@ export default {
     createUser() {
       axios({
         method: 'POST',
-        url: `https://api.${ip}.${port}/api/register`,
+        url: `https://${ip}.${port}/api/register`,
         data: this.userForm,
         headers: {
           Authorization: 'Bearer ' + localStorage['sid']
@@ -1128,7 +1177,7 @@ export default {
       }).then(resp => {
         axios({
           method: 'GET',
-          url: `https://api.${ip}.${port}/api/user/`+resp.data.id,
+          url: `https://${ip}.${port}/api/user/`+resp.data.id,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
@@ -1139,18 +1188,21 @@ export default {
             this.userForm[item] = ''
           }
 
-          this.addUserAlert[0] = true
-          this.addUserAlert[1] = this.curLocale.tabs.tab2.context.addUser.alerts[0]
+          this.addUserAlert = true
+          this.addUserAlertInfo[1] = this.curLocale.tabs.tab2.context.addUser.alerts[0]
 
           this.addAdminDialog = false
           this.stepperUserForm = 1
           this.chooseBtnUser = ''
         })
       }).catch(() => {
-        this.addUserAlert[0] = true
-        this.addUserAlert[2] = 'red'
-        this.addUserAlert[1] = this.curLocale.tabs.tab2.context.addUser.alerts[1]
+        this.addUserAlert = true
+        this.addUserAlertInfo[2] = 'red'
+        this.addUserAlertInfo[1] = this.curLocale.tabs.tab2.context.addUser.alerts[1]
       })
+    },
+    updateAllProduct(info) {
+      this.products = info['items']
     },
     updateInSaleComp(info) {
       this.editDialog = info['edit']

@@ -252,12 +252,12 @@
     },
     mounted() {
       if (localStorage['sid'] !== undefined) {
-        axios.get(`https://api.${ip}.${port}/api/user`,{
+        axios.get(`https://${ip}.${port}/api/user`,{
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(resp => {
-          axios.get(`https://api.${ip}.${port}/api/basket/user/` + resp.data.id, {
+          axios.get(`https://${ip}.${port}/api/basket/user/` + resp.data.id, {
             headers: {
               Authorization: 'Bearer ' + localStorage['sid']
             }
@@ -290,14 +290,14 @@
         }
         axios({
           method: 'GET',
-          url: `https://api.${ip}.${port}/api/user`,
+          url: `https://${ip}.${port}/api/user`,
           headers: {
             Authorization: 'Bearer ' + localStorage['sid']
           }
         }).then(user => {
           axios({
             method: 'POST',
-            url: `https://api.${ip}.${port}/api/check/`,
+            url: `https://${ip}.${port}/api/check/`,
             data: {
               user_id: user.data.id,
               canteen: this.info.userInfo.activeCanteen,
@@ -308,20 +308,54 @@
               Authorization: 'Bearer ' + localStorage['sid']
             }
           }).then(resp => {
+            if (this.info.userInfo.typePay === this.curLocale.userData.form.typePay[0]) {
+              axios({
+                method: 'POST',
+                url: `https://${ip}.${port}/api/pay`,
+                data: {
+                  action: 'pay',
+                  amount: summa,
+                  currency: 'UAH',
+                  description: 'Оплата: ' + this.cartItems.map(i => i.name).join(' - '),
+                  order_id: resp.data.check_id
+                },
+                headers: {
+                  Authorization: 'Bearer ' + localStorage['sid']
+                }
+              }).then(payPage => {
+                let rawHtml = payPage.data
+                let htmlParser = new DOMParser().parseFromString(rawHtml, "text/html")
+                let linkPay = 'https://www.liqpay.ua/api/3/checkout'
+                let data = htmlParser.body.getElementsByTagName("form")[0].getElementsByTagName("input")[0].attributes[2].value
+                let signature = htmlParser.body.getElementsByTagName("form")[0].getElementsByTagName("input")[1].attributes[2].value
+                axios({
+                  method: 'POST',
+                  url: linkPay,
+                  data: {
+                    data: data,
+                    signature: signature
+                  }
+                }).then(pay => {
+                  console.log('pay', pay.data)
+                })
+              }).catch(e => {
+                console.error('errr pay', e)
+              })
+            }
             axios({
               method: 'PUT',
-              url: `https://api.${ip}.${port}/api/check/`+resp.data.check_id,
+              url: `https://${ip}.${port}/api/check/`+resp.data.check_id,
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }})
             axios({
               method: 'DELETE',
-              url: `https://api.${ip}.${port}/api/basket/user/`+user.data.id+'/'+resp.data.check_id,
+              url: `https://${ip}.${port}/api/basket/user/`+user.data.id+'/'+resp.data.check_id,
               headers: {
                 Authorization: 'Bearer ' + localStorage['sid']
               }
             })
-            this.$router.push('/receipt');
+            // this.$router.push('/receipt');
           }).catch(() => {
 
           })

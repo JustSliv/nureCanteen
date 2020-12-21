@@ -198,7 +198,7 @@
           if (this.login && this.pwd !== '') {
             axios({
               method: "POST",
-              url: `https://api.${ip}.${port}/api/authenticate`,
+              url: `https://${ip}.${port}/api/authenticate`,
               data: {
                 username: this.login,
                 password: this.pwd

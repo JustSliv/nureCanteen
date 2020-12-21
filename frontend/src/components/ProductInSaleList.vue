@@ -4,6 +4,7 @@
         v-for="(item, i) in products" :key="i"
         :product="item"
         :updater="updater"
+        :update-products="updateProducts"
         :locale="locale"
     />
   </v-list>
@@ -14,7 +15,7 @@ import ProductInSaleItem from "@/components/ProductInSaleItem";
 export default {
   name: "ProductInSaleList",
   components: {ProductInSaleItem},
-  props: ['products', 'updater', 'locale']
+  props: ['products', 'updater', 'locale', 'updateProducts']
 }
 </script>
 
