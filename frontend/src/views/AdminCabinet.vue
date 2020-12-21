@@ -86,7 +86,6 @@
                 x-large
                 absolute
                 elevation="10"
-                v-if="products.length >= 0"
                 @click="addProductDialog = true"
             >
               <v-icon large>
@@ -100,6 +99,20 @@
             </v-icon>
             <v-card-title style="justify-content: center">
               {{curLocale.tabs.tab1.context.notFound}}
+              <v-btn
+                  bottom
+                  right
+                  fab
+                  color="success"
+                  x-large
+                  absolute
+                  elevation="10"
+                  @click="addProductDialog = true"
+              >
+                <v-icon large>
+                  add_circle
+                </v-icon>
+              </v-btn>
             </v-card-title>
           </v-card>
           <v-dialog v-model="addProductDialog" width="650">
