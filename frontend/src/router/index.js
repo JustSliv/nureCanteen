@@ -15,6 +15,10 @@ export default new Router({
             component: () => import('@/views/Auth')
         },
         {
+            path: '/restoreAccount',
+            component: () => import('@/views/RestoreAcc')
+        },
+        {
             path: '/register',
             component: () => import('@/views/Register')
         },

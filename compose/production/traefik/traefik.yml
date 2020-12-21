@@ -1,0 +1,71 @@
+log:
+  level: INFO
+
+entryPoints:
+  web:
+    # http
+    address: ":80"
+  web-secure:
+    # https
+    address: ":443"
+
+certificatesResolvers:
+  letsencrypt:
+    # https://docs.traefik.io/master/https/acme/#lets-encrypt
+    acme:
+      email: "admin@nurecanteen.pp.ua"
+      storage: /etc/traefik/acme/acme.json
+      # https://docs.traefik.io/master/https/acme/#httpchallenge
+      httpChallenge:
+        entryPoint: web
+
+http:
+  routers:
+    backend-router:
+      rule: "Host(`api.nurecanteen.pp.ua`)"
+      entryPoints:
+        - web-secure
+      service: backend
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
+
+    frontend-router:
+      rule: "Host(`nurecanteen.pp.ua`)"
+      entryPoints:
+        - web
+      middlewares:
+        - redirect
+      service: frontend
+
+    frontend-secure-router:
+      rule: "Host(`nurecanteen.pp.ua`)"
+      entryPoints:
+        - web-secure
+      service: frontend
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
+
+  middlewares:
+    redirect:
+      # https://docs.traefik.io/master/middlewares/redirectscheme/
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  services:
+    frontend:
+      loadBalancer:
+        servers:
+          - url: http://frontend:8080
+    backend:
+      loadBalancer:
+        servers:
+          - url: http://backend:8000
+
+providers:
+  # https://docs.traefik.io/master/providers/file/
+  file:
+    filename: /etc/traefik/traefik.yml
+    watch: true

@@ -1,2 +1,0 @@
-nure/canteen/CanteenApplicationTests.java
- nure.canteen.CanteenApplicationTests
