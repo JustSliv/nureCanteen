@@ -94,14 +94,22 @@
             </v-btn>
           </v-card>
           <v-card flat v-else style="margin: 4%">
-            <v-icon style="text-align: center; display: block">
-              warning
-            </v-icon>
+            <v-btn
+                style="text-align: center; display: block"
+                fab
+                color="success"
+                x-large
+                absolute
+                elevation="10"
+                @click="addProductDialog = true"
+            >
+              <v-icon large>
+                add_circle
+              </v-icon>
+            </v-btn>
             <v-card-title style="justify-content: center">
               {{curLocale.tabs.tab1.context.notFound}}
               <v-btn
-                  bottom
-                  right
                   fab
                   color="success"
                   x-large
