@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
-   <groupId>org.zerhusen</groupId>
-   <artifactId>jwtdemo</artifactId>
+   <groupId>org.nure</groupId>
+   <artifactId>canteen</artifactId>
    <version>2.0.0</version>
    <packaging>jar</packaging>
 
@@ -97,11 +97,6 @@
          <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
-<!--            <configuration>-->
-<!--               <jvmArguments>-->
-<!--                  -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:8000-->
-<!--               </jvmArguments>-->
-<!--            </configuration>-->
          </plugin>
       </plugins>
    </build>
